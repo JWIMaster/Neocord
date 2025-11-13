@@ -31,7 +31,7 @@
 		5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE912EBC7A5200577B00 /* SettingsView.swift */; };
 		5F724FD02EC179B7002A9E25 /* MainVC+ObjectMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */; };
 		5F724FD22EC1B064002A9E25 /* DMsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F724FD12EC1B064002A9E25 /* DMsIcon.png */; };
-		5F724FD42EC1D7FD002A9E25 /* funni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* funni.swift */; };
+		5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */; };
 		5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7987192EB1DD5C0058566C /* ReplyView.swift */; };
 		5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */; };
 		5F9F58BA2EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B92EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift */; };
@@ -98,7 +98,7 @@
 		5F64FE912EBC7A5200577B00 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+ObjectMethods.swift"; sourceTree = "<group>"; };
 		5F724FD12EC1B064002A9E25 /* DMsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DMsIcon.png; path = Assets.xcassets/AppIcon.appiconset/DMsIcon.png; sourceTree = "<group>"; };
-		5F724FD32EC1D7FD002A9E25 /* funni.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funni.swift; sourceTree = "<group>"; };
+		5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordMarkdownView.swift; sourceTree = "<group>"; };
 		5F7987192EB1DD5C0058566C /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
 		5F79871B2EB1E6470058566C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Gateway.swift"; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 				5FE178502EB025F700FC4AA4 /* MessageActionView.swift */,
 				5F7987192EB1DD5C0058566C /* ReplyView.swift */,
 				5F64FE912EBC7A5200577B00 /* SettingsView.swift */,
-				5F724FD32EC1D7FD002A9E25 /* funni.swift */,
+				5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -468,7 +468,7 @@
 				5F9F58BE2EB4303000A09760 /* TextVC+MessageAction.swift in Sources */,
 				5FE178512EB025F700FC4AA4 /* MessageActionView.swift in Sources */,
 				5F5450502EACB03E0066AEC6 /* AttachmentVC.swift in Sources */,
-				5F724FD42EC1D7FD002A9E25 /* funni.swift in Sources */,
+				5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */,
 				5F9F58C02EB4309300A09760 /* TextVC+Background.swift in Sources */,
 				5FEF15162EA4E616005598D3 /* AuthenticationVC.swift in Sources */,
 				5FEF14A42EA373C2005598D3 /* MessageView.swift in Sources */,

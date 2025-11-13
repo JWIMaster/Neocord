@@ -9,18 +9,17 @@ public class InputView: UIView, UITextViewDelegate {
     public weak var snapshotView: UIView?
     
     public let backgroundView: UIView? = {
-        switch device {
-        case .a4:
-            let bView = UIView()
-            bView.layer.cornerRadius = 20
-            bView.backgroundColor = .discordGray.withAlphaComponent(0.8)
-            return bView
-        default:
+        if ThemeEngine.enableGlass {
             let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
             bView.translatesAutoresizingMaskIntoConstraints = false
             bView.solidViewColour = .discordGray.withAlphaComponent(0.8)
             bView.scaleFactor = PerformanceManager.scaleFactor
             bView.frameInterval = PerformanceManager.frameInterval
+            return bView
+        } else {
+            let bView = UIView()
+            bView.layer.cornerRadius = 20
+            bView.backgroundColor = .discordGray.withAlphaComponent(0.8)
             return bView
         }
     }()
@@ -29,19 +28,18 @@ public class InputView: UIView, UITextViewDelegate {
     public var tokenInputView: Bool?
     
     let buttonBackground: UIView? = {
-        switch device {
-        case .a4:
-            let background = UIView()
-            background.layer.cornerRadius = 20
-            background.backgroundColor = .discordGray.withAlphaComponent(0.8)
-            background.isUserInteractionEnabled = false
-            return background
-        default:
+        if ThemeEngine.enableGlass {
             let background = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
             background.scaleFactor = 0.25
             background.frameInterval = 6
             background.isUserInteractionEnabled = false
             background.solidViewColour = .discordGray.withAlphaComponent(0.8)
+            return background
+        } else {
+            let background = UIView()
+            background.layer.cornerRadius = 20
+            background.backgroundColor = .discordGray.withAlphaComponent(0.8)
+            background.isUserInteractionEnabled = false
             return background
         }
     }()

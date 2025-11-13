@@ -20,37 +20,37 @@ extension MessageView {
         if #available(iOS 7.0.1, *) {
             messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
             messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
-        } else {
-            messageText.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        messageText.translatesAutoresizingMaskIntoConstraints = false
+        
+        messageText.text = "\(message?.content ?? "unknown")"
+        messageText.backgroundColor = .clear
+        messageText.textColor = .white
+        messageText.lineBreakMode = .byWordWrapping
+        messageText.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
+        messageText.numberOfLines = 0
+        //messageText.sizeToFit()
+        
+        MessageView.markdownQueue.async { [weak self] in
+            guard let self = self else { return }
+            let parsed = self.markdownParser.attributedString(fromMarkdown: "\(self.message?.content ?? "unknown")")
             
-            messageText.text = "\(message?.content ?? "unknown")"
-            messageText.backgroundColor = .clear
-            messageText.textColor = .white
-            messageText.lineBreakMode = .byWordWrapping
-            messageText.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
-            messageText.numberOfLines = 0
-            //messageText.sizeToFit()
-            
-            MessageView.markdownQueue.async { [weak self] in
-                guard let self = self else { return }
-                let parsed = self.markdownParser.attributedString(fromMarkdown: "\(self.message?.content ?? "unknown")")
+            DispatchQueue.main.async {
                 
-                DispatchQueue.main.async {
-                    
-                    self.messageText.attributedText = parsed
-                    self.messageText.sizeToFit()
-                    //self.setNeedsLayout()
-                    //self.layoutIfNeeded()
-                    
-                    // Give Auto Layout a short delay to settle before scrolling
-                    guard let parentVC = self.parentViewController else { return }
-                    if let dmVC = parentVC as? TextViewController {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                            dmVC.scrollToBottom(animated: true)
-                        }
+                self.messageText.attributedText = parsed
+                self.messageText.sizeToFit()
+                //self.setNeedsLayout()
+                //self.layoutIfNeeded()
+                
+                // Give Auto Layout a short delay to settle before scrolling
+                guard let parentVC = self.parentViewController else { return }
+                if let dmVC = parentVC as? TextViewController {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        dmVC.scrollToBottom(animated: true)
                     }
-                    
                 }
+                
             }
         }
     }

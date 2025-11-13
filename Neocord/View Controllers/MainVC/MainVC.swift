@@ -47,7 +47,11 @@ class ViewController: UIViewController {
     
     var activeGuildChannels: [GuildChannel] = []
     
-    var containerView = UIView()
+    var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     var offset: CGFloat {
         return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
@@ -71,19 +75,14 @@ class ViewController: UIViewController {
     
     let activeContentView: UIView = {
         if ThemeEngine.enableGlass {
-            switch device {
-            case .a4:
-                let bg = UIView()
-                bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
-                return bg
-            default:
-                let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
-                glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
-                return glass
-            }
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
+            return glass
         } else {
             let bg = UIView()
             bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
+            bg.translatesAutoresizingMaskIntoConstraints = false
             return bg
         }
     }()
@@ -139,27 +138,24 @@ class ViewController: UIViewController {
     
     var sidebarBackgroundView: UIView? = {
         if ThemeEngine.enableGlass {
-            switch device {
-            case .a4:
-                let bg = UIView()
-                bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
-                return bg
-            default:
-                let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
-                glass.translatesAutoresizingMaskIntoConstraints = false
-                glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
-                return glass
-            }
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
+            return glass
         } else {
             let bg = UIView()
+            bg.translatesAutoresizingMaskIntoConstraints = false
             bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
             return bg
         }
     }()
     
-    var toolbar = CustomToolbar()
+    var toolbar: CustomToolbar = {
+        let toolbar = CustomToolbar()
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        return toolbar
+    }()
     
-    var animatedIndexPathsPerCollectionView: [UICollectionView: Set<IndexPath>] = [:]
     
     var activeGuild: Guild? {
         get {
@@ -174,7 +170,12 @@ class ViewController: UIViewController {
     
     var displayedChannels: [GuildChannel] = []
     
-    var settingsContainerView = SettingsView()
+    var settingsContainerView: SettingsView = {
+        let settingsView = SettingsView()
+        settingsView.translatesAutoresizingMaskIntoConstraints = false
+        settingsView.isHidden = true
+        return settingsView
+    }()
     
     var mainContainerView = UIView()
     
@@ -198,6 +199,8 @@ class ViewController: UIViewController {
         //clientUser.clearCache()
         
         clientUser.loadCache {
+            self.setupOrderedGuilds()
+            self.rebuildSidebarButtons()
             self.setupMainView()
         }
         
@@ -206,62 +209,41 @@ class ViewController: UIViewController {
     func setupMainView() {
         title = "Direct Messages"
         view.backgroundColor = .discordGray
-        
-        guard let sidebarBackgroundView = sidebarBackgroundView else { return }
-        
-        setupOrderedGuilds()
-        rebuildSidebarButtons()
-        //self.sidebarCollectionView.reloadData()
-        //self.dmCollectionView.reloadData()
-        //self.channelsCollectionView.reloadData()
-        /*clientUser.loadCache {
-            
-            self.setupOrderedGuilds()
-            
-            self.rebuildSidebarButtons()
-            
-            self.sidebarCollectionView.reloadData()
-            self.dmCollectionView.reloadData()
-            self.channelsCollectionView.reloadData()
-            self.fetchDMs()
-            self.fetchGuilds()
-            
-        }*/
         if #unavailable(iOS 7.0.1) {
             SetStatusBarBlackTranslucent()
             SetWantsFullScreenLayout(self, true)
         }
-        view.addSubview(mainContainerView)
-        mainContainerView.addSubview(containerView)
-        
-        mainContainerView.addSubview(settingsContainerView)
-        settingsContainerView.translatesAutoresizingMaskIntoConstraints = false
-        settingsContainerView.isHidden = true  // hide it initially
-        
-        containerView.addSubview(sidebarBackgroundView)
-        
-        containerView.addSubview(activeContentView)
-        activeContentView.translatesAutoresizingMaskIntoConstraints = false
-        sidebarBackgroundView.addSubview(sidebarCollectionView)
-        
-        
-        
-        view.addSubview(toolbar)
-        toolbar.translatesAutoresizingMaskIntoConstraints = false
-        
+   
+        setupMainViewSubviews()
         setupConstraints()
         setupButtonActions()
-        
-
-        
-        toolbar.setItems([UIButton(), mainMenuButton, settingsButton, UIButton()])
+        setupToolbar()
+        readyWatcher()
         
         if ThemeEngine.enableAnimations {
             activeContentView.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
             toolbar.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
-            sidebarBackgroundView.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
+            sidebarBackgroundView?.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
         }
+    }
+    
+    func setupMainViewSubviews() {
+        guard let sidebarBackgroundView = sidebarBackgroundView else { return }
+        view.addSubview(mainContainerView)
+        mainContainerView.addSubview(containerView)
+        mainContainerView.addSubview(settingsContainerView)
+        //settingsContainerView.isHidden = true
         
+        containerView.addSubview(sidebarBackgroundView)
+        
+        containerView.addSubview(activeContentView)
+        
+        sidebarBackgroundView.addSubview(sidebarCollectionView)
+        
+        view.addSubview(toolbar)
+    }
+    
+    func readyWatcher() {
         clientUser.onReady = {
             DispatchQueue.main.async {
                 CATransaction.begin()
@@ -272,6 +254,10 @@ class ViewController: UIViewController {
                 CATransaction.commit()
             }
         }
+    }
+    
+    func setupToolbar() {
+        toolbar.setItems([UIButton(), mainMenuButton, settingsButton, UIButton()])
     }
     
     func setupButtonActions() {
@@ -349,15 +335,15 @@ class ViewController: UIViewController {
             ])
             
             if #available(iOS 11.0, *) {
-                //toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-                view.addConstraint(toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10))
+                toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+                //view.addConstraint(toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10))
             } else {
                 toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
             }
         }
 
         // MARK: Container view
-        containerView.translatesAutoresizingMaskIntoConstraints = false
+        //containerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: offset),
             mainContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -371,7 +357,7 @@ class ViewController: UIViewController {
 
 
         // MARK: Sidebar
-        sidebarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        //sidebarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             sidebarBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             sidebarBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -380,7 +366,7 @@ class ViewController: UIViewController {
         ])
 
         // MARK: Active content area
-        activeContentView.translatesAutoresizingMaskIntoConstraints = false
+        //activeContentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             activeContentView.leadingAnchor.constraint(equalTo: sidebarBackgroundView.trailingAnchor, constant: 10),
             activeContentView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -389,7 +375,6 @@ class ViewController: UIViewController {
         ])
 
         // MARK: Sidebar collection
-        sidebarCollectionView.translatesAutoresizingMaskIntoConstraints = false
         sidebarCollectionView.pinToEdges(of: sidebarBackgroundView, insetBy: .init(top: 6, left: 6, bottom: 6, right: 6))
     }
 

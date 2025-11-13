@@ -35,6 +35,16 @@ extension TextViewController {
             for recipient in recipients {
                 dmRecipients.append(recipient)
             }
+        } else if let channel = self.channel as? GuildChannel {
+            guard let channelGuild = channel.guild else { return }
+            let guildMembers = channelGuild.members
+
+            for recipientID in self.userIDsInStack {
+                if guildMembers[recipientID] != nil {
+                    dmRecipients.append(guildMembers[recipientID]!.user)
+                }
+            }
+            
         }
         
         for recipient in dmRecipients {

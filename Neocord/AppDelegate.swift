@@ -24,16 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var rootVC: UIViewController
         var navController: UINavigationController
         AvatarCache.shared.memoryCache.countLimit = 20
-        print(UIColor.black.argbInt)
-        
-        //window?.clipsToBounds = false
-        //window?.frame = UIScreen.main.bounds
-        //window?.rootViewController = TestViewController()
-        //window?.makeKeyAndVisible()
-        //return true
-        
 
-        
         if token != nil {
             rootVC = ViewController()
             navController = CustomNavigationController(rootViewController: rootVC)

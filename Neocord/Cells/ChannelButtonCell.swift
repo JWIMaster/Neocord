@@ -28,22 +28,16 @@ class ChannelButtonCell: UICollectionViewCell {
     
     private var backgroundGlass: UIView? = {
         if ThemeEngine.enableGlass {
-            switch device {
-            case .a4:
-                let bg = UIView()
-                bg.layer.cornerRadius = 22
-                return bg
-            default:
-                let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true)
-                lg.shadowOpacity = 0.6
-                lg.shadowRadius = 0
-                lg.solidViewColour = .clear
-                lg.translatesAutoresizingMaskIntoConstraints = false
-                return lg
-            }
+            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true)
+            lg.shadowOpacity = 0.6
+            lg.shadowRadius = 0
+            lg.solidViewColour = .clear
+            lg.translatesAutoresizingMaskIntoConstraints = false
+            return lg
         } else {
             let bg = UIView()
             bg.layer.cornerRadius = 22
+            bg.translatesAutoresizingMaskIntoConstraints = false
             return bg
         }
     }()

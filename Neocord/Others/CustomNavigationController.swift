@@ -5,15 +5,7 @@ import UIKitExtensions
 public class CustomNavigationController: UINavigationController {
 
     private let customNavBar: UIView? = {
-        switch device {
-        case .a4:
-            let navBar = UIView()
-            navBar.layer.cornerRadius = 12
-            navBar.backgroundColor = .discordGray.withAlphaComponent(0.8)
-            navBar.layer.shadowRadius = 12
-            navBar.layer.shadowOpacity = 0.6
-            return navBar
-        default:
+        if ThemeEngine.enableGlass {
             let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
             glassView.frameInterval = PerformanceManager.frameInterval
             glassView.scaleFactor = PerformanceManager.scaleFactor
@@ -21,6 +13,14 @@ public class CustomNavigationController: UINavigationController {
             glassView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             glassView.translatesAutoresizingMaskIntoConstraints = false
             return glassView
+        } else {
+            let navBar = UIView()
+            navBar.layer.cornerRadius = 12
+            navBar.backgroundColor = .discordGray.withAlphaComponent(0.8)
+            navBar.layer.shadowRadius = 12
+            navBar.layer.shadowOpacity = 0.6
+            navBar.translatesAutoresizingMaskIntoConstraints = false
+            return navBar
         }
     }()
     
@@ -72,19 +72,7 @@ public class CustomNavigationController: UINavigationController {
         customNavBar.heightAnchor.constraint(equalToConstant: navBarFrame.frame.height).isActive = true
         customNavBar.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         if #available(iOS 11.0, *) {
-            let guide: UIKit.UILayoutGuide = view.safeAreaLayoutGuide
-            customNavBar.translatesAutoresizingMaskIntoConstraints = false
-            let topConstraint = NSLayoutConstraint(
-                item: customNavBar,
-                attribute: .top,
-                relatedBy: .equal,
-                toItem: guide,
-                attribute: .top,
-                multiplier: 1,
-                constant: 0
-            )
-            view.addConstraint(topConstraint)
-
+            customNavBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         } else {
             customNavBar.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 22).isActive = true
         }
@@ -147,9 +135,7 @@ public class CustomNavigationController: UINavigationController {
     
     public override func viewDidAppear(_ animated: Bool) {
         
-        if let customNavBar = customNavBar as? LiquidGlassView {
-            
-        } else {
+        if !(self.customNavBar is LiquidGlassView) {
             customNavBar!.layer.shadowPath = UIBezierPath(roundedRect: customNavBar!.bounds, cornerRadius: 12).cgPath
         }
         

@@ -10,17 +10,20 @@ class CustomToolbar: UIView {
         sv.distribution = .equalSpacing
         sv.alignment = .center
         sv.spacing = 8
+        sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     
     private let backgroundView: UIView? = {
-        switch device {
-        case .a4:
-            return UIView()
-        default:
+        if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 22, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
+            glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
+        } else {
+            let bg = UIView()
+            bg.translatesAutoresizingMaskIntoConstraints = false
+            return bg
         }
     }()
 
@@ -38,7 +41,7 @@ class CustomToolbar: UIView {
     private func setupViews() {
         guard let backgroundView = backgroundView else { return }
         addSubview(backgroundView)
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        //backgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -48,7 +51,7 @@ class CustomToolbar: UIView {
         
         
         addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        //stackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Pin stackView to safe area
         NSLayoutConstraint.activate([

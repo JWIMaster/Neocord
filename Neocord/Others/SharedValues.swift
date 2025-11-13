@@ -79,6 +79,7 @@ public class StringCache {
 
 private var DeviceInfoClass = DeviceInfo()
 public var device: ChipsetClass {
+    return .a4
     return DeviceInfoClass.chipsetClass()
 }
 private var captureScale: CGFloat {

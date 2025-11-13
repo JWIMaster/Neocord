@@ -33,13 +33,13 @@ class ProfileView: UIView {
     var profileBanner = UIImageView()
     
     var bioBackground: UIView? = {
-        switch device {
-        case .a4:
-            return UIView()
-        default:
+        if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterOptions: [.darken, .depth, .rim, .tint])
             glass.shadowRadius = 6
             return glass
+        } else {
+            let bioBg = UIView()
+            return bioBg
         }
     }()
     
@@ -49,10 +49,7 @@ class ProfileView: UIView {
     var scrollView = UIScrollView()
     
     var backgroundView: UIView? = {
-        switch device {
-        case .a4:
-            return UIView()
-        default:
+        if ThemeEngine.enableGlass {
             let bg = LiquidGlassView(
                 blurRadius: 6,
                 cornerRadius: 0,
@@ -62,6 +59,9 @@ class ProfileView: UIView {
             )
             bg.shadowRadius = 50
             bg.shadowOpacity = 1
+            return bg
+        } else {
+            let bg = UIView()
             return bg
         }
     }()
@@ -265,10 +265,10 @@ class ProfileView: UIView {
             let colors = userProfile.themeColors.map { $0.withIncreasedSaturation(factor: 0.7) }
             let shifted = shiftedGradientColorsIfTwoDistinct(colors)
             
-            bg.tintGradientColors = shifted
+            bg.tintGradientColors = colors
             bg.tintColorForGlass = .clear
             bg.setNeedsLayout()
-
+            print(userProfile.themeColors)
             let bioColors = userProfile.themeColors.map { $0.withAlphaComponent(0.4).withIncreasedSaturation(factor: 0.7) }
             bioBg.tintGradientColors = shiftedGradientColorsIfTwoDistinct(bioColors)
             bioBg.tintColorForGlass = .clear

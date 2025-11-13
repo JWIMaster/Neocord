@@ -33,14 +33,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     let edited = UILabel()
     let messageBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            switch device {
-            case .a4:
-                let background = UIView()
-                background.layer.cornerRadius = 22
-                return background
-            default:
-                return LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
-            }
+            return LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
         } else {
             let background = UIView()
             background.layer.cornerRadius = 22
