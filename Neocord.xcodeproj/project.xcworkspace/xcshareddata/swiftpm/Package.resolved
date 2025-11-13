@@ -1,0 +1,59 @@
+{
+  "pins" : [
+    {
+      "identity" : "foundationcompatkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/FoundationCompatKit.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9bc6b1034bb141a4294d0f619492f90ba80d1599"
+      }
+    },
+    {
+      "identity" : "modernsdkkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/ModernSDKKit",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d506132e862b3e0e2b728857219a531d0d8fef8b"
+      }
+    },
+    {
+      "identity" : "sfsymbolscompatkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/SFSymbolsCompatKit.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "601133a5716a241d733683a0f848e5bf366f693b"
+      }
+    },
+    {
+      "identity" : "tsmarkdownparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/TSMarkdownParser.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9eb0b5156cf56ca800cb650e413bb6ad31b8bfe0"
+      }
+    },
+    {
+      "identity" : "uikitcompatkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/UIKitCompatKit.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "01f017870c9873cfb417712061aa5aadfa3041e2"
+      }
+    },
+    {
+      "identity" : "uikitextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/UIKitExtensions.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "89193e8e8b2e4bf26762d2507e708c8ffd12d5ec"
+      }
+    }
+  ],
+  "version" : 2
+}
