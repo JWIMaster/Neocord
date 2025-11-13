@@ -82,6 +82,7 @@ class ViewController: UIViewController {
         } else {
             let bg = UIView()
             bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
+            bg.layer.cornerRadius = 22
             bg.translatesAutoresizingMaskIntoConstraints = false
             return bg
         }
@@ -145,6 +146,7 @@ class ViewController: UIViewController {
         } else {
             let bg = UIView()
             bg.translatesAutoresizingMaskIntoConstraints = false
+            bg.layer.cornerRadius = 22
             bg.backgroundColor = .discordGray.withIncreasedSaturation(factor: 0.3)
             return bg
         }
@@ -182,7 +184,7 @@ class ViewController: UIViewController {
     var settingsButton: UIButton = {
         let button1 = UIButton(type: .custom)
         button1.setTitle("Settings", for: .normal)
-        button1.setImage(.init(systemName:"gear", tintColor: .white), for: .normal)
+        button1.setImage(.init(systemName:"person.fill", tintColor: .white), for: .normal)
         return button1
     }()
     
@@ -190,6 +192,13 @@ class ViewController: UIViewController {
         let button2 = UIButton(type: .custom)
         button2.setTitle("Menu", for: .normal)
         button2.setImage(.init(systemName:"list.bullet.below.rectangle", tintColor: .white), for: .normal)
+        return button2
+    }()
+    
+    var friendsButton: UIButton = {
+        let button2 = UIButton(type: .custom)
+        button2.setTitle("Friends", for: .normal)
+        button2.setImage(.init(systemName:"person.2.fill", tintColor: .white), for: .normal)
         return button2
     }()
     
@@ -248,6 +257,7 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
+                self.setupOrderedGuilds()
                 self.rebuildSidebarButtons()
                 self.sidebarCollectionView.reloadData()
                 self.dmCollectionView.reloadData()
@@ -257,7 +267,7 @@ class ViewController: UIViewController {
     }
     
     func setupToolbar() {
-        toolbar.setItems([UIButton(), mainMenuButton, settingsButton, UIButton()])
+        toolbar.setItems([mainMenuButton, friendsButton, settingsButton])
     }
     
     func setupButtonActions() {
@@ -296,6 +306,7 @@ class ViewController: UIViewController {
                 continue
             }
             
+            //If there's no ID, we have to give it one.
             if folder.id == nil || folder.id?.description == "" {
                 let uuidString = UUID().uuidString
                 let digitsString = uuidString.compactMap { $0.wholeNumberValue }.map(String.init).joined()
@@ -316,7 +327,30 @@ class ViewController: UIViewController {
         sidebarButtons = items
     }
 
+    func setupOrderedGuilds() {
+        guard let settings = clientUser.clientUserSettings else { return }
+        let guildFolders = settings.guildFolders
+        var orderID: [Snowflake] = []
+        guard let guildFolders = guildFolders else {
+            return
+        }
+        
+        for folder in guildFolders {
+            guard let guildIDs = folder.guildIDs else { return }
+            for id in guildIDs {
+                orderID.append(id)
+            }
+        }
+        
+        let orderedGuilds = orderID.compactMap { guildId in
+            return self.guilds.values.first { $0.id == guildId }
+        }
 
+        
+        self.orderedGuilds = orderedGuilds
+        
+        self.sidebarCollectionView.reloadData()
+    }
     
     func refreshView() {
         self.view.setNeedsLayout()
@@ -336,14 +370,12 @@ class ViewController: UIViewController {
             
             if #available(iOS 11.0, *) {
                 toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-                //view.addConstraint(toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10))
             } else {
                 toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
             }
         }
 
         // MARK: Container view
-        //containerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             mainContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: offset),
             mainContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -357,7 +389,6 @@ class ViewController: UIViewController {
 
 
         // MARK: Sidebar
-        //sidebarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             sidebarBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             sidebarBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -366,7 +397,6 @@ class ViewController: UIViewController {
         ])
 
         // MARK: Active content area
-        //activeContentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             activeContentView.leadingAnchor.constraint(equalTo: sidebarBackgroundView.trailingAnchor, constant: 10),
             activeContentView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
@@ -418,11 +448,9 @@ class ViewController: UIViewController {
         }
 
         // Add uncategorized channels at the end
-        let uncategorized = textChannels
-            .filter { $0.parentID == nil || categories.first(where: { $0.id == $0.parentID }) == nil }
-            .sorted { ($0.position ?? 0) < ($1.position ?? 0) }
+        //let uncategorized = textChannels.filter { $0.parentID == nil || categories.first(where: { $0.id == $0.parentID }) == nil }.sorted { ($0.position ?? 0) < ($1.position ?? 0) }
 
-        displayedChannels.append(contentsOf: uncategorized)
+        //displayedChannels.append(contentsOf: uncategorized)
         
         channelsCollectionView.reloadData()
     }

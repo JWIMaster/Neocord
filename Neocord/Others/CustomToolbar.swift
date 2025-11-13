@@ -7,7 +7,7 @@ class CustomToolbar: UIView {
     private let stackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
-        sv.distribution = .equalSpacing
+        sv.distribution = .fill
         sv.alignment = .center
         sv.spacing = 8
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,6 @@ class CustomToolbar: UIView {
     private func setupViews() {
         guard let backgroundView = backgroundView else { return }
         addSubview(backgroundView)
-        //backgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -49,28 +48,34 @@ class CustomToolbar: UIView {
             backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
-        
         addSubview(stackView)
-        //stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Pin stackView to safe area
+        // Center stackView horizontally and vertically
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+        
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = 12
+        stackView.distribution = .fill // let buttons keep intrinsic width
     }
 
-    // MARK: - Public API
     func setItems(_ buttons: [UIButton]) {
         // Remove old buttons
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
+        // Add buttons directly to stackView
         for button in buttons {
             stackView.addArrangedSubview(button)
+            button.setContentHuggingPriority(.required, for: .horizontal)
         }
+        
+        // Force layout update
+        stackView.layoutIfNeeded()
     }
+
 }
 
 

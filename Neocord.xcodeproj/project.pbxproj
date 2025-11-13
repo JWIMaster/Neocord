@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5F0F1F872EB834A900CEF378 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0F1F862EB834A900CEF378 /* LoginManager.swift */; };
 		5F0F1F942EB8A3B500CEF378 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F0F1F932EB8A3B500CEF378 /* Assets.xcassets */; };
+		5F139A472EC5A1FD0092EDA6 /* NSJSONSerializationForSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5F139A462EC5A1FD0092EDA6 /* NSJSONSerializationForSwift */; };
 		5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913A42EA989510019DC0F /* AvatarCache.swift */; };
 		5F2914002EAB093C0019DC0F /* DMButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */; };
 		5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2914012EAB09440019DC0F /* ChannelButtonView.swift */; };
@@ -144,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F57B8C12E9EEAE000CA2CE2 /* ModernSDKKit in Frameworks */,
+				5F139A472EC5A1FD0092EDA6 /* NSJSONSerializationForSwift in Frameworks */,
 				5F57B8C62E9EF1CF00CA2CE2 /* SwiftcordLegacy in Frameworks */,
 				5FEF14622EA0CF1A005598D3 /* UIKitExtensions in Frameworks */,
 				5FE178362EAF17D000FC4AA4 /* TSMarkdownParser in Frameworks */,
@@ -356,6 +358,7 @@
 				5F57B8C52E9EF1CF00CA2CE2 /* SwiftcordLegacy */,
 				5FEF14612EA0CF1A005598D3 /* UIKitExtensions */,
 				5FE178352EAF17D000FC4AA4 /* TSMarkdownParser */,
+				5F139A462EC5A1FD0092EDA6 /* NSJSONSerializationForSwift */,
 			);
 			productName = MakingADiscordAPI;
 			productReference = 5F57B8AE2E9EEAC600CA2CE2 /* Neocord.app */;
@@ -389,6 +392,7 @@
 				5F57B8BF2E9EEAE000CA2CE2 /* XCRemoteSwiftPackageReference "ModernSDKKit" */,
 				5FEF14602EA0CF1A005598D3 /* XCRemoteSwiftPackageReference "UIKitExtensions" */,
 				5FE178342EAF17D000FC4AA4 /* XCRemoteSwiftPackageReference "TSMarkdownParser" */,
+				5F139A452EC5A1FD0092EDA6 /* XCRemoteSwiftPackageReference "NSJSONSerialization-for-Swift" */,
 			);
 			productRefGroup = 5F57B8AF2E9EEAC600CA2CE2 /* Products */;
 			projectDirPath = "";
@@ -693,6 +697,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5F139A452EC5A1FD0092EDA6 /* XCRemoteSwiftPackageReference "NSJSONSerialization-for-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JWIMaster/NSJSONSerialization-for-Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		5F57B8BF2E9EEAE000CA2CE2 /* XCRemoteSwiftPackageReference "ModernSDKKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JWIMaster/ModernSDKKit";
@@ -720,6 +732,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5F139A462EC5A1FD0092EDA6 /* NSJSONSerializationForSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5F139A452EC5A1FD0092EDA6 /* XCRemoteSwiftPackageReference "NSJSONSerialization-for-Swift" */;
+			productName = NSJSONSerializationForSwift;
+		};
 		5F57B8C02E9EEAE000CA2CE2 /* ModernSDKKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5F57B8BF2E9EEAE000CA2CE2 /* XCRemoteSwiftPackageReference "ModernSDKKit" */;

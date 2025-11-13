@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "nsjsonserialization-for-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/NSJSONSerialization-for-Swift",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7f30560fccca01843cff7ff1c6be4c0a1f066cac"
+      }
+    },
+    {
       "identity" : "sfsymbolscompatkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JWIMaster/SFSymbolsCompatKit.git",
@@ -51,7 +60,7 @@
       "location" : "https://github.com/JWIMaster/UIKitExtensions.git",
       "state" : {
         "branch" : "master",
-        "revision" : "89193e8e8b2e4bf26762d2507e708c8ffd12d5ec"
+        "revision" : "806b054d9d87b29b7459ee4796f37222626213e5"
       }
     }
   ],

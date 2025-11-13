@@ -11,6 +11,7 @@ import UIKitExtensions
 import UIKitCompatKit
 import iOS6BarFix
 import LiveFrost
+import AudioToolbox
 
 // MARK: - Collection View
 // MARK: - Collection View
@@ -78,39 +79,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
                 showContentView(channelsCollectionView)
                 setupChannelCollectionView(for: guild)
             case .folder(let folder, _):
-                guard let folderID = folder.id?.description else { return }
-                print(folderID)
-                let isExpanded = UserDefaults.standard.bool(forKey: folderID)
-                let guildsInFolder = orderedGuilds.filter { folder.guildIDs?.contains($0.id!) ?? false }
-                guard !guildsInFolder.isEmpty else { return }
-
-                guard let folderIndex = sidebarButtons.firstIndex(where: {
-                    if case .folder(let f, _) = $0 { return f.id == folder.id }
-                    return false
-                }) else { return }
-                
-                let startIndex = folderIndex + 1
-
-                sidebarCollectionView.performBatchUpdates({
-                    if isExpanded {
-                        // Collapse
-                        let endIndex = min(startIndex + guildsInFolder.count, sidebarButtons.count)
-                        let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0) }
-                        sidebarButtons.removeSubrange(startIndex..<endIndex)
-                        sidebarCollectionView.deleteItems(at: indexPaths)
-                    } else {
-                        // Expand
-                        sidebarButtons.insert(contentsOf: guildsInFolder.map { .guild($0) }, at: startIndex)
-                        let indexPaths = (startIndex..<startIndex + guildsInFolder.count).map { IndexPath(item: $0, section: 0) }
-                        sidebarCollectionView.insertItems(at: indexPaths)
-                    }
-
-                    // Update folder itself with new expanded state
-                    sidebarButtons[folderIndex] = .folder(folder, isExpanded: !isExpanded)
-                }, completion: nil)
-                
-                UserDefaults.standard.set(!isExpanded, forKey: folderID)
-                self.rebuildSidebarButtons()
+                didSelectFolder(folder)
             }
             
         case channelsCollectionView:
@@ -211,6 +180,63 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         }*/
     }
     
+    
+    func didSelectFolder(_ folder: GuildFolder) {
+        guard let folderID = folder.id?.description else { return }
+        print(folderID)
+        let isExpanded = UserDefaults.standard.bool(forKey: folderID)
+
+        let guildsInFolder = orderedGuilds.filter { folder.guildIDs?.contains($0.id!) ?? false }
+        guard !guildsInFolder.isEmpty else { return }
+
+        guard let folderIndex = sidebarButtons.firstIndex(where: {
+            if case .folder(let f, _) = $0 { return f.id == folder.id }
+            return false
+        }) else { return }
+
+        let startIndex = folderIndex + 1
+        
+        let hapticSupport: Int = UIDevice.current.value(forKey: "_feedbackSupportLevel") as? Int ?? 0
+        switch hapticSupport {
+        case 0:
+            break
+        case 1:
+            AudioServicesPlaySystemSound(1519)
+        case 2:
+            if #available(iOS 10.0, *) {
+                let haptic = UISelectionFeedbackGenerator()
+                haptic.selectionChanged()
+            } else {
+                break
+            }
+        default:
+            break
+        }
+        
+        sidebarCollectionView.performBatchUpdates({
+            if isExpanded {
+                // Collapse
+
+                let endIndex = min(startIndex + guildsInFolder.count, sidebarButtons.count)
+                let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0) }
+                sidebarButtons.removeSubrange(startIndex..<endIndex)
+                sidebarCollectionView.deleteItems(at: indexPaths)
+            } else {
+                // Expand
+
+                sidebarButtons.insert(contentsOf: guildsInFolder.map { .guild($0) }, at: startIndex)
+                let indexPaths = (startIndex..<startIndex + guildsInFolder.count).map { IndexPath(item: $0, section: 0) }
+                sidebarCollectionView.insertItems(at: indexPaths)
+            }
+
+            // Update folder itself with new expanded state
+            sidebarButtons[folderIndex] = .folder(folder, isExpanded: !isExpanded)
+        }, completion: nil)
+        
+        UserDefaults.standard.set(!isExpanded, forKey: folderID)
+        self.rebuildSidebarButtons()
+    }
+    
     func updateTitle(_ title: String) {
         self.title = title
         (navigationController as? CustomNavigationController)?.updateTitle(for: self)
@@ -279,35 +305,7 @@ extension ViewController {
     }
 
     
-    func setupOrderedGuilds() {
-        guard let settings = clientUser.clientUserSettings else { return }
-        let guildFolders = settings.guildFolders
-        var orderID: [Snowflake] = []
-        guard let guildFolders = guildFolders else {
-            return
-        }
-        
-        for folder in guildFolders {
-            guard let guildIDs = folder.guildIDs else { return }
-            for id in guildIDs {
-                orderID.append(id)
-            }
-        }
-        let guilds = clientUser.guilds
-        for (id, guild) in guilds {
-            self.guilds[id] = guild
-        }
-        
-        
-        let orderedGuilds = orderID.compactMap { guildId in
-            return self.guilds.values.first { $0.id == guildId }
-        }
-        
-        //self.guilds = orderedGuilds
-        self.orderedGuilds = orderedGuilds
-        
-        self.sidebarCollectionView.reloadData()
-    }
+    
 }
 
 extension UIView {
