@@ -48,6 +48,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     var markdownParser: TSMarkdownParser = TSMarkdownParser.standard()
     var member: GuildMember?
     var guildTextChannel: GuildChannel?
+    var isSameUser: Bool = false
     
     
     static let markdownQueue: DispatchQueue = DispatchQueue(label: "com.jwi.markdownrender", attributes: .concurrent, target: .global(qos: .userInitiated))
@@ -74,10 +75,11 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     let messageTextAndEmoji = DiscordMarkdownView()
     
-    public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil) {
+    public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false) {
         super.init(frame: .zero)
         self.slClient = slClient
         self.message = message
+        self.isSameUser = isSameUser
         self.isClientUser = {
             return message.author == slClient.clientUser
         }()

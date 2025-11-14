@@ -48,15 +48,19 @@ extension TextViewController {
     //Add messages fetched via REST API to the stack
     func addMessagesToStack(_ messages: [Message]) {
         for message in messages {
-            if let messageID = message.id, let userID = message.author?.id, !messageIDsInStack.contains(messageID) {
+            if let messageID = message.id, let user = message.author, let userID = user.id, !messageIDsInStack.contains(messageID) {
                 var messageView: MessageView
+                var isSameUser: Bool
+                self.secondLastUserToSpeak = self.lastUserToSpeak
+                self.lastUserToSpeak = user
+                isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
                 if let channel = channel {
-                    messageView = MessageView(clientUser, message: message, guildTextChannel: channel)
+                    messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser)
                     if !requestedUserIDs.contains(userID) {
                         requestedUserIDs.insert(userID)
                     }
                 } else {
-                    messageView = MessageView(clientUser, message: message)
+                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser)
                 }
                 self.messageStack.addArrangedSubview(messageView)
                 messageIDsInStack.insert(messageID)

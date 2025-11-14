@@ -17,7 +17,7 @@ import FoundationCompatKit
 public typealias UIStackView = UIKitCompatKit.UIStackView
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var dms: [DMChannel] {
         get {
@@ -493,7 +493,8 @@ class ViewController: UIViewController {
         channelsCollectionView.reloadData()
     }
 
-
+    
+    
     
 }
 

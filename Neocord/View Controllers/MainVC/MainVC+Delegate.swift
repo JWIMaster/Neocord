@@ -73,6 +73,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
             switch button {
             case .dms:
                 showContentView(dmCollectionView)
+                dmCollectionView.reloadData()
                 if dmCollectionView.numberOfItems(inSection: 0) != dms.count { dmCollectionView.reloadData() }
                 updateTitle("Direct Messages")
             case .guild(let guild):

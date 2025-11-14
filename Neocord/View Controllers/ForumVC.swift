@@ -12,7 +12,7 @@ import UIKitCompatKit
 import LiveFrost
 import iOS6BarFix
 
-class ForumViewController: UIViewController {
+class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
 
     let forum: GuildForum
     var threads: [GuildThread] = []
@@ -61,6 +61,7 @@ class ForumViewController: UIViewController {
         collectionView.pinToEdges(of: view, insetBy: .init(top: offset, left: 0, bottom: 0, right: 0))
         
         loadThreads()
+        addBackGesture()
         
         // Listen for Thread List Sync events from the gateway
         clientUser.gateway?.handleThreadListSync = { [weak self] guildId in
@@ -89,6 +90,37 @@ class ForumViewController: UIViewController {
                     ($0.lastMessageID?.rawValue ?? 0) > ($1.lastMessageID?.rawValue ?? 0)
                 }
                 self.collectionView.reloadData()
+            }
+        }
+    }
+    
+    func addBackGesture() {
+        let backGesture = UIPanGestureRecognizer(target: self, action: #selector(goBack))
+        backGesture.isEnabled = true
+        backGesture.cancelsTouchesInView = false
+        backGesture.delegate = self
+        self.view.addGestureRecognizer(backGesture)
+    }
+    
+    
+    @objc func goBack(_ pan: UIPanGestureRecognizer) {
+        let velocity = pan.velocity(in: view)
+        let translation = pan.translation(in: view)
+
+        // Only consider horizontal swipes
+        guard abs(velocity.x) > abs(velocity.y) else { return }
+        
+        // Only left-to-right
+        guard velocity.x > 0 else { return }
+        
+        // Require minimum force (speed)
+        let minimumVelocity: CGFloat = 500 // points per second
+        let minimumTranslation: CGFloat = 50 // minimum distance swiped
+
+        if velocity.x > minimumVelocity || translation.x > minimumTranslation {
+            // Gesture is strong enough, perform back action
+            if pan.state == .ended {
+                navigationController?.popViewController(animated: true)
             }
         }
     }

@@ -28,6 +28,7 @@ extension InputView {
         self.editMessage = message
         self.textView.text = self.editMessage?.content
         self.textViewDidChange(self.textView)
+        self.removeContextBubble()
         self.addContextBubble(with: "Editing")
         if let parentVC = parentViewController as? TextViewController {
             parentVC.updateInputOffset()
@@ -38,7 +39,8 @@ extension InputView {
     public func replyToMessage(_ message: Message) {
         self.changeInputMode(to: .reply)
         self.replyMessage = message
-        self.addContextBubble(with: "Replying to")
+        self.removeContextBubble()
+        self.addContextBubble(with: "Replying to \(message.author?.displayname ?? message.author?.username ?? "unknown")")
         if let parentVC = parentViewController as? TextViewController {
             parentVC.updateInputOffset()
             parentVC.scrollToBottom(animated: true)
@@ -82,6 +84,9 @@ extension InputView {
         clientUser.reply(to: replyMessage, with: newMessage, in: channel) { [weak self] error in
             guard let self = self else { return }
             self.removeContextBubble()
+            if let parentVC = self.parentViewController as? TextViewController {
+                parentVC.updateInputOffset()
+            }
         }
     }
     
@@ -119,6 +124,9 @@ extension InputView {
         clientUser.edit(message: editMessage, to: newMessage, in: channel) { [weak self] error in
             guard let self = self else { return }
             self.removeContextBubble()
+            if let parentVC = self.parentViewController as? TextViewController {
+                parentVC.updateInputOffset()
+            }
         }
     }
 }

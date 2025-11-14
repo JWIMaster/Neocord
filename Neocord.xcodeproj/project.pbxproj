@@ -34,6 +34,7 @@
 		5F57B8C12E9EEAE000CA2CE2 /* ModernSDKKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5F57B8C02E9EEAE000CA2CE2 /* ModernSDKKit */; };
 		5F57B8C62E9EF1CF00CA2CE2 /* SwiftcordLegacy in Frameworks */ = {isa = PBXBuildFile; productRef = 5F57B8C52E9EF1CF00CA2CE2 /* SwiftcordLegacy */; };
 		5F57B8CB2E9F327000CA2CE2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F57B8CA2E9F327000CA2CE2 /* Default-568h@2x.png */; };
+		5F5AF8A62EC718B600D0C660 /* FoundationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 5F5AF8A52EC718B600D0C660 /* FoundationExtensions */; };
 		5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */; };
 		5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */; };
 		5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE912EBC7A5200577B00 /* SettingsView.swift */; };
@@ -159,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F57B8C12E9EEAE000CA2CE2 /* ModernSDKKit in Frameworks */,
+				5F5AF8A62EC718B600D0C660 /* FoundationExtensions in Frameworks */,
 				5F139A472EC5A1FD0092EDA6 /* NSJSONSerializationForSwift in Frameworks */,
 				5F57B8C62E9EF1CF00CA2CE2 /* SwiftcordLegacy in Frameworks */,
 				5FEF14622EA0CF1A005598D3 /* UIKitExtensions in Frameworks */,
@@ -388,6 +390,7 @@
 				5FEF14612EA0CF1A005598D3 /* UIKitExtensions */,
 				5FE178352EAF17D000FC4AA4 /* TSMarkdownParser */,
 				5F139A462EC5A1FD0092EDA6 /* NSJSONSerializationForSwift */,
+				5F5AF8A52EC718B600D0C660 /* FoundationExtensions */,
 			);
 			productName = MakingADiscordAPI;
 			productReference = 5F57B8AE2E9EEAC600CA2CE2 /* Neocord.app */;
@@ -422,6 +425,7 @@
 				5FEF14602EA0CF1A005598D3 /* XCRemoteSwiftPackageReference "UIKitExtensions" */,
 				5FE178342EAF17D000FC4AA4 /* XCRemoteSwiftPackageReference "TSMarkdownParser" */,
 				5F139A452EC5A1FD0092EDA6 /* XCRemoteSwiftPackageReference "NSJSONSerialization-for-Swift" */,
+				5F5AF8A42EC718B600D0C660 /* XCRemoteSwiftPackageReference "FoundationExtensions" */,
 			);
 			productRefGroup = 5F57B8AF2E9EEAC600CA2CE2 /* Products */;
 			projectDirPath = "";
@@ -749,6 +753,14 @@
 				kind = branch;
 			};
 		};
+		5F5AF8A42EC718B600D0C660 /* XCRemoteSwiftPackageReference "FoundationExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JWIMaster/FoundationExtensions";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		5FE178342EAF17D000FC4AA4 /* XCRemoteSwiftPackageReference "TSMarkdownParser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JWIMaster/TSMarkdownParser.git";
@@ -781,6 +793,11 @@
 		5F57B8C52E9EF1CF00CA2CE2 /* SwiftcordLegacy */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftcordLegacy;
+		};
+		5F5AF8A52EC718B600D0C660 /* FoundationExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5F5AF8A42EC718B600D0C660 /* XCRemoteSwiftPackageReference "FoundationExtensions" */;
+			productName = FoundationExtensions;
 		};
 		5FE178352EAF17D000FC4AA4 /* TSMarkdownParser */ = {
 			isa = XCSwiftPackageProductDependency;

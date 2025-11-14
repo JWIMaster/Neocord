@@ -11,6 +11,7 @@ import UIKitExtensions
 import SwiftcordLegacy
 import SFSymbolsCompatKit
 import FoundationCompatKit
+import FoundationExtensions
 
 extension InputView {
     public func addContextBubble(with text: String) {
@@ -26,12 +27,14 @@ extension InputView {
     
     
     public func removeContextBubble() {
-        self.bubbleStack.removeArrangedSubview(self.contextBubble!)
+        guard let contextBubble = self.contextBubble else { return }
+        self.bubbleStack.removeArrangedSubview(contextBubble)
         if self.bubbleStack.arrangedSubviews.count == 0 {
             self.topConstraint.constant = 0
         }
         self.layoutIfNeeded()
     }
+    
 }
 
 
@@ -75,16 +78,9 @@ extension InputView {
         // Resolve the display name once and store it
         let name: String
         if let member = member {
-            name = member.guildNickname
-                ?? user.nickname
-                ?? user.displayname
-                ?? user.username
-                ?? "unknown"
+            name = member.guildNickname ?? user.nickname ?? user.displayname ?? user.username ?? "unknown"
         } else {
-            name = user.nickname
-                ?? user.displayname
-                ?? user.username
-                ?? "unknown"
+            name = user.nickname ?? user.displayname ?? user.username ?? "unknown"
         }
         
         // Store name directly

@@ -87,6 +87,7 @@ public class InputView: UIView, UITextViewDelegate {
     public lazy var bubbleStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.spacing = 4
         stack.axis = .vertical
         stack.alignment = .center
         return stack
@@ -139,39 +140,45 @@ public class InputView: UIView, UITextViewDelegate {
             self?.sendMessageAction()
         }
         
-        buttonStack.addArrangedSubview(sendButton)
-        addSubview(buttonStack)
-        bringSubviewToFront(sendButton)
+        addSubview(sendButton)
     }
     
     private func setupConstraints() {
         guard let backgroundView = backgroundView else { return }
-        
-        topConstraint = backgroundView.topAnchor.constraint(equalTo: bubbleStack.bottomAnchor)
-        
+
+        // Bubble stack at top
         NSLayoutConstraint.activate([
             bubbleStack.topAnchor.constraint(equalTo: self.topAnchor),
             bubbleStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            bubbleStack.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            
+            bubbleStack.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        ])
+        bubbleStack.setContentHuggingPriority(.required, for: .vertical)
+        bubbleStack.setContentCompressionResistancePriority(.required, for: .vertical)
+        topConstraint = backgroundView.topAnchor.constraint(equalTo: bubbleStack.bottomAnchor)
+        
+        sendButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor).isActive = true
+        sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        activateButtonBackgroundConstraints()
+        
+        // Background view below bubbleStack, minimum height to prevent collapse
+        NSLayoutConstraint.activate([
             topConstraint,
-            backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -60)
+            backgroundView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -20),
+            backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            //THIS IS NEEDED OR ELSE IT COLLAPSES ON iOS 6
+            backgroundView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
         ])
         
-        NSLayoutConstraint.activate([
+        textView.pinToEdges(of: backgroundView)
+        /*NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: backgroundView.topAnchor),
             textView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor),
             textView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor)
-        ])
-        
-        buttonStack.centerYAnchor.constraint(equalTo: textView.centerYAnchor).isActive = true
-        buttonStack.leadingAnchor.constraint(equalTo: textView.trailingAnchor, constant: 20).isActive = true
-        
-        activateButtonBackgroundConstraints()
+        ])*/
     }
+
     
     func activateButtonBackgroundConstraints() {
         guard let buttonBackground = buttonBackground else { return }

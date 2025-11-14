@@ -49,23 +49,20 @@ extension TextViewController {
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            
+            guard let user = message.author else { return }
+            if let textInputView = self.textInputView, textInputView.activeTypingUsers.keys.contains(user.id!) {
+                textInputView.removeTyping(for: user.id!)
+            }
+            var isSameUser: Bool
+            self.secondLastUserToSpeak = self.lastUserToSpeak
+            self.lastUserToSpeak = user
+            isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
             if isGuildMessage, let channel = self.channel {
-                // Guild channel: include guild context
-                guard let user = message.author else { return }
-                if let textInputView = self.textInputView, textInputView.activeTypingUsers.keys.contains(user.id!) {
-                    textInputView.removeTyping(for: user.id!)
-                }
-                let messageView = MessageView(clientUser, message: message, guildTextChannel: channel)
+                let messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser)
                 self.messageStack.addArrangedSubview(messageView)
                 self.requestMemberIfNeeded(userID)
             } else {
-                // DM channel
-                guard let user = message.author else { return }
-                if self.textInputView!.activeTypingUsers.keys.contains(user.id!) {
-                    self.textInputView?.removeTyping(for: user.id!)
-                }
-                let messageView = MessageView(clientUser, message: message)
+                let messageView = MessageView(clientUser, message: message, isSameUser: isSameUser)
                 self.messageStack.addArrangedSubview(messageView)
             }
             

@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "foundationextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/FoundationExtensions",
+      "state" : {
+        "branch" : "master",
+        "revision" : "6a85e00bb47025831c355ae92722469e1e45a28f"
+      }
+    },
+    {
       "identity" : "modernsdkkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JWIMaster/ModernSDKKit",
@@ -51,7 +60,7 @@
       "location" : "https://github.com/JWIMaster/UIKitCompatKit.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7659f037cce45fc41b262fbdd614e9764cc4b537"
+        "revision" : "709a64783577a80fa0e024461fd77f82ceb1cbcb"
       }
     },
     {
@@ -60,7 +69,7 @@
       "location" : "https://github.com/JWIMaster/UIKitExtensions.git",
       "state" : {
         "branch" : "master",
-        "revision" : "806b054d9d87b29b7459ee4796f37222626213e5"
+        "revision" : "c106f8396235a35b59d38433ca0c9359551dae06"
       }
     }
   ],

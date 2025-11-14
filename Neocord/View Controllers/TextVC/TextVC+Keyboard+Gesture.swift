@@ -33,20 +33,60 @@ extension TextViewController {
         tapGesture.cancelsTouchesInView = false
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
+        
+        backGesture = UIPanGestureRecognizer(target: self, action: #selector(goBack))
+        backGesture.isEnabled = true
+        backGesture.cancelsTouchesInView = false
+        backGesture.delegate = self
+        containerView.addGestureRecognizer(backGesture)
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+    @objc func goBack(_ pan: UIPanGestureRecognizer) {
+        // Find the main scroll view
+        if scrollView.isDecelerating {
+            return
+        }
+
+        let velocity = pan.velocity(in: view)
+        let translation = pan.translation(in: view)
+
+        // Only consider horizontal swipes
+        guard abs(velocity.x) > abs(velocity.y) else { return }
+        
+        // Only left-to-right
+        guard velocity.x > 0 else { return }
+        
+        // Require minimum force (speed)
+        let minimumVelocity: CGFloat = 500
+        let minimumTranslation: CGFloat = 50
+
+        if velocity.x > minimumVelocity || translation.x > minimumTranslation {
+            if pan.state == .ended {
+                navigationController?.popViewController(animated: true)
+            }
+        }
     }
+
+    
+    
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // Make tap wait to see if hold activates
+        // Make back swipe wait if the other gesture is a reply swipe
+        if gestureRecognizer == backGesture,
+           let otherPan = otherGestureRecognizer as? UIPanGestureRecognizer,
+           otherPan.view is MessageView {
+            return true
+        }
+        
+        // Existing logic: tap waits for long press
         if gestureRecognizer is UITapGestureRecognizer, otherGestureRecognizer is UILongPressGestureRecognizer {
             return true
         }
+        
         return false
     }
+
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if touch.view is UIControl || touch.view is UITextView || touch.view is InputView {

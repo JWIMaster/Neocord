@@ -99,17 +99,8 @@ public class CustomNavigationController: UINavigationController {
         backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         titleLabel.centerXAnchor.constraint(equalTo: customNavBar.centerXAnchor).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: customNavBar.centerYAnchor).isActive = true
+        titleLabel.widthAnchor.constraint(lessThanOrEqualTo: customNavBar.widthAnchor, multiplier: 0.55).isActive = true
         
-        let maxWidthConstraint = NSLayoutConstraint(
-            item: titleLabel,
-            attribute: .width,
-            relatedBy: .lessThanOrEqual,
-            toItem: customNavBar,
-            attribute: .width,
-            multiplier: 0.55,
-            constant: 0 // leave room for back button
-        )
-        customNavBar.addConstraint(maxWidthConstraint)
         
         NSLayoutConstraint.activate([
             
