@@ -10,6 +10,13 @@
 		5F0F1F872EB834A900CEF378 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0F1F862EB834A900CEF378 /* LoginManager.swift */; };
 		5F0F1F942EB8A3B500CEF378 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F0F1F932EB8A3B500CEF378 /* Assets.xcassets */; };
 		5F139A472EC5A1FD0092EDA6 /* NSJSONSerializationForSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5F139A462EC5A1FD0092EDA6 /* NSJSONSerializationForSwift */; };
+		5F139A492EC5E3B30092EDA6 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A482EC5E3B30092EDA6 /* FriendsView.swift */; };
+		5F139A4B2EC69A690092EDA6 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4A2EC69A690092EDA6 /* FriendCell.swift */; };
+		5F139A4D2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */; };
+		5F139A502EC6C8D90092EDA6 /* InputView+Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */; };
+		5F139A522EC6C8E10092EDA6 /* InputView+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */; };
+		5F139A542EC6C8EB0092EDA6 /* LargeHitAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */; };
+		5F139A562EC6CA5C0092EDA6 /* Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A552EC6CA5C0092EDA6 /* Bubble.swift */; };
 		5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913A42EA989510019DC0F /* AvatarCache.swift */; };
 		5F2914002EAB093C0019DC0F /* DMButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */; };
 		5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2914012EAB09440019DC0F /* ChannelButtonView.swift */; };
@@ -75,6 +82,13 @@
 /* Begin PBXFileReference section */
 		5F0F1F862EB834A900CEF378 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		5F0F1F932EB8A3B500CEF378 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5F139A482EC5E3B30092EDA6 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		5F139A4A2EC69A690092EDA6 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
+		5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+ProfileView.swift"; sourceTree = "<group>"; };
+		5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputView+Bubble.swift"; sourceTree = "<group>"; };
+		5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputView+Actions.swift"; sourceTree = "<group>"; };
+		5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeHitAreaButton.swift; sourceTree = "<group>"; };
+		5F139A552EC6CA5C0092EDA6 /* Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bubble.swift; sourceTree = "<group>"; };
 		5F2913A42EA989510019DC0F /* AvatarCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCache.swift; sourceTree = "<group>"; };
 		5F2913A62EA999FA0019DC0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMButtonCell.swift; sourceTree = "<group>"; };
@@ -155,6 +169,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5F139A4E2EC6C8CA0092EDA6 /* InputView */ = {
+			isa = PBXGroup;
+			children = (
+				5FEF14A72EA4485B005598D3 /* InputView.swift */,
+				5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */,
+				5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */,
+				5F139A552EC6CA5C0092EDA6 /* Bubble.swift */,
+			);
+			path = InputView;
+			sourceTree = "<group>";
+		};
 		5F50947E2EA5789A002646A2 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,14 +196,16 @@
 		5F50947F2EA578AB002646A2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5F139A4E2EC6C8CA0092EDA6 /* InputView */,
 				5FACCA252EBAD43A007EC568 /* ProfileView */,
 				5F9F58D92EB6E6CD00A09760 /* MessageView */,
-				5FEF14A72EA4485B005598D3 /* InputView.swift */,
 				5F2914012EAB09440019DC0F /* ChannelButtonView.swift */,
 				5FE178502EB025F700FC4AA4 /* MessageActionView.swift */,
 				5F7987192EB1DD5C0058566C /* ReplyView.swift */,
 				5F64FE912EBC7A5200577B00 /* SettingsView.swift */,
 				5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */,
+				5F139A482EC5E3B30092EDA6 /* FriendsView.swift */,
+				5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -278,6 +305,7 @@
 				5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */,
 				5F9F58C82EB56F4100A09760 /* GuildButtonCell.swift */,
 				5F9F58CC2EB578A400A09760 /* ChannelButtonCell.swift */,
+				5F139A4A2EC69A690092EDA6 /* FriendCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -305,6 +333,7 @@
 				5F57B8B62E9EEAC600CA2CE2 /* MainVC.swift */,
 				5F9F58E52EB6EBCF00A09760 /* MainVC+Delegate.swift */,
 				5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */,
+				5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -435,6 +464,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F139A4D2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift in Sources */,
+				5F139A492EC5E3B30092EDA6 /* FriendsView.swift in Sources */,
 				5F9F58E62EB6EBCF00A09760 /* MainVC+Delegate.swift in Sources */,
 				5F57B8B72E9EEAC600CA2CE2 /* MainVC.swift in Sources */,
 				5F34F86F2EBEE80200877453 /* LoadingVC.swift in Sources */,
@@ -448,6 +479,7 @@
 				5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */,
 				5F9F58DB2EB6E71300A09760 /* MessageView+Author.swift in Sources */,
 				5F5094822EA57D92002646A2 /* SharedValues.swift in Sources */,
+				5F139A522EC6C8E10092EDA6 /* InputView+Actions.swift in Sources */,
 				5F9F58CB2EB56FB800A09760 /* GuildAvatarCache.swift in Sources */,
 				5FACCA272EBAD448007EC568 /* ProfileView+Swipe.swift in Sources */,
 				5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */,
@@ -467,10 +499,14 @@
 				5F57B8B22E9EEAC600CA2CE2 /* AppDelegate.swift in Sources */,
 				5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */,
 				5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */,
+				5F139A502EC6C8D90092EDA6 /* InputView+Bubble.swift in Sources */,
 				5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */,
+				5F139A4B2EC69A690092EDA6 /* FriendCell.swift in Sources */,
 				5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */,
+				5F139A562EC6CA5C0092EDA6 /* Bubble.swift in Sources */,
 				5F9F58BE2EB4303000A09760 /* TextVC+MessageAction.swift in Sources */,
 				5FE178512EB025F700FC4AA4 /* MessageActionView.swift in Sources */,
+				5F139A542EC6C8EB0092EDA6 /* LargeHitAreaButton.swift in Sources */,
 				5F5450502EACB03E0066AEC6 /* AttachmentVC.swift in Sources */,
 				5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */,
 				5F9F58C02EB4309300A09760 /* TextVC+Background.swift in Sources */,

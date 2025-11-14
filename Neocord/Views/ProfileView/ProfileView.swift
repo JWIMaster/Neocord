@@ -319,6 +319,8 @@ class ProfileView: UIView {
     func dismissProfile() {
         if let dmVC = parentViewController as? TextViewController {
             dmVC.removeProfileView()
+        } else if let mainVC = parentViewController as? ViewController {
+            mainVC.removeProfileView()
         }
     }
     

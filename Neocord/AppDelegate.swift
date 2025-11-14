@@ -45,6 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         clientUser.saveCache()
         backgroundEnterDate = Date()

@@ -13,6 +13,7 @@ public class InputView: UIView, UITextViewDelegate {
             let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
             bView.translatesAutoresizingMaskIntoConstraints = false
             bView.solidViewColour = .discordGray.withAlphaComponent(0.8)
+            bView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             bView.scaleFactor = PerformanceManager.scaleFactor
             bView.frameInterval = PerformanceManager.frameInterval
             return bView
@@ -34,6 +35,7 @@ public class InputView: UIView, UITextViewDelegate {
             background.frameInterval = 6
             background.isUserInteractionEnabled = false
             background.solidViewColour = .discordGray.withAlphaComponent(0.8)
+            background.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             return background
         } else {
             let background = UIView()
@@ -46,6 +48,9 @@ public class InputView: UIView, UITextViewDelegate {
     
     var replyMessage: Message?
     var editMessage: Message?
+    
+    var contextBubble: Bubble?
+    var typingBubble: Bubble?
     
     public enum inputMode {
         case edit, reply, send
@@ -79,14 +84,17 @@ public class InputView: UIView, UITextViewDelegate {
         return button
     }()
     
-    public let cancelButton: LargeHitAreaButton = {
-        let button = LargeHitAreaButton()
-        button.setImage(.init(systemName: "xmark.circle.fill", tintColor: .white), for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    public lazy var bubbleStack: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        return stack
     }()
     
+    var buttonIsActive: Bool = true
+    
+    var topConstraint: NSLayoutConstraint!
     
     public init(channel: TextChannel, snapshotView: UIView, tokenInputView: Bool = false) {
         super.init(frame: .zero)
@@ -115,13 +123,12 @@ public class InputView: UIView, UITextViewDelegate {
             backgroundView.snapshotTargetView = snapshotView
         }
         guard let buttonBackground = buttonBackground, let backgroundView = backgroundView else { return }
+        addSubview(bubbleStack)
         addSubview(backgroundView)
         
         textView.delegate = self
         backgroundView.addSubview(textView)
-        
-        //sendButton.setTitle("Send", for: .normal)
-        
+                
         addSubview(buttonBackground)
         
         sendButton.sendSubviewToBack(buttonBackground)
@@ -138,11 +145,16 @@ public class InputView: UIView, UITextViewDelegate {
     }
     
     private func setupConstraints() {
-        guard let buttonBackground = buttonBackground, let backgroundView = backgroundView else { return }
+        guard let backgroundView = backgroundView else { return }
         
+        topConstraint = backgroundView.topAnchor.constraint(equalTo: bubbleStack.bottomAnchor)
         
         NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: self.topAnchor),
+            bubbleStack.topAnchor.constraint(equalTo: self.topAnchor),
+            bubbleStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            bubbleStack.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            
+            topConstraint,
             backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -60)
@@ -162,140 +174,15 @@ public class InputView: UIView, UITextViewDelegate {
     }
     
     func activateButtonBackgroundConstraints() {
-        guard let buttonBackground = buttonBackground, let backgroundView = backgroundView else { return }
+        guard let buttonBackground = buttonBackground else { return }
         buttonBackground.pinToCenter(of: sendButton)
         buttonBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
         buttonBackground.widthAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
     func deactivateButtonBackgroundConstraings() {
-        guard let buttonBackground = buttonBackground, let backgroundView = backgroundView else { return }
+        guard let buttonBackground = buttonBackground else { return }
         buttonBackground.constraints.forEach { $0.isActive = false }
-    }
-    
-    public func editMessage(_ message: Message) {
-        self.changeInputMode(to: .edit)
-        self.editMessage = message
-        self.textView.text = self.editMessage?.content
-        self.textViewDidChange(self.textView)
-        //self.addCancelButton()
-    }
-    
-    public func replyToMessage(_ message: Message) {
-        self.changeInputMode(to: .reply)
-        self.replyMessage = message
-        //self.addCancelButton()
-    }
-    
-    public func changeInputMode(to mode: inputMode) {
-        switch mode {
-        case .reply:
-            sendButton.removeAllActions()
-            sendButton.addAction(for: .touchUpInside) { [unowned self] in
-                self.replyMessageAction()
-            }
-        case .edit:
-            sendButton.removeAllActions()
-            sendButton.addAction(for: .touchUpInside) { [unowned self] in
-                self.editMessageAction()
-            }
-        case .send:
-            sendButton.removeAllActions()
-            sendButton.addAction(for: .touchUpInside) { [unowned self] in
-                self.sendMessageAction()
-            }
-        }
-    }
-    
-    var buttonIsActive: Bool = true
-    
-    private func replyMessageAction() {
-        guard buttonIsActive == true else { return }
-        self.buttonIsActive = false
-        
-        guard let channel = self.channel, let replyMessage = self.replyMessage else { return }
-        
-        let newMessage = Message(clientUser, ["content": self.textView.text])
-        
-        self.textView.text = nil
-        self.editMessage = nil
-        self.changeInputMode(to: .send)
-        self.textViewDidChange(self.textView)
-        self.buttonIsActive = true
-        
-        clientUser.reply(to: replyMessage, with: newMessage, in: channel) { [weak self] error in
-            guard let self = self else { return }
-            
-            //self.removeCancelButton()
-        }
-    }
-    
-    private func sendMessageAction() {
-        guard buttonIsActive == true else { return }
-        self.buttonIsActive = false
-        
-        guard let channel = self.channel else { return }
-        
-        let message = Message(clientUser, ["content": self.textView.text])
-        self.textView.text = nil
-        self.buttonIsActive = true
-        self.textViewDidChange(self.textView)
-        
-        clientUser.send(message: message, in: channel) { [weak self] error in
-            guard let self = self else { return }
-            
-        }
-    }
-    
-    private func editMessageAction() {
-        guard buttonIsActive == true else { return }
-        self.buttonIsActive = false
-        
-        guard let channel = self.channel, let editMessage = self.editMessage else { return }
-        
-        let newMessage = Message(clientUser, ["content": self.textView.text])
-        
-        self.textView.text = nil
-        self.editMessage = nil
-        self.changeInputMode(to: .send)
-        self.textViewDidChange(self.textView)
-        self.buttonIsActive = true
-        
-        clientUser.edit(message: editMessage, to: newMessage, in: channel) { [weak self] error in
-            guard let self = self else { return }
-            
-            //self.removeCancelButton()
-        }
-    }
-    
-    public func addCancelButton() {
-        cancelButton.addAction(for: .touchUpInside) { [weak self] in
-            guard let self = self else { return }
-            self.textView.text = nil
-            self.editMessage = nil
-            self.changeInputMode(to: .send)
-            self.textViewDidChange(self.textView)
-            self.sendButton.isUserInteractionEnabled = true
-            self.removeCancelButton()
-        }
-        buttonStack.addArrangedSubview(cancelButton)
-    }
-    
-    public func removeCancelButton() {
-        // Remove first
-        cancelButton.removeFromSuperview()
-        sendButton.removeFromSuperview()
-        buttonBackground?.removeFromSuperview()
-        deactivateButtonBackgroundConstraings()
-
-        // Add the button back
-        buttonStack.addArrangedSubview(sendButton)
-
-        // Add the background **inside the sendButton** behind its content
-        if let background = buttonBackground {
-            sendButton.insertSubview(background, at: 0) // always behind content
-            activateButtonBackgroundConstraints()
-        }
     }
     
     
@@ -338,23 +225,5 @@ public class InputView: UIView, UITextViewDelegate {
 }
 
 
-public class LargeHitAreaButton: UIButton {
-    var hitAreaInset: UIEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
-    
-    init(hitAreaInset: UIEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)) {
-        self.hitAreaInset = hitAreaInset
-        super.init(frame: .zero)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    
-    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let largerFrame = bounds.inset(by: hitAreaInset)
-        return largerFrame.contains(point)
-    }
-}
+
 

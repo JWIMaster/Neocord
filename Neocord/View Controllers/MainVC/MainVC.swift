@@ -72,7 +72,7 @@ class ViewController: UIViewController {
     }
     
     var sidebarButtons: [SidebarButtonType] = []
-    
+    var profileView: ProfileView?
     let activeContentView: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
@@ -137,6 +137,10 @@ class ViewController: UIViewController {
         return cv
     }()
     
+    var navigationBarHeight: CGFloat {
+        return navigationController?.navigationBar.frame.height ?? 0
+    }
+    
     var sidebarBackgroundView: UIView? = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
@@ -179,6 +183,13 @@ class ViewController: UIViewController {
         return settingsView
     }()
     
+    var friendsContainerView: FriendsView = {
+        let fview = FriendsView()
+        fview.translatesAutoresizingMaskIntoConstraints = false
+        fview.isHidden = true
+        return fview
+    }()
+    
     var mainContainerView = UIView()
     
     var settingsButton: UIButton = {
@@ -202,6 +213,8 @@ class ViewController: UIViewController {
         return button2
     }()
     
+    lazy var currentlyActiveView: UIView = containerView
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         clientUser.connect()
@@ -222,6 +235,7 @@ class ViewController: UIViewController {
             SetStatusBarBlackTranslucent()
             SetWantsFullScreenLayout(self, true)
         }
+        
    
         setupMainViewSubviews()
         setupConstraints()
@@ -241,7 +255,7 @@ class ViewController: UIViewController {
         view.addSubview(mainContainerView)
         mainContainerView.addSubview(containerView)
         mainContainerView.addSubview(settingsContainerView)
-        //settingsContainerView.isHidden = true
+        mainContainerView.addSubview(friendsContainerView)
         
         containerView.addSubview(sidebarBackgroundView)
         
@@ -261,6 +275,7 @@ class ViewController: UIViewController {
                 self.rebuildSidebarButtons()
                 self.sidebarCollectionView.reloadData()
                 self.dmCollectionView.reloadData()
+                self.friendsContainerView.reloadFriends()
                 CATransaction.commit()
             }
         }
@@ -273,16 +288,39 @@ class ViewController: UIViewController {
     func setupButtonActions() {
         settingsButton.addAction(for: .touchUpInside) {
             self.settingsButton.isUserInteractionEnabled = false
-            UIView.transition(from: self.containerView, to: self.settingsContainerView, direction: .left, in: self.mainContainerView, completionHandler: {
+            
+            UIView.transition(from: self.currentlyActiveView, to: self.settingsContainerView, direction: .left, in: self.mainContainerView, completionHandler: {
                 self.mainMenuButton.isUserInteractionEnabled = true
+                self.friendsButton.isUserInteractionEnabled = true
+                self.currentlyActiveView = self.settingsContainerView
             })
         }
         
+        friendsButton.addAction(for: .touchUpInside) {
+            self.friendsButton.isUserInteractionEnabled = false
+            var direction: UIView.SlideDirection = {
+                switch self.currentlyActiveView {
+                case self.containerView:
+                    return .left
+                case self.settingsContainerView:
+                    return .right
+                default:
+                    return .right
+                }
+            }()
+            UIView.transition(from: self.currentlyActiveView, to: self.friendsContainerView, direction: direction, in: self.mainContainerView, completionHandler: {
+                self.mainMenuButton.isUserInteractionEnabled = true
+                self.settingsButton.isUserInteractionEnabled = true
+                self.currentlyActiveView = self.friendsContainerView
+            })
+        }
         
         mainMenuButton.addAction(for: .touchUpInside) {
             self.mainMenuButton.isUserInteractionEnabled = false
-            UIView.transition(from: self.settingsContainerView, to: self.containerView, direction: .right, in: self.mainContainerView, completionHandler: {
+            UIView.transition(from: self.currentlyActiveView, to: self.containerView, direction: .right, in: self.mainContainerView, completionHandler: {
                 self.settingsButton.isUserInteractionEnabled = true
+                self.friendsButton.isUserInteractionEnabled = true
+                self.currentlyActiveView = self.containerView
             })
         }
     }
@@ -386,7 +424,7 @@ class ViewController: UIViewController {
         containerView.pinToEdges(of: mainContainerView)
         
         settingsContainerView.pinToEdges(of: mainContainerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
-
+        friendsContainerView.pinToEdges(of: mainContainerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
 
         // MARK: Sidebar
         NSLayoutConstraint.activate([

@@ -31,6 +31,10 @@ extension MessageView {
     }
     
     @objc func profileClick(_ gesture: UITapGestureRecognizer) {
+        if #available(iOS 10.0, *) {
+            let haptic = UISelectionFeedbackGenerator()
+            haptic.selectionChanged()
+        }
         guard let message = self.message, let user = message.author else { return }
         if let textVC = self.parentViewController as? TextViewController {
             if let member = self.member {

@@ -71,6 +71,20 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         safelyRemoveScrollView()
     }
     
+    var isAtBottom: Bool {
+        if let inputView = textInputView {
+            let inputFrameInScroll = scrollView.convert(inputView.frame, from: inputView.superview)
+            for view in messageStack.arrangedSubviews {
+                let viewFrameInScroll = scrollView.convert(view.frame, from: view.superview)
+                if inputFrameInScroll.intersects(viewFrameInScroll) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    
     func safelyRemoveScrollView() {
         scrollView.delegate = nil
         scrollView.layer.removeAllAnimations()

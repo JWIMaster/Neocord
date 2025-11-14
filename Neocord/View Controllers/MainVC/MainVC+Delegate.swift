@@ -196,23 +196,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
 
         let startIndex = folderIndex + 1
         
-        let hapticSupport: Int = UIDevice.current.value(forKey: "_feedbackSupportLevel") as? Int ?? 0
-        switch hapticSupport {
-        case 0:
-            break
-        case 1:
-            AudioServicesPlaySystemSound(1519)
-        case 2:
-            if #available(iOS 10.0, *) {
-                let haptic = UISelectionFeedbackGenerator()
-                haptic.selectionChanged()
-            } else {
-                break
-            }
-        default:
-            break
+        if #available(iOS 10.0, *) {
+            let haptic = UISelectionFeedbackGenerator()
+            haptic.selectionChanged()
         }
-        
+         
         sidebarCollectionView.performBatchUpdates({
             if isExpanded {
                 // Collapse

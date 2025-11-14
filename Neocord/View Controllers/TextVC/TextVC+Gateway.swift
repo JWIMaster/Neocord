@@ -30,6 +30,10 @@ extension TextViewController {
         gateway.onMessageDelete = { [weak self] message in
             self?.deleteMessage(message)
         }
+        
+        gateway.onTypingStart = { [weak self] channelID, userID in
+            self?.typingStarted(by: userID, in: channelID)
+        }
     }
     
     
@@ -48,11 +52,19 @@ extension TextViewController {
             
             if isGuildMessage, let channel = self.channel {
                 // Guild channel: include guild context
+                guard let user = message.author else { return }
+                if let textInputView = self.textInputView, textInputView.activeTypingUsers.keys.contains(user.id!) {
+                    textInputView.removeTyping(for: user.id!)
+                }
                 let messageView = MessageView(clientUser, message: message, guildTextChannel: channel)
                 self.messageStack.addArrangedSubview(messageView)
                 self.requestMemberIfNeeded(userID)
             } else {
                 // DM channel
+                guard let user = message.author else { return }
+                if self.textInputView!.activeTypingUsers.keys.contains(user.id!) {
+                    self.textInputView?.removeTyping(for: user.id!)
+                }
                 let messageView = MessageView(clientUser, message: message)
                 self.messageStack.addArrangedSubview(messageView)
             }
@@ -102,6 +114,38 @@ extension TextViewController {
                     }, completion: nil)
                 }
             }
+        }
+    }
+    
+    func typingStarted(by userID: Snowflake, in channelID: Snowflake) {
+        if let dm = self.dm as? DM, dm.id! == channelID {
+            if userID == clientUser.clientUser?.id! {
+                self.textInputView?.handleTyping(for: clientUser.clientUser!)
+            } else if userID == dm.recipient?.id! {
+                self.textInputView?.handleTyping(for: dm.recipient!)
+            }
+        } else if let groupDM = self.dm as? GroupDM, groupDM.id! == channelID {
+            
+        } else if let channel = self.channel, channel.id! == channelID {
+            if let channelMembers = clientUser.guilds[channel.guild!.id!]?.members {
+                let channelUserDict: [Snowflake: User] = Dictionary(
+                    uniqueKeysWithValues: channelMembers.compactMap { (key: Snowflake, member: GuildMember) -> (Snowflake, User)? in
+                        guard let id = member.user.id else { return nil }
+                        return (id, member.user)
+                    }
+                )
+                
+                if let typingUser = channelUserDict[userID] {
+                    if let typingMember = channelMembers[userID] {
+                        self.textInputView?.handleTyping(for: typingUser, typingMember)
+                    }
+                } else {
+                    print("no user")
+                }
+            } else {
+                print("no members")
+            }
+
         }
     }
 }

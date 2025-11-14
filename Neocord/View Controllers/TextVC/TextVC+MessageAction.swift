@@ -58,7 +58,7 @@ extension TextViewController {
             }
             self.containerView.isUserInteractionEnabled = true
             self.containerView.layer.filters = nil
-            
+
             if let nav = UIApplication.shared.windows.first?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 1
             }
