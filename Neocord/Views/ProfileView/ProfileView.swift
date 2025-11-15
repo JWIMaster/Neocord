@@ -66,6 +66,23 @@ class ProfileView: UIView {
         }
     }()
     
+    var roleCollectionView: RoleCollectionView = {
+        let roleCV = RoleCollectionView()
+        roleCV.translatesAutoresizingMaskIntoConstraints = false
+        roleCV.clipsToBounds = false
+        return roleCV
+    }()
+    var roleCollectionViewBackground: UIView? = {
+        if ThemeEngine.enableGlass {
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterOptions: [.darken, .depth, .rim, .tint])
+            glass.shadowRadius = 6
+            return glass
+        } else {
+            let roleBg = UIView()
+            return roleBg
+        }
+    }()
+    
     /*func makeRole(name: String, color: UIColor) -> UIView {
         
     }*/
@@ -76,7 +93,6 @@ class ProfileView: UIView {
         self.member = member
         self.user = user
         super.init(frame: .zero)
-        
         setup() // Build base layout immediately
         
         // Fetch updated user info in the background
@@ -101,6 +117,7 @@ class ProfileView: UIView {
         setupProfileName()
         setupProfilePicture()
         setupBio()
+        setupRoles()
         setupConstraints()
         setupGestureRecognizer()
     }
@@ -120,6 +137,11 @@ class ProfileView: UIView {
         
         containerView.addSubview(bioBackground)
         containerView.addSubview(bio)
+        
+        if let _ = member {
+            containerView.addSubview(roleCollectionViewBackground!)
+            containerView.addSubview(roleCollectionView)
+        }
         
         addSubview(grabber) // grabber sits at the top of the view
     }
@@ -171,8 +193,26 @@ class ProfileView: UIView {
             bio.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
             bio.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
             bio.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            //bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
+        
+        var bottomConstraint: NSLayoutConstraint
+        
+        if let _ = member {
+            bottomConstraint = roleCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            roleCollectionViewBackground!.pinToEdges(of: roleCollectionView, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
+            NSLayoutConstraint.activate([
+                roleCollectionView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
+                roleCollectionView.topAnchor.constraint(equalTo: bioBackground.bottomAnchor, constant: 20),
+                roleCollectionView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+                bottomConstraint
+            ])
+
+        } else {
+            bottomConstraint = bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            bottomConstraint.isActive = true
+        }
+        
     }
     
     func setupProfileName() {
@@ -258,21 +298,26 @@ class ProfileView: UIView {
     // MARK: - Colors
     
     func updateProfileColors() {
-        guard let bg = self.backgroundView as? LiquidGlassView,
-              let bioBg = self.bioBackground as? LiquidGlassView else { return }
+        guard let bg = self.backgroundView as? LiquidGlassView, let bioBg = self.bioBackground as? LiquidGlassView else { return }
 
         if let userProfile = userProfile, !userProfile.themeColors.isEmpty {
             let colors = userProfile.themeColors.map { $0.withIncreasedSaturation(factor: 0.7) }
-            let shifted = shiftedGradientColorsIfTwoDistinct(colors)
+            //let shifted = shiftedGradientColorsIfTwoDistinct(colors)
             
             bg.tintGradientColors = colors
             bg.tintColorForGlass = .clear
             bg.setNeedsLayout()
-            print(userProfile.themeColors)
             let bioColors = userProfile.themeColors.map { $0.withAlphaComponent(0.4).withIncreasedSaturation(factor: 0.7) }
             bioBg.tintGradientColors = shiftedGradientColorsIfTwoDistinct(bioColors)
             bioBg.tintColorForGlass = .clear
             bioBg.setNeedsLayout()
+            
+            if let roleCollectionViewBackground = roleCollectionViewBackground as? LiquidGlassView {
+                let roleBgColors = userProfile.themeColors.map { $0.withAlphaComponent(0.4).withIncreasedSaturation(factor: 0.7) }
+                roleCollectionViewBackground.tintGradientColors = shiftedGradientColorsIfTwoDistinct(roleBgColors)
+                roleCollectionViewBackground.tintColorForGlass = .clear
+                roleCollectionViewBackground.setNeedsLayout()
+            }
         } else if let user = user {
             AvatarCache.shared.avatar(for: user) { [weak self] image, color in
                 guard let self = self, let color = color else { return }
@@ -282,6 +327,12 @@ class ProfileView: UIView {
                     bg.shadowColor = color.withIncreasedSaturation(factor: 1.4).cgColor
                     bg.shadowOpacity = 0.6
                     bg.setNeedsLayout()
+                    
+                    if let roleCollectionViewBackground = self.roleCollectionViewBackground as? LiquidGlassView {
+                        roleCollectionViewBackground.tintGradientColors = nil
+                        roleCollectionViewBackground.tintColorForGlass = color.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
+                        roleCollectionViewBackground.setNeedsLayout()
+                    }
 
                     bioBg.tintGradientColors = nil
                     bioBg.tintColorForGlass = color.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
@@ -323,6 +374,14 @@ class ProfileView: UIView {
             mainVC.removeProfileView()
         }
     }
+    
+    func setupRoles() {
+        guard let member = member, let roles = member.roles else { return }
+        roleCollectionView.roles = roles
+    }
+    
+    
+
     
     // MARK: - Layout
     

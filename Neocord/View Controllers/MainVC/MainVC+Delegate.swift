@@ -79,6 +79,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
             case .guild(let guild):
                 showContentView(channelsCollectionView)
                 setupChannelCollectionView(for: guild)
+                
+
             case .folder(let folder, _):
                 didSelectFolder(folder)
             }

@@ -12,6 +12,7 @@ import SwiftcordLegacy
 import SFSymbolsCompatKit
 import FoundationCompatKit
 import FoundationExtensions
+import DeprecatedAPIKit
 
 extension InputView {
     public func addContextBubble(with text: String) {
@@ -127,10 +128,21 @@ extension InputView {
             topConstraint.constant = 0
         } else {
             let names = activeTypingUsers.values.sorted().joined(separator: ", ")
-            bubble.textLabel.text = names + " is typing"
+            if activeTypingUsers.count > 1 {
+                let allButLast = activeTypingUsers.values.sorted().dropLast().joined(separator: ", ")
+                let last = activeTypingUsers.values.sorted().last!
+                bubble.textLabel.text = "\(allButLast) and \(last) are typing"
+                //bubble.textLabel.text = names + " are typing"
+            } else {
+                bubble.textLabel.text = names + " is typing"
+            }
         }
         
         layoutIfNeeded()
+        
+        if bubble.textLabel.isTextTruncated {
+            bubble.textLabel.text = "Several people are typing"
+        }
         
         if let parentVC = parentViewController as? TextViewController {
             parentVC.updateInputOffset()
@@ -162,4 +174,28 @@ extension InputView {
         updateTypingBubbleText()
     }
 }
+
+
+import UIKit
+
+extension UILabel {
+    var isTextTruncated: Bool {
+        guard let text = self.text, let font = self.font else { return false }
+        
+        // Maximum size available for the label
+        let size = CGSize(width: self.bounds.width, height: CGFloat.greatestFiniteMagnitude)
+        
+        // Use the old iOS 6 method
+        
+        let expectedSize = self.size(
+            with: font,
+            constrainedTo: size,
+            lineBreakMode: self.lineBreakMode
+        )
+        
+        // Compare the expected height to the label's height
+        return expectedSize.height > self.bounds.height
+    }
+}
+
 
