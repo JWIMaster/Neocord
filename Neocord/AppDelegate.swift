@@ -12,6 +12,8 @@ import FoundationCompatKit
 import UIKitExtensions
 import SwiftcordLegacy
 
+
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
