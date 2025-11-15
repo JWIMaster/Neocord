@@ -44,6 +44,7 @@ class ProfileView: UIView {
     }()
     
     var bio = UILabel()
+    var bioWithEmoji = DiscordMarkdownView()
     
     var containerView = UIView()
     var scrollView = UIScrollView()
@@ -57,8 +58,8 @@ class ProfileView: UIView {
                 disableBlur: true,
                 filterOptions: [.depth, .darken, .rim, .tint]
             )
-            bg.shadowRadius = 50
-            bg.shadowOpacity = 1
+            bg.shadowRadius = 0
+            bg.shadowOpacity = 0
             return bg
         } else {
             let bg = UIView()
@@ -136,7 +137,11 @@ class ProfileView: UIView {
         containerView.addSubview(username)
         
         containerView.addSubview(bioBackground)
-        containerView.addSubview(bio)
+        if #available(iOS 7.0.1, *) {
+            containerView.addSubview(bioWithEmoji)
+        } else {
+            containerView.addSubview(bio)
+        }
         
         if let _ = member {
             containerView.addSubview(roleCollectionViewBackground!)
@@ -170,7 +175,11 @@ class ProfileView: UIView {
             grabber.heightAnchor.constraint(equalToConstant: 4)
         ])
         
-        bioBackground.pinToEdges(of: bio, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
+        if #available(iOS 7.0.1, *) {
+            bioBackground.pinToEdges(of: bioWithEmoji, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
+        } else {
+            bioBackground.pinToEdges(of: bio, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
+        }
         
         // Banner, avatar, name
         NSLayoutConstraint.activate([
@@ -190,11 +199,25 @@ class ProfileView: UIView {
             username.topAnchor.constraint(equalTo: displayname.bottomAnchor, constant: 4),
             username.leadingAnchor.constraint(equalTo: displayname.leadingAnchor),
             
-            bio.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
-            bio.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
-            bio.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            
             //bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
+        
+        
+        
+        if #available(iOS 7.0.1, *) {
+            NSLayoutConstraint.activate([
+                bioWithEmoji.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
+                bioWithEmoji.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
+                bioWithEmoji.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                bio.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
+                bio.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
+                bio.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            ])
+        }
         
         var bottomConstraint: NSLayoutConstraint
         
@@ -209,8 +232,14 @@ class ProfileView: UIView {
             ])
 
         } else {
-            bottomConstraint = bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-            bottomConstraint.isActive = true
+            if #available(iOS 7.0.1, *) {
+                bottomConstraint = bioWithEmoji.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+                bottomConstraint.isActive = true
+            } else {
+                bottomConstraint = bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+                bottomConstraint.isActive = true
+            }
+            
         }
         
     }
@@ -231,13 +260,28 @@ class ProfileView: UIView {
     }
     
     func setupBio() {
-        bioStringParsing()
+        //bioStringParsing()
         bio.backgroundColor = .clear
         //bio.isScrollEnabled = false
         //bio.isEditable = false
         bio.numberOfLines = 0
         bio.lineBreakMode = .byWordWrapping
         bio.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
+        
+        bioWithEmoji.backgroundColor = .clear
+        //bio.isScrollEnabled = false
+        //bio.isEditable = false
+        bioWithEmoji.numberOfLines = 0
+        bioWithEmoji.lineBreakMode = .byWordWrapping
+        bioWithEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
+        
+        if #available(iOS 7.0.1, *) {
+            let bioText = user?.bio ?? "unknown"
+            bioWithEmoji.setMarkdown(bioText)
+        } else {
+            let bioText = user?.bio ?? "unknown"
+            bio.text = bioText
+        }
     }
     
     func bioStringParsing() {
@@ -430,13 +474,20 @@ class ProfileView: UIView {
         
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        bioStringParsing()
+        if #available(iOS 7.0.1, *) {
+            let bioText = user?.bio ?? "unknown"
+            bioWithEmoji.setMarkdown(bioText)
+        } else {
+            let bioText = user?.bio ?? "unknown"
+            bio.text = bioText
+        }
         CATransaction.commit()
 
         setupProfilePicture()
         updateProfileColors()
         
         bio.setNeedsLayout()
+        bioWithEmoji.setNeedsLayout()
         backgroundView?.setNeedsLayout()
         bioBackground?.setNeedsLayout()
         containerView.setNeedsLayout()
