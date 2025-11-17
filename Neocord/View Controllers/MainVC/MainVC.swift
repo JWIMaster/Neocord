@@ -218,8 +218,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         clientUser.connect()
-        //clientUser.clearCache()
-        
+
         clientUser.loadCache {
             self.setupOrderedGuilds()
             self.rebuildSidebarButtons()

@@ -14,7 +14,6 @@ import LiveFrost
 import AudioToolbox
 
 // MARK: - Collection View
-// MARK: - Collection View
 extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -135,7 +134,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func setupChannelCollectionView(for guild: Guild) {
         guard activeGuild?.id != guild.id || displayedChannels.isEmpty || !guild.fullGuild else { return }
         activeGuild = guild
-        print(activeGuild)
         updateTitle(guild.name ?? "Loading…")
         if activeContentView.subviews.first != channelsCollectionView || activeContentView.subviews.first == dmCollectionView{
             showContentView(channelsCollectionView)
@@ -165,8 +163,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         self.fetchChannels(for: guild) {
             DispatchQueue.main.async {
                 loadingLabel.removeFromSuperview()
-                //self.flattenChannelsForDisplay()
-                //self.channelsCollectionView.reloadData()
                 self.channelsCollectionView.alpha = 1
                 UIView.transition(with: self.channelsCollectionView, duration: 0.25, options: .transitionCrossDissolve) {
                     
@@ -174,13 +170,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
                 self.updateTitle(guild.name ?? "Unknown Guild")
             }
         }
-        
-        /*clientUser.getFullGuild(guild) { [weak self] guilds, _ in
-            guard let self = self, let fullGuild = guilds.values.first else { return }
-            self.activeGuild = fullGuild
-            
-            if let index = self.guilds.firstIndex(where: { $0.id == fullGuild.id }) { self.guilds[index] = fullGuild }
-        }*/
     }
     
     
@@ -269,7 +258,6 @@ extension ViewController {
                     return self.guilds.values.first { $0.id == guildId }
                 }
                 
-                //self.guilds = orderedGuilds
                 self.orderedGuilds = orderedGuilds
                 
                 self.rebuildSidebarButtons()
@@ -284,9 +272,6 @@ extension ViewController {
     func fetchChannels(for guild: Guild, completion: @escaping () -> Void) {
         clientUser.getGuildChannels(for: guild.id!) { [weak self] channels, error in
             guard let self = self else { return }
-
-            // Replace activeGuild with the canonical guild from the cache
-            
             self.activeGuildChannels = channels
 
             print("channels fetched: \(channels.count)")
@@ -297,20 +282,4 @@ extension ViewController {
 
     
     
-}
-
-extension UIView {
-    func springAnimation(scaleDuration: CGFloat = 0.3, bounceDuration: CGFloat = 0.2, scaleOptions: UIView.AnimationOptions = [.curveEaseOut, .allowUserInteraction], bounceOptions: UIView.AnimationOptions = [.curveEaseInOut, .allowUserInteraction], bounceAmount: CGFloat = -6, delay: CGFloat = 0) {
-        self.alpha = 0
-        self.transform = CGAffineTransform(translationX: 0, y: 50).scaledBy(x: 0.8, y: 0.8)
-
-        UIView.animate(withDuration: scaleDuration, delay: delay, options: scaleOptions, animations: {
-            self.alpha = 1
-            self.transform = CGAffineTransform(translationX: 0, y: bounceAmount)
-        }, completion: { _ in
-            UIView.animate(withDuration: bounceDuration, delay: 0, options: bounceOptions, animations: {
-                self.transform = .identity
-            }, completion: nil)
-        })
-    }
 }

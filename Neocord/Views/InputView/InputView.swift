@@ -171,12 +171,6 @@ public class InputView: UIView, UITextViewDelegate {
         ])
         
         textView.pinToEdges(of: backgroundView)
-        /*NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: backgroundView.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor),
-            textView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor)
-        ])*/
     }
 
     

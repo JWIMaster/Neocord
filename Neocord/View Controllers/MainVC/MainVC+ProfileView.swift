@@ -27,12 +27,7 @@ extension ViewController {
         let height = parentView.bounds.height - topOffset
         
         // Start off-screen
-        profile.frame = CGRect(
-            x: 0,
-            y: parentView.bounds.height,
-            width: parentView.bounds.width,
-            height: height
-        )
+        profile.frame = CGRect(x: 0, y: parentView.bounds.height, width: parentView.bounds.width, height: height)
         
         parentView.addSubview(profile)
         profileView = profile
@@ -41,19 +36,13 @@ extension ViewController {
         }
         
         self.containerView.isUserInteractionEnabled = false
-        // Animate in
-        
-        
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = topOffset
-            //self.profileBlur.blurRadius = 6
             if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 0
             }
-        }, completion: { _ in
-            //self.profileBlur.frameInterval = 60*60*60
-        })
+        }, completion: nil)
     }
 
 
@@ -61,7 +50,6 @@ extension ViewController {
         guard let profile = profileView, let parent = profile.superview else { return }
         self.containerView.isUserInteractionEnabled = true
         
-        //self.profileBlur.frameInterval = 2
         profile.removeFromSuperview()
         self.profileView = nil
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
@@ -70,9 +58,6 @@ extension ViewController {
             if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 1
             }
-        }, completion: { _ in
-            //self.profileBlur.removeFromSuperview()
-            
-        })
+        }, completion: nil)
     }
 }
