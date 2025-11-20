@@ -118,7 +118,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             addSubview(replyView)
         }
         
-        if #available(iOS 7.0.1, *) {
+        if #available(iOS 6.0.1, *) {
             messageContent.addArrangedSubview(messageTextAndEmoji)
         } else {
             messageContent.addArrangedSubview(messageText)
@@ -237,7 +237,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     public func updateMessage(_ message: Message) {
         self.messageText.text = message.content
-        if #available(iOS 7.0.1, *) {
+        if #available(iOS 6.0.1, *) {
             self.messageTextAndEmoji.setMarkdown(message.content ?? "unknown")
         }
         self.message?.content = message.content

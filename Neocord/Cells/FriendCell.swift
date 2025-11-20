@@ -51,6 +51,22 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private var friend: User?
     
+    private lazy var presenceIndicator: UIView = {
+        if ThemeEngine.enableGlass {
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            glass.tintColorForGlass = presenceColor
+            return glass
+        } else {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = presenceColor
+            return view
+        }
+    }()
+
+    private var presenceColor: UIColor = .offlineGray
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -68,6 +84,7 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         contentView.addSubview(stack)
         stack.addArrangedSubview(friendAvatar)
         stack.addArrangedSubview(friendName)
+        contentView.addSubview(presenceIndicator)
         
         NSLayoutConstraint.activate([
             backgroundGlass.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -81,13 +98,50 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             
             friendAvatar.widthAnchor.constraint(equalToConstant: 40),
-            friendAvatar.heightAnchor.constraint(equalToConstant: 40)
+            friendAvatar.heightAnchor.constraint(equalToConstant: 40),
+            
+            presenceIndicator.widthAnchor.constraint(equalToConstant: 16),
+            presenceIndicator.heightAnchor.constraint(equalToConstant: 16),
+
+            presenceIndicator.bottomAnchor.constraint(equalTo: friendAvatar.bottomAnchor),
+            presenceIndicator.trailingAnchor.constraint(equalTo: friendAvatar.trailingAnchor)
         ])
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        presenceColor = .offlineGray
+        updatePresenceIndicatorColor()
+        friendAvatar.image = nil
+        friendName.text = nil
+        friend = nil
+    }
+
+    private func updatePresenceIndicatorColor() {
+        if let glass = presenceIndicator as? LiquidGlassView {
+            glass.tintColorForGlass = presenceColor
+        } else {
+            presenceIndicator.backgroundColor = presenceColor
+        }
     }
     
     func configure(with user: User) {
         self.friendName.text = user.nickname ?? user.displayname ?? user.username
         self.friend = user
+        
+        let presence = clientUser.presences[user.id!] ?? .offline
+        presenceColor = PresenceColor.color(for: presence)
+        updatePresenceIndicatorColor()
+        
+        clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
+            guard let self = self, let updatedPresence = presenceDict[user.id!] else { return }
+            self.presenceColor = PresenceColor.color(for: updatedPresence)
+            DispatchQueue.main.async {
+                if self.friend?.id == user.id {
+                    self.updatePresenceIndicatorColor()
+                }
+            }
+        }
         
         AvatarCache.shared.avatar(for: user) { [weak self] image, color in
             

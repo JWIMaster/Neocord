@@ -4,10 +4,44 @@ import UIKitExtensions
 import UIKitCompatKit
 import SFSymbolsCompatKit
 
+
+public enum PresenceColor {
+    static func color(for presence: PresenceType) -> UIColor {
+        switch presence {
+        case .online:
+            return .onlineGreen
+        case .idle:
+            return .idleOrange
+        case .dnd:
+            return .dndRed
+        case .offline:
+            return .offlineGray
+        }
+    }
+}
+
+public extension UIColor {
+    class var onlineGreen: UIColor {
+        return UIColor(red: 85.0/255.0, green: 239.0/255.0, blue: 196.0/255.0, alpha: 1)
+    }
+    
+    class var idleOrange: UIColor {
+        return UIColor(red: 253.0/255.0, green: 203.0/255.0, blue: 110.0/255.0, alpha: 1)
+    }
+    
+    class var dndRed: UIColor {
+        return UIColor(red: 235.0/255.0, green: 59.0/255.0, blue: 90.0/255.0, alpha: 1)
+    }
+    
+    class var offlineGray: UIColor {
+        return UIColor(red: 116.0/255.0, green: 125.0/255.0, blue: 140.0/255.0, alpha: 1)
+    }
+}
+
 class DMButtonCell: UICollectionViewCell {
-    
+
     static let reuseID = "DMButtonCell"
-    
+
     private var dmAuthorAvatar: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -15,7 +49,7 @@ class DMButtonCell: UICollectionViewCell {
         iv.layer.masksToBounds = true
         return iv
     }()
-    
+
     private var dmNameLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 17)
@@ -24,7 +58,7 @@ class DMButtonCell: UICollectionViewCell {
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
-    
+
     private var backgroundGlass: UIView? = {
         if ThemeEngine.enableGlass {
             let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
@@ -39,7 +73,7 @@ class DMButtonCell: UICollectionViewCell {
             return bg
         }
     }()
-    
+
     private var stack: UIStackView = {
         let st = UIStackView()
         st.axis = .horizontal
@@ -48,87 +82,146 @@ class DMButtonCell: UICollectionViewCell {
         st.translatesAutoresizingMaskIntoConstraints = false
         return st
     }()
+
+    private lazy var presenceIndicator: UIView = {
+        if ThemeEngine.enableGlass {
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            glass.tintColorForGlass = presenceColor
+            return glass
+        } else {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = presenceColor
+            return view
+        }
+    }()
+
+    private var presenceColor: UIColor = .offlineGray
     
+    private var recipientIDs = Set<Snowflake>()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
-    
+
     required init?(coder: NSCoder) { fatalError() }
-    
+
     private func setupViews() {
-        guard let backgroundGlass = backgroundGlass else {
-            return
-        }
+        guard let backgroundGlass = backgroundGlass else { return }
 
         contentView.addSubview(backgroundGlass)
         contentView.addSubview(stack)
         stack.addArrangedSubview(dmAuthorAvatar)
         stack.addArrangedSubview(dmNameLabel)
-        
+        contentView.addSubview(presenceIndicator)
+
         NSLayoutConstraint.activate([
             backgroundGlass.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundGlass.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundGlass.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundGlass.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+
             stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            
+
             dmAuthorAvatar.widthAnchor.constraint(equalToConstant: 40),
-            dmAuthorAvatar.heightAnchor.constraint(equalToConstant: 40)
+            dmAuthorAvatar.heightAnchor.constraint(equalToConstant: 40),
+
+            presenceIndicator.widthAnchor.constraint(equalToConstant: 16),
+            presenceIndicator.heightAnchor.constraint(equalToConstant: 16),
+
+            presenceIndicator.bottomAnchor.constraint(equalTo: dmAuthorAvatar.bottomAnchor),
+            presenceIndicator.trailingAnchor.constraint(equalTo: dmAuthorAvatar.trailingAnchor)
         ])
     }
-    
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        presenceColor = .offlineGray
+        updatePresenceIndicatorColor()
+        dmAuthorAvatar.image = nil
+        dmNameLabel.text = nil
+        recipientIDs.removeAll()
+    }
+
+    private func updatePresenceIndicatorColor() {
+        if let glass = presenceIndicator as? LiquidGlassView {
+            glass.tintColorForGlass = presenceColor
+        } else {
+            presenceIndicator.backgroundColor = presenceColor
+        }
+    }
+
     func configure(with dm: DMChannel) {
         switch dm.type {
         case .dm:
-            //Set DM Text
             guard let dm = dm as? DM, let recipient = dm.recipient else { return }
-            self.dmNameLabel.text = dm.recipient?.nickname ?? dm.recipient?.displayname ?? dm.recipient?.username
+            dmNameLabel.text = recipient.nickname ?? recipient.displayname ?? recipient.username
             
+            // Keep track of the current user ID for this cell
+            let currentRecipientID = recipient.id
+            self.recipientIDs.insert(currentRecipientID!)
+            
+            // Set initial presence
+            let presence = clientUser.presences[currentRecipientID!] ?? .offline
+            presenceColor = PresenceColor.color(for: presence)
+            updatePresenceIndicatorColor()
+            
+            clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
+                guard let self = self, let updatedPresence = presenceDict[currentRecipientID!] else { return }
+                self.presenceColor = PresenceColor.color(for: updatedPresence)
+                DispatchQueue.main.async {
+                    if self.recipientIDs.contains(recipient.id!) {
+                        self.updatePresenceIndicatorColor()
+                    }
+                }
+            }
+            
+            // Load avatar asynchronously
             AvatarCache.shared.avatar(for: recipient) { [weak self] image, color in
+                guard let self = self, let image = image, let color = color else { return }
                 
-                DispatchQueue.global(qos: .userInitiated).async {
-                    
-                    guard let self = self, let image = image, let color = color else { return }
-                    
-                    let resized = image.resizeImage(image, targetSize: CGSize(width: 40, height: 40))
-                    
-                    DispatchQueue.main.async {
+                let resized = image.resizeImage(image, targetSize: CGSize(width: 40, height: 40))
+                
+                DispatchQueue.main.async {
+                    if self.recipientIDs.contains(recipient.id!) {
                         self.dmAuthorAvatar.image = resized
                         if ThemeEngine.enableProfileTinting {
-                            if let backgroundGlass = self.backgroundGlass as? LiquidGlassView {
-                                backgroundGlass.tintColorForGlass = color
+                            if let glass = self.backgroundGlass as? LiquidGlassView {
+                                glass.tintColorForGlass = color
                             } else {
                                 self.backgroundGlass?.backgroundColor = color
                             }
                         }
                     }
-                    
                 }
             }
+            
         case .groupDM:
             guard let dm = dm as? GroupDM else { return }
-            self.dmNameLabel.text = dm.name
+            dmNameLabel.text = dm.name
             
             DispatchQueue.global(qos: .userInitiated).async {
-                let resized = UIImage(named: "defaultavatar")!.resizeImage(UIImage(named: "defaultavatar")!, targetSize: CGSize(width: 40, height: 40))
+                let defaultImage = UIImage(named: "defaultavatar")!.resizeImage(UIImage(named: "defaultavatar")!, targetSize: CGSize(width: 40, height: 40))
                 DispatchQueue.main.async {
-                    self.dmAuthorAvatar.image = resized
+                    self.dmAuthorAvatar.image = defaultImage
                     if ThemeEngine.enableProfileTinting {
-                        if let backgroundGlass = self.backgroundGlass as? LiquidGlassView {
-                            backgroundGlass.tintColorForGlass = .blue.withAlphaComponent(0.5)
+                        if let glass = self.backgroundGlass as? LiquidGlassView {
+                            glass.tintColorForGlass = UIColor.blue.withAlphaComponent(0.5)
                         } else {
-                            self.backgroundGlass?.backgroundColor = .blue.withAlphaComponent(0.5)
+                            self.backgroundGlass?.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
                         }
                     }
                 }
             }
+            
         default:
             break
         }
     }
+
 }

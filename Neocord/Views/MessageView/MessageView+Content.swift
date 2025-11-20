@@ -17,7 +17,7 @@ extension MessageView {
     
     
     func setupText() {
-        if #available(iOS 7.0.1, *) {
+        if #available(iOS 6.0.1, *) {
             messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
             messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
         }

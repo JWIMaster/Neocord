@@ -19,6 +19,7 @@ class DiscordMarkdownView: UILabel {
         textColor = .white
         numberOfLines = 0
         lineBreakMode = .byWordWrapping
+        backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {
@@ -77,34 +78,40 @@ class DiscordMarkdownView: UILabel {
     
     // MARK: - Parsing
     private func parseDiscordMarkdown(_ markdown: String) -> [DiscordPart] {
+        // On iOS < 7.0.1, treat all text as plain text (no emojis)
+        if #unavailable(iOS 7.0.1) {
+            return [.text(markdown)]
+        }
+
         var results: [DiscordPart] = []
         let pattern = "<:([a-zA-Z0-9_]+):([0-9]+)>"
         let regex = try? NSRegularExpression(pattern: pattern)
         var lastIndex = markdown.startIndex
-        
+
         regex?.enumerateMatches(in: markdown, options: [], range: NSRange(markdown.startIndex..., in: markdown)) { match, _, _ in
             guard let match = match,
                   let nameRange = Range(match.range(at: 1), in: markdown),
                   let idRange = Range(match.range(at: 2), in: markdown) else { return }
-            
+
             let emojiID = String(markdown[idRange])
             let matchStart = markdown.index(markdown.startIndex, offsetBy: match.range.location)
-            
+
             if lastIndex < matchStart {
                 let text = String(markdown[lastIndex..<matchStart])
                 results.append(.text(text))
             }
-            
+
             results.append(.emoji(id: emojiID, name: String(markdown[nameRange])))
             lastIndex = markdown.index(matchStart, offsetBy: match.range.length)
         }
-        
+
         if lastIndex < markdown.endIndex {
             results.append(.text(String(markdown[lastIndex...])))
         }
-        
+
         return results
     }
+
     
     private enum DiscordPart {
         case text(String)
