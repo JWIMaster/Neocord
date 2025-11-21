@@ -17,10 +17,9 @@ extension MessageView {
     
     
     func setupText() {
-        if #available(iOS 6.0.1, *) {
-            messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
-            messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
-        }
+        messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
+        messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
+        messageTextAndEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
         
         messageText.translatesAutoresizingMaskIntoConstraints = false
         
@@ -37,11 +36,8 @@ extension MessageView {
             let parsed = self.markdownParser.attributedString(fromMarkdown: "\(self.message?.content ?? "unknown")")
             
             DispatchQueue.main.async {
-                
                 self.messageText.attributedText = parsed
                 self.messageText.sizeToFit()
-                //self.setNeedsLayout()
-                //self.layoutIfNeeded()
                 
                 // Give Auto Layout a short delay to settle before scrolling
                 guard let parentVC = self.parentViewController else { return }

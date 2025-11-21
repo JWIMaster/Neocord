@@ -26,7 +26,11 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     let backgroundGradient = CAGradientLayer()
     let scrollView = UIScrollView()
-    let containerView = UIView()
+    let containerView: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        return container
+    }()
     var containerViewBottomConstraint: NSLayoutConstraint!
     var lastUserToSpeak: User?
     var secondLastUserToSpeak: User?

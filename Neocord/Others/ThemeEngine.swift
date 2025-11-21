@@ -9,18 +9,13 @@ import UIKit
 import UIKitCompatKit
 import UIKitExtensions
 
-
-
 public final class ThemeEngine {
     public static var enableGlass: Bool {
         get {
             switch device {
-            case .a4:
-                return false
+            case .a4: return false
             default:
-                if UserDefaults.standard.object(forKey: "enableGlass") == nil {
-                    return true  // default value
-                }
+                if UserDefaults.standard.object(forKey: "enableGlass") == nil { return true }
                 return UserDefaults.standard.bool(forKey: "enableGlass")
             }
         }
@@ -32,12 +27,14 @@ public final class ThemeEngine {
     public static var enableAnimations: Bool {
         get {
             switch device {
-            case .a4, .a5, .a6:
-                return false
+            case .a4, .a5, .a6: return false
+            case .a7_a8:
+                if #available(iOS 9.0, *) {
+                    if UserDefaults.standard.object(forKey: "enableAnimations") == nil { return true }
+                    return UserDefaults.standard.bool(forKey: "enableAnimations")
+                } else { return false }
             default:
-                if UserDefaults.standard.object(forKey: "enableAnimations") == nil {
-                    return true  // default value
-                }
+                if UserDefaults.standard.object(forKey: "enableAnimations") == nil { return true }
                 return UserDefaults.standard.bool(forKey: "enableAnimations")
             }
         }
@@ -48,9 +45,7 @@ public final class ThemeEngine {
     }
     public static var enableProfileTinting: Bool {
         get {
-            if UserDefaults.standard.object(forKey: "enableProfileTinting") == nil {
-                return true  // default value
-            }
+            if UserDefaults.standard.object(forKey: "enableProfileTinting") == nil { return true }
             return UserDefaults.standard.bool(forKey: "enableProfileTinting")
         }
         set {

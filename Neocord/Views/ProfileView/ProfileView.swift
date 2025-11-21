@@ -267,6 +267,7 @@ class ProfileView: UIView {
         bio.numberOfLines = 0
         bio.lineBreakMode = .byWordWrapping
         bio.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
+        bio.textColor = .white
         
         bioWithEmoji.backgroundColor = .clear
         //bio.isScrollEnabled = false

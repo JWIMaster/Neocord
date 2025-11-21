@@ -132,7 +132,6 @@ extension InputView {
                 let allButLast = activeTypingUsers.values.sorted().dropLast().joined(separator: ", ")
                 let last = activeTypingUsers.values.sorted().last!
                 bubble.textLabel.text = "\(allButLast) and \(last) are typing"
-                //bubble.textLabel.text = names + " are typing"
             } else {
                 bubble.textLabel.text = names + " is typing"
             }
@@ -180,20 +179,8 @@ import UIKit
 
 extension UILabel {
     var isTextTruncated: Bool {
-        guard let text = self.text, let font = self.font else { return false }
-        
-        // Maximum size available for the label
         let size = CGSize(width: self.bounds.width, height: CGFloat.greatestFiniteMagnitude)
-        
-        // Use the old iOS 6 method
-        
-        let expectedSize = self.size(
-            with: font,
-            constrainedTo: size,
-            lineBreakMode: self.lineBreakMode
-        )
-        
-        // Compare the expected height to the label's height
+        let expectedSize = self.size(with: self.font, constrainedTo: size, lineBreakMode: self.lineBreakMode)
         return expectedSize.height > self.bounds.height
     }
 }

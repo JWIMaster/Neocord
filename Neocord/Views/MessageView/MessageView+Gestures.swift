@@ -42,6 +42,7 @@ extension MessageView {
         //self.addGestureRecognizer(replySwipe)
     }
     
+    //MARK: Must fix
     @objc func replySwipe(_ pan: UIPanGestureRecognizer) {
         let rawX = pan.translation(in: self).x
         let velocity = pan.velocity(in: self).x
@@ -133,3 +134,5 @@ extension MessageView {
     
     
 }
+
+

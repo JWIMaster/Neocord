@@ -42,7 +42,7 @@
 		5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */; };
 		5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */; };
 		5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE912EBC7A5200577B00 /* SettingsView.swift */; };
-		5F724FD02EC179B7002A9E25 /* MainVC+ObjectMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */; };
+		5F724FD02EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */; };
 		5F724FD22EC1B064002A9E25 /* DMsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F724FD12EC1B064002A9E25 /* DMsIcon.png */; };
 		5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */; };
 		5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7987192EB1DD5C0058566C /* ReplyView.swift */; };
@@ -119,7 +119,7 @@
 		5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEngine.swift; sourceTree = "<group>"; };
 		5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		5F64FE912EBC7A5200577B00 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+ObjectMethods.swift"; sourceTree = "<group>"; };
+		5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+SwiftcordMethods.swift"; sourceTree = "<group>"; };
 		5F724FD12EC1B064002A9E25 /* DMsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DMsIcon.png; path = Assets.xcassets/AppIcon.appiconset/DMsIcon.png; sourceTree = "<group>"; };
 		5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordMarkdownView.swift; sourceTree = "<group>"; };
 		5F7987192EB1DD5C0058566C /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
@@ -344,7 +344,7 @@
 			children = (
 				5F57B8B62E9EEAC600CA2CE2 /* MainVC.swift */,
 				5F9F58E52EB6EBCF00A09760 /* MainVC+Delegate.swift */,
-				5F724FCF2EC179B7002A9E25 /* MainVC+ObjectMethods.swift */,
+				5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */,
 				5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */,
 			);
 			path = MainVC;
@@ -489,7 +489,7 @@
 				5FACCA242EBAC163007EC568 /* ForumVC.swift in Sources */,
 				5F9F58C92EB56F4100A09760 /* GuildButtonCell.swift in Sources */,
 				5F2914062EAC462F0019DC0F /* png8.swift in Sources */,
-				5F724FD02EC179B7002A9E25 /* MainVC+ObjectMethods.swift in Sources */,
+				5F724FD02EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift in Sources */,
 				5F0F1F872EB834A900CEF378 /* LoginManager.swift in Sources */,
 				5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */,
 				5F5AF8AB2EC8257500D0C660 /* RoleIconCache.swift in Sources */,
@@ -667,6 +667,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -701,6 +702,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";

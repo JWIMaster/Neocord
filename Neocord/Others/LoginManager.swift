@@ -49,7 +49,7 @@ public class LoginManager {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(self.superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
-        request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent")
+        request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
 
         session.dataTask(with: request) { [weak self] data, _, error in
             guard let self = self else { return }
@@ -105,7 +105,7 @@ public class LoginManager {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.setValue(self.superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
                 request.setValue(fp, forHTTPHeaderField: "X-Fingerprint")
-                request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // ADDED
+                request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
                 request.setValue("*/*", forHTTPHeaderField: "Accept") // ADDED
 
                 let body: [String: Any?] = [
@@ -178,7 +178,7 @@ public class LoginManager {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
         request.setValue(fp, forHTTPHeaderField: "X-Fingerprint")
-        request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // ADDED
+        request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
         request.setValue("*/*", forHTTPHeaderField: "Accept") // ADDED
 
 
@@ -256,22 +256,21 @@ public class LoginManager {
 
 
     private func superPropertiesBase64() -> String {
-        // Replicate the Objective-C's superPropertiesDict structure as closely as possible
         let props: [String: Any?] = [
-            "os": "iOS", // Obj-C uses "Mac OS X", but your Swift is for iOS. Keep "iOS" if truly an iOS app. If you're building a Mac app, change to "Mac OS X". This is a key decision.
-            "browser": "Discord Client", // Match Obj-C's 'browser' field value
+            "os": "iOS",
+            "browser": "Discord Client", //Match the client
             "release_channel": "stable",
-            "client_version": "0.0.326", // Match Obj-C's client_version
-            "os_version": "15.5", // Keep your iOS version for now, or use a more specific kernel version if you can obtain it consistently for iOS. For a Mac app, you'd need the equivalent of [DLUtil kernelVersion].
-            "os_arch": "arm64", // Obj-C uses "x64", but your iOS device is arm64. Keep "arm64".
-            "app_arch": "arm64", // ADDED: Match Obj-C's 'app_arch', change from x64 to arm64 for iOS
+            "client_version": "0.0.326", // Specifically chosen
+            "os_version": "15.5", // This just seems to work
+            "os_arch": "arm64", // Again, seems to work
+            "app_arch": "arm64", // This is seemingly needed
             "system_locale": "en-US",
-            "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.326 Chrome/128.0.6613.186 Electron/32.2.2 Safari/537.36", // ADDED: Exact string from Obj-C's userAgentString
-            "browser_version": "32.2.2", // ADDED: Match Obj-C's 'browser_version'
-            "os_sdk_version": "23", // ADDED: Match Obj-C's 'os_sdk_version'
-            "client_build_number": 209354, // Match Obj-C's client_build_number
-            "native_build_number": NSNull(), // ADDED: Match Obj-C's NSNull
-            "client_event_source": NSNull() // ADDED: Match Obj-C's NSNull
+            "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.326 Chrome/128.0.6613.186 Electron/32.2.2 Safari/537.36", //Again, rather odd, but seemingly this works and others don't
+            "browser_version": "32.2.2", // Probably needed
+            "os_sdk_version": "23", // Same as above
+            "client_build_number": 209354, // This is very important
+            "native_build_number": NSNull(), // Rather odd, but also needs to be here
+            "client_event_source": NSNull() // Don't even know what this is, but it needs to be here
         ]
         let data = try! JSONSerialization.data(withJSONObject: Self.cleanJSON(props)) // Use cleanJSON to handle NSNull
         return base64Encode(data: data)
