@@ -71,8 +71,8 @@ extension InputView {
         guard buttonIsActive == true else { return }
         self.buttonIsActive = false
         
-        guard let channel = self.channel, let replyMessage = self.replyMessage, let currentText = self.textView.text else { return }
-        
+        guard let channel = self.channel, let replyMessage = self.replyMessage, var currentText = self.textView.text else { return }
+        currentText = self.formatDiscordCommands(in: currentText)
         let newMessage = Message(clientUser, ["content": currentText])
         
         self.textView.text = nil
@@ -94,8 +94,8 @@ extension InputView {
         guard buttonIsActive == true else { return }
         self.buttonIsActive = false
         
-        guard let channel = self.channel, let currentText = self.textView.text else { return }
-        
+        guard let channel = self.channel, var currentText = self.textView.text else { return }
+        currentText = self.formatDiscordCommands(in: currentText)
         let message = Message(clientUser, ["content": currentText])
         self.textView.text = nil
         self.buttonIsActive = true
@@ -111,8 +111,8 @@ extension InputView {
         guard buttonIsActive == true else { return }
         self.buttonIsActive = false
         
-        guard let channel = self.channel, let editMessage = self.editMessage, let currentText = self.textView.text else { return }
-        
+        guard let channel = self.channel, let editMessage = self.editMessage, var currentText = self.textView.text else { return }
+        currentText = self.formatDiscordCommands(in: currentText)
         let newMessage = Message(clientUser, ["content": currentText])
         
         self.textView.text = nil
@@ -128,5 +128,14 @@ extension InputView {
                 parentVC.updateInputOffset()
             }
         }
+    }
+    
+    
+    func formatDiscordCommands(in string: String) -> String {
+        var mutableString = string
+        mutableString = mutableString.replacingOccurrences(of: #"/shrug"#, with: #"¯\_(ツ)_/¯"#)
+        mutableString = mutableString.replacingOccurrences(of: #"/tableflip"#, with: #"(╯°□°)╯︵ ┻━┻"#)
+        mutableString = mutableString.replacingOccurrences(of: #"/unflip"#, with: #"┬─┬ノ( º _ ºノ)"#)
+        return mutableString
     }
 }

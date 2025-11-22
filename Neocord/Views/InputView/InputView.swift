@@ -84,6 +84,14 @@ public class InputView: UIView, UITextViewDelegate {
         return button
     }()
     
+    public let attachmentButton: LargeHitAreaButton = {
+        let button = LargeHitAreaButton()
+        button.setImage(.init(systemName: "paperplane", tintColor: .white), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     public lazy var bubbleStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false

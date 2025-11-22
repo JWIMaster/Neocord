@@ -130,4 +130,5 @@ class DiscordMarkdownView: UILabel {
             completion(image)
         }
     }
+    
 }

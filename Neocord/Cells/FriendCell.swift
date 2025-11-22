@@ -53,7 +53,7 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private lazy var presenceIndicator: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.tintColorForGlass = presenceColor
             return glass
@@ -100,8 +100,8 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             friendAvatar.widthAnchor.constraint(equalToConstant: 40),
             friendAvatar.heightAnchor.constraint(equalToConstant: 40),
             
-            presenceIndicator.widthAnchor.constraint(equalToConstant: 16),
-            presenceIndicator.heightAnchor.constraint(equalToConstant: 16),
+            presenceIndicator.widthAnchor.constraint(equalToConstant: 12),
+            presenceIndicator.heightAnchor.constraint(equalToConstant: 12),
 
             presenceIndicator.bottomAnchor.constraint(equalTo: friendAvatar.bottomAnchor),
             presenceIndicator.trailingAnchor.constraint(equalTo: friendAvatar.trailingAnchor)
