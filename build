@@ -2,8 +2,8 @@
 
 
 PROJECT_NAME="Neocord"
-OUTPUT_FOLDER="build"
-BUILD_DIR="./build"
+OUTPUT_FOLDER="builddir"
+BUILD_DIR="./builddir"
 ARCHIVE_PATH="$BUILD_DIR/${PROJECT_NAME}.xcarchive"
 APP_PATH="$ARCHIVE_PATH/Products/Applications/${PROJECT_NAME}.app"
 IPA_NAME="${PROJECT_NAME}.ipa"
