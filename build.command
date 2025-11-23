@@ -18,7 +18,7 @@ SWIFT_LIB_PATH="/Library/Developer/Toolchains/swift-5.1.5-RELEASE.xctoolchain/us
 echo "🧹 Cleaning old build artifacts..."
 rm -rf "$BUILD_DIR" "$IPA_NAME"
 
-echo "📦 Archiving project: $PROJECT_NAME (unsigned) using Swift 5.1.5)..."
+echo "📦 Archiving project: $PROJECT_NAME (unsigned) using Swift 5.10.1)..."
 
 xcodebuild archive \
   -scheme "$PROJECT_NAME" \
@@ -39,7 +39,7 @@ fi
 # --- Force copy Swift 5.1.5 dylibs into the app ---
 FRAMEWORKS_DIR="$APP_PATH/Frameworks"
 mkdir -p "$FRAMEWORKS_DIR"
-echo "📌 Overwriting Swift dylibs with Swift 5.1.5 versions..."
+echo "📌 Overwriting Xcode's Swift dylibs with custom Swift 5.1.5 versions..."
 for dylib in "$SWIFT_LIB_PATH"/*.dylib; do
   cp -f "$dylib" "$FRAMEWORKS_DIR/"
 done

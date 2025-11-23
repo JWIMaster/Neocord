@@ -47,6 +47,7 @@
 		5F764B9B2ED27EFE00034CFC /* BubbleActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9A2ED27EFE00034CFC /* BubbleActionView.swift */; };
 		5F764B9D2ED2844900034CFC /* TextVC+Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */; };
 		5F764B9F2ED2867600034CFC /* BubbleActionView+Typing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */; };
+		5F764BA12ED297C100034CFC /* build.command in Resources */ = {isa = PBXBuildFile; fileRef = 5F764BA02ED297C100034CFC /* build.command */; };
 		5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7987192EB1DD5C0058566C /* ReplyView.swift */; };
 		5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */; };
 		5F9F58BA2EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B92EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift */; };
@@ -126,6 +127,7 @@
 		5F764B9A2ED27EFE00034CFC /* BubbleActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleActionView.swift; sourceTree = "<group>"; };
 		5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Bubble.swift"; sourceTree = "<group>"; };
 		5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BubbleActionView+Typing.swift"; sourceTree = "<group>"; };
+		5F764BA02ED297C100034CFC /* build.command */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.command; sourceTree = "<group>"; };
 		5F7987192EB1DD5C0058566C /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
 		5F79871B2EB1E6470058566C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Gateway.swift"; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				5F79871B2EB1E6470058566C /* README.md */,
+				5F764BA02ED297C100034CFC /* build.command */,
 				5F57B8C22E9EF1C400CA2CE2 /* Packages */,
 				5F57B8B02E9EEAC600CA2CE2 /* Neocord */,
 				5F57B8AF2E9EEAC600CA2CE2 /* Products */,
@@ -470,6 +473,7 @@
 			files = (
 				5FE178472EAF3D1D00FC4AA4 /* SFSymbols-semibold.ttf in Resources */,
 				5F2914082EAC4EB00019DC0F /* defaultavatar.png in Resources */,
+				5F764BA12ED297C100034CFC /* build.command in Resources */,
 				5FE178492EAF3D1D00FC4AA4 /* SFSymbols-thin.ttf in Resources */,
 				5FE1784E2EAF3D1D00FC4AA4 /* SFSymbols-heavy.ttf in Resources */,
 				5FE1784A2EAF3D1D00FC4AA4 /* SFSymbols-regular.ttf in Resources */,
