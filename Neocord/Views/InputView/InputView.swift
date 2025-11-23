@@ -60,7 +60,7 @@ public class InputView: UIView, UITextViewDelegate {
         textView.textColor = .white
         textView.font = UIFont.systemFont(ofSize: 18)
         textView.isScrollEnabled = false
-        textView.contentInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        textView.contentInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: -4)
         return textView
     }()
     
@@ -142,14 +142,16 @@ public class InputView: UIView, UITextViewDelegate {
         guard let backgroundView = backgroundView else { return }
         
         sendButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor).isActive = true
-        sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6).isActive = true
+        sendButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        sendButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         activateButtonBackgroundConstraints()
         
         // Background view below bubbleStack, minimum height to prevent collapse
         NSLayoutConstraint.activate([
             backgroundView.topAnchor.constraint(equalTo: self.topAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -20),
+            backgroundView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -6),
             backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             //THIS IS NEEDED OR ELSE IT COLLAPSES ON iOS 6
             backgroundView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
