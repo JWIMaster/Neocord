@@ -17,10 +17,6 @@ extension InputView {
         self.changeInputMode(to: .send)
         self.textView.text = nil
         self.textViewDidChange(self.textView)
-        self.removeContextBubble()
-        if let parentVC = parentViewController as? TextViewController {
-            parentVC.updateInputOffset()
-        }
     }
     
     public func editMessage(_ message: Message) {
@@ -28,9 +24,8 @@ extension InputView {
         self.editMessage = message
         self.textView.text = self.editMessage?.content
         self.textViewDidChange(self.textView)
-        self.removeContextBubble()
-        self.addContextBubble(with: "Editing")
         if let parentVC = parentViewController as? TextViewController {
+            parentVC.bubbleActionView?.addContextBubble(with: "Editing")
             parentVC.updateInputOffset()
             parentVC.scrollToBottom(animated: true)
         }
@@ -39,9 +34,8 @@ extension InputView {
     public func replyToMessage(_ message: Message) {
         self.changeInputMode(to: .reply)
         self.replyMessage = message
-        self.removeContextBubble()
-        self.addContextBubble(with: "Replying to \(message.author?.displayname ?? message.author?.username ?? "unknown")")
         if let parentVC = parentViewController as? TextViewController {
+            parentVC.bubbleActionView?.addContextBubble(with: "Replying to \(message.author?.displayname ?? message.author?.username ?? "unknown")")
             parentVC.updateInputOffset()
             parentVC.scrollToBottom(animated: true)
         }
@@ -71,7 +65,7 @@ extension InputView {
         guard buttonIsActive == true else { return }
         self.buttonIsActive = false
         
-        guard let channel = self.channel, let replyMessage = self.replyMessage, var currentText = self.textView.text else { return }
+        guard let channel = self.channel, let replyMessage = self.replyMessage, var currentText = self.textView.text, let parentVC = self.parentViewController as? TextViewController else { return }
         currentText = self.formatDiscordCommands(in: currentText)
         let newMessage = Message(clientUser, ["content": currentText])
         
@@ -81,12 +75,12 @@ extension InputView {
         self.textViewDidChange(self.textView)
         self.buttonIsActive = true
         
+        
+        
         clientUser.reply(to: replyMessage, with: newMessage, in: channel) { [weak self] error in
             guard let self = self else { return }
-            self.removeContextBubble()
-            if let parentVC = self.parentViewController as? TextViewController {
-                parentVC.updateInputOffset()
-            }
+            parentVC.bubbleActionView?.removeContextBubble()
+            parentVC.updateInputOffset()
         }
     }
     
@@ -111,7 +105,7 @@ extension InputView {
         guard buttonIsActive == true else { return }
         self.buttonIsActive = false
         
-        guard let channel = self.channel, let editMessage = self.editMessage, var currentText = self.textView.text else { return }
+        guard let channel = self.channel, let editMessage = self.editMessage, var currentText = self.textView.text, let parentVC = self.parentViewController as? TextViewController else { return }
         currentText = self.formatDiscordCommands(in: currentText)
         let newMessage = Message(clientUser, ["content": currentText])
         
@@ -121,12 +115,12 @@ extension InputView {
         self.textViewDidChange(self.textView)
         self.buttonIsActive = true
         
+        
+        
         clientUser.edit(message: editMessage, to: newMessage, in: channel) { [weak self] error in
             guard let self = self else { return }
-            self.removeContextBubble()
-            if let parentVC = self.parentViewController as? TextViewController {
-                parentVC.updateInputOffset()
-            }
+            parentVC.bubbleActionView?.removeContextBubble()
+            parentVC.updateInputOffset()
         }
     }
     

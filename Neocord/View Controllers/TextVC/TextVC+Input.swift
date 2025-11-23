@@ -30,18 +30,19 @@ extension TextViewController {
         textInputView.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -20).isActive = true
         
         view.layoutIfNeeded()
-        self.updateInputOffset()
+        self.setupBubbleActionView(for: textChannel)
+        /*self.updateInputOffset()
         scrollView.contentInset.top = (navigationController?.navigationBar.frame.height) ?? 0
         
         scrollView.layoutIfNeeded()
         scrollToBottom(animated: false)
         
-        initialViewSetupComplete = true
+        initialViewSetupComplete = true*/
     }
     
     func updateInputOffset() {
         UIView.animate(withDuration: 0.5) {
-            self.scrollView.contentInset.bottom = (self.textInputView?.bounds.height)! + 10
+            self.scrollView.contentInset.bottom = (self.textInputView?.bounds.height)! + (self.bubbleActionView?.bounds.height)! + 10
         }
     }
 }

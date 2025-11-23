@@ -49,9 +49,6 @@ public class InputView: UIView, UITextViewDelegate {
     var replyMessage: Message?
     var editMessage: Message?
     
-    var contextBubble: Bubble?
-    var typingBubble: Bubble?
-    
     public enum inputMode {
         case edit, reply, send
     }
@@ -92,18 +89,9 @@ public class InputView: UIView, UITextViewDelegate {
         return button
     }()
     
-    public lazy var bubbleStack: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.spacing = 4
-        stack.axis = .vertical
-        stack.alignment = .center
-        return stack
-    }()
     
     var buttonIsActive: Bool = true
-    
-    var topConstraint: NSLayoutConstraint!
+
     
     public init(channel: TextChannel, snapshotView: UIView, tokenInputView: Bool = false) {
         super.init(frame: .zero)
@@ -132,7 +120,6 @@ public class InputView: UIView, UITextViewDelegate {
             backgroundView.snapshotTargetView = snapshotView
         }
         guard let buttonBackground = buttonBackground, let backgroundView = backgroundView else { return }
-        addSubview(bubbleStack)
         addSubview(backgroundView)
         
         textView.delegate = self
@@ -153,16 +140,6 @@ public class InputView: UIView, UITextViewDelegate {
     
     private func setupConstraints() {
         guard let backgroundView = backgroundView else { return }
-
-        // Bubble stack at top
-        NSLayoutConstraint.activate([
-            bubbleStack.topAnchor.constraint(equalTo: self.topAnchor),
-            bubbleStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            bubbleStack.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ])
-        bubbleStack.setContentHuggingPriority(.required, for: .vertical)
-        bubbleStack.setContentCompressionResistancePriority(.required, for: .vertical)
-        topConstraint = backgroundView.topAnchor.constraint(equalTo: bubbleStack.bottomAnchor)
         
         sendButton.centerYAnchor.constraint(equalTo: textView.centerYAnchor).isActive = true
         sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
@@ -170,7 +147,7 @@ public class InputView: UIView, UITextViewDelegate {
         
         // Background view below bubbleStack, minimum height to prevent collapse
         NSLayoutConstraint.activate([
-            topConstraint,
+            backgroundView.topAnchor.constraint(equalTo: self.topAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -20),
             backgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),

@@ -50,8 +50,8 @@ extension TextViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             guard let user = message.author else { return }
-            if let textInputView = self.textInputView, textInputView.activeTypingUsers.keys.contains(user.id!) {
-                textInputView.removeTyping(for: user.id!)
+            if let bubbleActionView = self.bubbleActionView, bubbleActionView.activeTypingUsers.keys.contains(user.id!) {
+                bubbleActionView.removeTyping(for: user.id!)
             }
             var isSameUser: Bool
             self.secondLastUserToSpeak = self.lastUserToSpeak
@@ -117,9 +117,9 @@ extension TextViewController {
     func typingStarted(by userID: Snowflake, in channelID: Snowflake) {
         if let dm = self.dm as? DM, dm.id! == channelID {
             if userID == clientUser.clientUser?.id! {
-                self.textInputView?.handleTyping(for: clientUser.clientUser!)
+                self.bubbleActionView?.handleTyping(for: clientUser.clientUser!)
             } else if userID == dm.recipient?.id! {
-                self.textInputView?.handleTyping(for: dm.recipient!)
+                self.bubbleActionView?.handleTyping(for: dm.recipient!)
             }
         } else if let groupDM = self.dm as? GroupDM, groupDM.id! == channelID {
             
@@ -134,7 +134,7 @@ extension TextViewController {
                 
                 if let typingUser = channelUserDict[userID] {
                     if let typingMember = channelMembers[userID] {
-                        self.textInputView?.handleTyping(for: typingUser, typingMember)
+                        self.bubbleActionView?.handleTyping(for: typingUser, typingMember)
                     }
                 } else {
                     print("no user")

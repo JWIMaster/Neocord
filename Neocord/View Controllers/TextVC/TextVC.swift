@@ -19,6 +19,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     public var dm: DMChannel?
     public var channel: GuildChannel?
     var textInputView: InputView?
+    var bubbleActionView: BubbleActionView?
     var messageIDsInStack = Set<Snowflake>()
     var userIDsInStack = Set<Snowflake>()
     var initialViewSetupComplete = false

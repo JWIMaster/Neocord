@@ -13,7 +13,6 @@
 		5F139A492EC5E3B30092EDA6 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A482EC5E3B30092EDA6 /* FriendsView.swift */; };
 		5F139A4B2EC69A690092EDA6 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4A2EC69A690092EDA6 /* FriendCell.swift */; };
 		5F139A4D2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */; };
-		5F139A502EC6C8D90092EDA6 /* InputView+Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */; };
 		5F139A522EC6C8E10092EDA6 /* InputView+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */; };
 		5F139A542EC6C8EB0092EDA6 /* LargeHitAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */; };
 		5F139A562EC6CA5C0092EDA6 /* Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A552EC6CA5C0092EDA6 /* Bubble.swift */; };
@@ -46,6 +45,8 @@
 		5F724FD22EC1B064002A9E25 /* DMsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F724FD12EC1B064002A9E25 /* DMsIcon.png */; };
 		5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */; };
 		5F764B9B2ED27EFE00034CFC /* BubbleActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9A2ED27EFE00034CFC /* BubbleActionView.swift */; };
+		5F764B9D2ED2844900034CFC /* TextVC+Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */; };
+		5F764B9F2ED2867600034CFC /* BubbleActionView+Typing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */; };
 		5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7987192EB1DD5C0058566C /* ReplyView.swift */; };
 		5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */; };
 		5F9F58BA2EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B92EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift */; };
@@ -91,7 +92,6 @@
 		5F139A482EC5E3B30092EDA6 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		5F139A4A2EC69A690092EDA6 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+ProfileView.swift"; sourceTree = "<group>"; };
-		5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputView+Bubble.swift"; sourceTree = "<group>"; };
 		5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputView+Actions.swift"; sourceTree = "<group>"; };
 		5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeHitAreaButton.swift; sourceTree = "<group>"; };
 		5F139A552EC6CA5C0092EDA6 /* Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bubble.swift; sourceTree = "<group>"; };
@@ -124,6 +124,8 @@
 		5F724FD12EC1B064002A9E25 /* DMsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DMsIcon.png; path = Assets.xcassets/AppIcon.appiconset/DMsIcon.png; sourceTree = "<group>"; };
 		5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordMarkdownView.swift; sourceTree = "<group>"; };
 		5F764B9A2ED27EFE00034CFC /* BubbleActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleActionView.swift; sourceTree = "<group>"; };
+		5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Bubble.swift"; sourceTree = "<group>"; };
+		5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BubbleActionView+Typing.swift"; sourceTree = "<group>"; };
 		5F7987192EB1DD5C0058566C /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
 		5F79871B2EB1E6470058566C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Gateway.swift"; sourceTree = "<group>"; };
@@ -185,9 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				5FEF14A72EA4485B005598D3 /* InputView.swift */,
-				5F139A4F2EC6C8D90092EDA6 /* InputView+Bubble.swift */,
 				5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */,
-				5F139A552EC6CA5C0092EDA6 /* Bubble.swift */,
 			);
 			path = InputView;
 			sourceTree = "<group>";
@@ -278,7 +278,9 @@
 		5F764B992ED27EEB00034CFC /* BubbleActionView */ = {
 			isa = PBXGroup;
 			children = (
+				5F139A552EC6CA5C0092EDA6 /* Bubble.swift */,
 				5F764B9A2ED27EFE00034CFC /* BubbleActionView.swift */,
+				5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */,
 			);
 			path = BubbleActionView;
 			sourceTree = "<group>";
@@ -293,6 +295,7 @@
 				5F9F58BD2EB4303000A09760 /* TextVC+MessageAction.swift */,
 				5F9F58BF2EB4309300A09760 /* TextVC+Background.swift */,
 				5F9F58C12EB4309B00A09760 /* TextVC+Input.swift */,
+				5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */,
 			);
 			path = TextVC;
 			sourceTree = "<group>";
@@ -511,6 +514,7 @@
 				5F9F58DB2EB6E71300A09760 /* MessageView+Author.swift in Sources */,
 				5F5094822EA57D92002646A2 /* SharedValues.swift in Sources */,
 				5F139A522EC6C8E10092EDA6 /* InputView+Actions.swift in Sources */,
+				5F764B9D2ED2844900034CFC /* TextVC+Bubble.swift in Sources */,
 				5F9F58CB2EB56FB800A09760 /* GuildAvatarCache.swift in Sources */,
 				5FACCA272EBAD448007EC568 /* ProfileView+Swipe.swift in Sources */,
 				5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */,
@@ -531,7 +535,7 @@
 				5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */,
 				5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */,
 				5F5AF8AD2EC8267500D0C660 /* RoleCell.swift in Sources */,
-				5F139A502EC6C8D90092EDA6 /* InputView+Bubble.swift in Sources */,
+				5F764B9F2ED2867600034CFC /* BubbleActionView+Typing.swift in Sources */,
 				5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */,
 				5F139A4B2EC69A690092EDA6 /* FriendCell.swift in Sources */,
 				5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */,
