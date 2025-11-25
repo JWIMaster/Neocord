@@ -147,7 +147,6 @@
 		5FA7B1ED2ED3C90F008BCC5E /* MediaPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPreviewView.swift; sourceTree = "<group>"; };
 		5FA7B1F02ED3CB66008BCC5E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neocord.entitlements; sourceTree = "<group>"; };
-		5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Modern.xcconfig; sourceTree = "<group>"; };
 		5FACCA232EBAC163007EC568 /* ForumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumVC.swift; sourceTree = "<group>"; };
 		5FACCA262EBAD448007EC568 /* ProfileView+Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileView+Swipe.swift"; sourceTree = "<group>"; };
 		5FE178382EAF3D1D00FC4AA4 /* lookup.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = lookup.dat; sourceTree = "<group>"; };
@@ -234,7 +233,6 @@
 		5F57B8A52E9EEAC600CA2CE2 = {
 			isa = PBXGroup;
 			children = (
-				5FA7B1FC2ED55FF1008BCC5E /* BuildConfigs */,
 				5FA7B1F02ED3CB66008BCC5E /* .swiftlint.yml */,
 				5F79871B2EB1E6470058566C /* README.md */,
 				5FE9785D2ED298CC00CDDD16 /* build */,
@@ -396,14 +394,6 @@
 				5F5AF8AA2EC8257500D0C660 /* RoleIconCache.swift */,
 			);
 			path = CacheManagers;
-			sourceTree = "<group>";
-		};
-		5FA7B1FC2ED55FF1008BCC5E /* BuildConfigs */ = {
-			isa = PBXGroup;
-			children = (
-				5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */,
-			);
-			path = BuildConfigs;
 			sourceTree = "<group>";
 		};
 		5FACCA252EBAD43A007EC568 /* ProfileView */ = {
@@ -659,7 +649,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -713,7 +702,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -802,7 +790,6 @@
 		};
 		5FA7B1F82ED55FA7008BCC5E /* Debug Modern */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -851,7 +838,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -863,7 +849,6 @@
 		};
 		5FA7B1F92ED55FA7008BCC5E /* Debug Modern */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = "$(ARCHS_STANDARD)";
@@ -883,7 +868,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -903,7 +888,6 @@
 		};
 		5FA7B1FA2ED55FB0008BCC5E /* Release Modern */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -946,7 +930,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -958,7 +941,6 @@
 		};
 		5FA7B1FB2ED55FB0008BCC5E /* Release Modern */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5FA7B1FD2ED5600D008BCC5E /* Modern.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = "$(ARCHS_STANDARD)";
@@ -978,7 +960,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
