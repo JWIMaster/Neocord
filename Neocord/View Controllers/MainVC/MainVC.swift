@@ -15,7 +15,9 @@ import SFSymbolsCompatKit
 import FoundationCompatKit
 
 #if !targetEnvironment(macCatalyst)
+#if compiler(<6.0)
 public typealias UIStackView = UIKitCompatKit.UIStackView
+#endif
 #endif
 
 class ViewController: UIViewController, UIGestureRecognizerDelegate {
