@@ -33,11 +33,11 @@ extension BubbleActionView {
     }
     
     // MARK: - Timers per user
-    private struct TypingInfo {
+    internal struct TypingInfo {
         var timer: Timer
     }
     
-    private var typingTimers: [Snowflake: TypingInfo] {
+    internal var typingTimers: [Snowflake: TypingInfo] {
         get { objc_getAssociatedObject(self, &AssociatedKeys.typingTimers) as? [Snowflake: TypingInfo] ?? [:] }
         set { objc_setAssociatedObject(self, &AssociatedKeys.typingTimers, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }

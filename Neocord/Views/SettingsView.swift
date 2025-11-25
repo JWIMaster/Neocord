@@ -147,6 +147,7 @@ class SettingsView: UIView {
         glass.translatesAutoresizingMaskIntoConstraints = false
         glass.heightAnchor.constraint(equalToConstant: 50).isActive = true
         glass.tintColorForGlass = isOn ? UIColor.green.withAlphaComponent(0.3) : UIColor.red.withAlphaComponent(0.3)
+        glass.shadowOpacity = 0
         
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false

@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import FoundationCompatKit
+import SwiftcordLegacy
 
 
 //MARK: MOST OF THIS CHATGPT COOKED UP FROM DISCORDLITE, WHILE I DO UNDERSTAND IT, IT'S VERY DELICATE. Please note, the base 64 user agent must be the same as mine if you want 2fa support.
@@ -271,6 +272,7 @@ public class LoginManager {
             "client_event_source": NSNull() // Don't even know what this is, but it needs to be here
         ]
         let data = try! JSONSerialization.data(withJSONObject: Self.cleanJSON(props)) // Use cleanJSON to handle NSNull
+        return discordSuperPropertiesBase64
         return base64Encode(data: data)
     }
     

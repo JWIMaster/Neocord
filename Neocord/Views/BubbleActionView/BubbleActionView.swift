@@ -47,4 +47,10 @@ class BubbleActionView: UIView {
     
     // MARK: - Associated keys
     
+    
+    deinit {
+        for (_, typingInfo) in typingTimers {
+            typingInfo.timer.invalidate()
+        }
+    }
 }

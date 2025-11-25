@@ -84,7 +84,24 @@ extension MessageView {
 
         if isSelfUser {
             let pinged = UIView()
-            pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+            pinged.backgroundColor = .orange.withAlphaComponent(0.3)
+            
+            UIView.animate(withDuration: 2.5) {
+                pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+            }
+            
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                print("a")
+                UIView.animate(withDuration: 2.5) {
+                    pinged.backgroundColor = .orange.withAlphaComponent(0.3)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    UIView.animate(withDuration: 2.5) {
+                        pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+                    }
+                }
+            }
             pinged.layer.cornerRadius = 22
             addSubview(pinged)
             pinged.pinToEdges(of: self)
