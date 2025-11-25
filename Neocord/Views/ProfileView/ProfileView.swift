@@ -22,6 +22,7 @@ class ProfileView: UIView {
     
     var grabber: UIView = {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(white: 1, alpha: 0.5)
         view.layer.cornerRadius = 2
         return view
@@ -35,10 +36,12 @@ class ProfileView: UIView {
     lazy var bioBackground: UIView? = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 6
             return glass
         } else {
             let bioBg = UIView()
+            bioBg.translatesAutoresizingMaskIntoConstraints = false
             return bioBg
         }
     }()
@@ -58,11 +61,13 @@ class ProfileView: UIView {
                 disableBlur: true,
                 filterExclusions: exclusions
             )
+            bg.translatesAutoresizingMaskIntoConstraints = false
             bg.shadowRadius = 0
             bg.shadowOpacity = 0
             return bg
         } else {
             let bg = UIView()
+            bg.translatesAutoresizingMaskIntoConstraints = false
             return bg
         }
     }()
@@ -76,10 +81,12 @@ class ProfileView: UIView {
     lazy var roleCollectionViewBackground: UIView? = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 6
             return glass
         } else {
             let roleBg = UIView()
+            roleBg.translatesAutoresizingMaskIntoConstraints = false
             return roleBg
         }
     }()
@@ -137,11 +144,7 @@ class ProfileView: UIView {
         containerView.addSubview(username)
         
         containerView.addSubview(bioBackground)
-        if #available(iOS 7.0.1, *) {
-            containerView.addSubview(bioWithEmoji)
-        } else {
-            containerView.addSubview(bio)
-        }
+        containerView.addSubview(bioWithEmoji)
         
         if member != nil {
             containerView.addSubview(roleCollectionViewBackground!)
@@ -154,7 +157,7 @@ class ProfileView: UIView {
     func setupConstraints() {
         guard let backgroundView = backgroundView, let bioBackground = bioBackground else { return }
         
-        let views = [backgroundView, scrollView, containerView, profileBanner, profilePicture, displayname, username, bio, bioBackground, grabber]
+        let views = [backgroundView, scrollView, containerView, profileBanner, profilePicture, displayname, username, bio, bioBackground, grabber, bioWithEmoji]
         for v in views { v.translatesAutoresizingMaskIntoConstraints = false }
         
         // Background
@@ -175,11 +178,7 @@ class ProfileView: UIView {
             grabber.heightAnchor.constraint(equalToConstant: 4)
         ])
         
-        if #available(iOS 7.0.1, *) {
-            bioBackground.pinToEdges(of: bioWithEmoji, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
-        } else {
-            bioBackground.pinToEdges(of: bio, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
-        }
+        bioBackground.pinToEdges(of: bioWithEmoji, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
         
         // Banner, avatar, name
         NSLayoutConstraint.activate([
@@ -205,19 +204,11 @@ class ProfileView: UIView {
         
         
         
-        if #available(iOS 7.0.1, *) {
-            NSLayoutConstraint.activate([
-                bioWithEmoji.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
-                bioWithEmoji.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
-                bioWithEmoji.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                bio.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
-                bio.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
-                bio.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            ])
-        }
+        NSLayoutConstraint.activate([
+            bioWithEmoji.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
+            bioWithEmoji.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
+            bioWithEmoji.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+        ])
         
         var bottomConstraint: NSLayoutConstraint
         
@@ -232,14 +223,8 @@ class ProfileView: UIView {
             ])
 
         } else {
-            if #available(iOS 7.0.1, *) {
-                bottomConstraint = bioWithEmoji.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-                bottomConstraint.isActive = true
-            } else {
-                bottomConstraint = bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-                bottomConstraint.isActive = true
-            }
-            
+            bottomConstraint = bioWithEmoji.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            bottomConstraint.isActive = true
         }
         
     }
@@ -276,13 +261,8 @@ class ProfileView: UIView {
         bioWithEmoji.lineBreakMode = .byWordWrapping
         bioWithEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
         
-        if #available(iOS 7.0.1, *) {
-            let bioText = user?.bio ?? "unknown"
-            bioWithEmoji.setMarkdown(bioText)
-        } else {
-            let bioText = user?.bio ?? "unknown"
-            bio.text = bioText
-        }
+        let bioText = user?.bio ?? "unknown"
+        bioWithEmoji.setMarkdown(bioText)
     }
     
     func bioStringParsing() {
@@ -475,13 +455,8 @@ class ProfileView: UIView {
         
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        if #available(iOS 7.0.1, *) {
-            let bioText = user?.bio ?? "unknown"
-            bioWithEmoji.setMarkdown(bioText)
-        } else {
-            let bioText = user?.bio ?? "unknown"
-            bio.text = bioText
-        }
+        let bioText = user?.bio ?? "unknown"
+        bioWithEmoji.setMarkdown(bioText)
         CATransaction.commit()
 
         setupProfilePicture()

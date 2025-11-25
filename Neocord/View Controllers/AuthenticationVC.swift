@@ -1,5 +1,6 @@
 import UIKit
 import UIKitCompatKit
+import SwiftcordLegacy
 
 class AuthenticationViewController: UIViewController {
 
@@ -244,6 +245,7 @@ class AuthenticationViewController: UIViewController {
     private func proceedToMainApp() {
         statusLabel.text = "Login successful!"
         let loadVC = LoadingViewController()
+        clientUser = SLClient(token: token ?? "idk")
         UIApplication.shared.keyWindow?.rootViewController = loadVC
     }
 }
