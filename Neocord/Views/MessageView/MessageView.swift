@@ -33,7 +33,9 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     let edited = UILabel()
     let messageBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            return LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            return glass
         } else {
             let background = UIView()
             background.layer.cornerRadius = 22
@@ -49,6 +51,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     var member: GuildMember?
     var guildTextChannel: GuildChannel?
     var isSameUser: Bool = false
+    var embedView: EmbedView?
     
     
     static let markdownQueue: DispatchQueue = DispatchQueue(label: "com.jwi.markdownrender", attributes: .concurrent, target: .global(qos: .userInitiated))
@@ -73,7 +76,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     static let calendar = Calendar.current
     
-    let messageTextAndEmoji = DiscordMarkdownView()
+    lazy var messageTextAndEmoji = DiscordMarkdownView(frame: .zero, message: self.message)
     
     public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false) {
         super.init(frame: .zero)
@@ -91,7 +94,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     
     func setup() {
-        if let guildTextChannel = guildTextChannel {
+        if guildTextChannel != nil {
             setupMembers()
         }
         setupText()
@@ -102,6 +105,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         setupTimestamp()
         setupGestureRecogniser()
         setupReply()
+        setupSelfPing()
         setupSubviews()
         setupContraints()
         setupAttachments()
@@ -244,24 +248,5 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         self.message = nil
         self.isClientUser = nil
     }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        
-    }
-    
-    
-    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // Check all subviews, even outside bounds
-        for subview in subviews {
-            let convertedPoint = subview.convert(point, from: self)
-            if let hitView = subview.hitTest(convertedPoint, with: event) {
-                return hitView
-            }
-        }
-        // Fallback
-        return super.hitTest(point, with: event)
-    }
-
 }
 

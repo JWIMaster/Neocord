@@ -16,7 +16,7 @@ class CustomToolbar: UIView {
     
     private let backgroundView: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
+            let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
@@ -68,6 +68,7 @@ class CustomToolbar: UIView {
 
         // Add buttons directly to stackView
         for button in buttons {
+            button.translatesAutoresizingMaskIntoConstraints = false
             stackView.addArrangedSubview(button)
             button.setContentHuggingPriority(.required, for: .horizontal)
         }

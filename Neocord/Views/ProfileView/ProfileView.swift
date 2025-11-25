@@ -31,10 +31,10 @@ class ProfileView: UIView {
     var username = UILabel()
     var profilePicture = UIImageView()
     var profileBanner = UIImageView()
-    
-    var bioBackground: UIView? = {
+    let exclusions = ThemeEngine.glassFilterExclusions + [.highlight]
+    lazy var bioBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterOptions: [.darken, .depth, .rim, .tint])
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
             glass.shadowRadius = 6
             return glass
         } else {
@@ -49,14 +49,14 @@ class ProfileView: UIView {
     var containerView = UIView()
     var scrollView = UIScrollView()
     
-    var backgroundView: UIView? = {
+    lazy var backgroundView: UIView? = {
         if ThemeEngine.enableGlass {
             let bg = LiquidGlassView(
                 blurRadius: 6,
                 cornerRadius: 0,
                 snapshotTargetView: nil,
                 disableBlur: true,
-                filterOptions: [.depth, .darken, .rim, .tint]
+                filterExclusions: exclusions
             )
             bg.shadowRadius = 0
             bg.shadowOpacity = 0
@@ -73,9 +73,9 @@ class ProfileView: UIView {
         roleCV.clipsToBounds = false
         return roleCV
     }()
-    var roleCollectionViewBackground: UIView? = {
+    lazy var roleCollectionViewBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterOptions: [.darken, .depth, .rim, .tint])
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
             glass.shadowRadius = 6
             return glass
         } else {
@@ -97,7 +97,7 @@ class ProfileView: UIView {
         setup() // Build base layout immediately
         
         // Fetch updated user info in the background
-        clientUser.getUserProfile(withID: user.id!) { [weak self] user, userProfile, error in
+        clientUser.getUserProfile(withID: user.id!) { [weak self] user, userProfile, _ in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.user = user
@@ -143,7 +143,7 @@ class ProfileView: UIView {
             containerView.addSubview(bio)
         }
         
-        if let _ = member {
+        if member != nil {
             containerView.addSubview(roleCollectionViewBackground!)
             containerView.addSubview(roleCollectionView)
         }
@@ -221,7 +221,7 @@ class ProfileView: UIView {
         
         var bottomConstraint: NSLayoutConstraint
         
-        if let _ = member {
+        if member != nil {
             bottomConstraint = roleCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             roleCollectionViewBackground!.pinToEdges(of: roleCollectionView, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
             NSLayoutConstraint.activate([
@@ -329,7 +329,7 @@ class ProfileView: UIView {
                 self.profilePicture.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 80, height: 80), cornerRadius: 40).cgPath
                 
                 self.profileBanner.backgroundColor = color
-                if let bg = self.backgroundView as? LiquidGlassView, let bioBackground = self.bioBackground as? LiquidGlassView {
+                if self.backgroundView is LiquidGlassView, let bioBackground = self.bioBackground as? LiquidGlassView {
                     bioBackground.tintColorForGlass = color.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
                     bioBackground.setNeedsLayout()
                 } else {
@@ -364,7 +364,7 @@ class ProfileView: UIView {
                 roleCollectionViewBackground.setNeedsLayout()
             }
         } else if let user = user {
-            AvatarCache.shared.avatar(for: user) { [weak self] image, color in
+            AvatarCache.shared.avatar(for: user) { [weak self] _, color in
                 guard let self = self, let color = color else { return }
                 DispatchQueue.main.async {
                     bg.tintGradientColors = nil

@@ -1,10 +1,3 @@
-//
-//  GlassSettingsView.swift
-//  Neocord
-//
-//  Created by JWI on 6/11/2025.
-//
-
 import UIKit
 import UIKitCompatKit
 import UIKitExtensions
@@ -13,7 +6,13 @@ class SettingsView: UIView {
     
     private var backgroundView: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(
+                blurRadius: 0,
+                cornerRadius: 22,
+                snapshotTargetView: nil,
+                disableBlur: true,
+                filterExclusions: ThemeEngine.glassFilterExclusions
+            )
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             return glass
@@ -26,21 +25,33 @@ class SettingsView: UIView {
         }
     }()
     
-    private var stackView: UIStackView = {
+    private var scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.alwaysBounceVertical = true
+        return scroll
+    }()
+    
+    private var contentStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 20
         stack.alignment = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
     private var glassButton: UIView!
     private var animationsButton: UIView!
     private var profileTintingButton: UIView!
+    private var resetTokenButton: UIView!
+    
+    private var filterButtons: [LiquidGlassView.AdvancedFilterOptions: UIView] = [:]
     
     public init() {
         super.init(frame: .zero)
         setup()
+        setupFilterToggles()
     }
     
     required init?(coder: NSCoder) {
@@ -51,87 +62,111 @@ class SettingsView: UIView {
         addSubview(backgroundView)
         backgroundView.pinToEdges(of: self)
         
-        addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(scrollView)
         NSLayoutConstraint.activate([
-            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            stackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8)
+            scrollView.topAnchor.constraint(equalTo: self.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
         
-        // Create buttons
-        glassButton = makeGlassButton(title: "Enable Glass", isOn: ThemeEngine.enableGlass) { value in
-            ThemeEngine.enableGlass = value
-            if let parentVC = self.parentViewController as? ViewController {
+        scrollView.addSubview(contentStack)
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40)
+        ])
+        
+        // Main toggle buttons
+        glassButton = makeToggleButton(title: "Enable Glass", isOn: ThemeEngine.enableGlass) { [weak self] in
+            ThemeEngine.enableGlass.toggle()
+            self?.updateButtonTint(self?.glassButton, isOn: ThemeEngine.enableGlass)
+            if let parentVC = self?.parentViewController as? ViewController {
                 parentVC.refreshView()
             }
         }
-        animationsButton = makeGlassButton(title: "Enable Animations", isOn: ThemeEngine.enableAnimations) { value in
-            ThemeEngine.enableAnimations = value
-        }
-        profileTintingButton = makeGlassButton(title: "Enable Profile Tinting", isOn: ThemeEngine.enableProfileTinting) { value in
-            ThemeEngine.enableProfileTinting = value
+        
+        animationsButton = makeToggleButton(title: "Enable Animations", isOn: ThemeEngine.enableAnimations) {
+            ThemeEngine.enableAnimations.toggle()
+            self.updateButtonTint(self.animationsButton, isOn: ThemeEngine.enableAnimations)
         }
         
-        stackView.addArrangedSubview(glassButton)
-        stackView.addArrangedSubview(animationsButton)
-        stackView.addArrangedSubview(profileTintingButton)
+        profileTintingButton = makeToggleButton(title: "Enable Profile Tinting", isOn: ThemeEngine.enableProfileTinting) {
+            ThemeEngine.enableProfileTinting.toggle()
+            self.updateButtonTint(self.profileTintingButton, isOn: ThemeEngine.enableProfileTinting)
+        }
+        
+        resetTokenButton = makeToggleButton(title: "Reset Token", isOn: false) {
+            token = nil
+            UIApplication.shared.keyWindow?.rootViewController = AuthenticationViewController()
+        }
+        
+        contentStack.addArrangedSubview(glassButton)
+        contentStack.addArrangedSubview(animationsButton)
+        contentStack.addArrangedSubview(profileTintingButton)
+        contentStack.addArrangedSubview(resetTokenButton)
     }
     
-    private func makeGlassButton(title: String, isOn: Bool, action: @escaping (Bool) -> Void) -> UIView {
-        let glass = LiquidGlassView(blurRadius: 8, cornerRadius: 16, snapshotTargetView: nil, disableBlur: true)
+    // MARK: - Advanced Filters
+    
+    private func setupFilterToggles() {
+        let label = UILabel()
+        label.text = "Glass Options"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        contentStack.addArrangedSubview(label)
+        
+        for filter in LiquidGlassView.AdvancedFilterOptions.allCases.filter( { $0 != .tint } ) {
+            let isEnabled = !ThemeEngine.glassFilterExclusions.contains(filter)
+            let button = makeToggleButton(title: "\(filter)".capitalized, isOn: isEnabled) { [weak self] in
+                self?.toggleFilter(filter)
+            }
+            contentStack.addArrangedSubview(button)
+            filterButtons[filter] = button
+        }
+    }
+    
+    private func toggleFilter(_ filter: LiquidGlassView.AdvancedFilterOptions) {
+        var exclusions = ThemeEngine.glassFilterExclusions
+        if let index = exclusions.firstIndex(of: filter) {
+            exclusions.remove(at: index)
+        } else {
+            exclusions.append(filter)
+        }
+        ThemeEngine.glassFilterExclusions = exclusions
+        updateButtonTint(filterButtons[filter], isOn: !exclusions.contains(filter))
+    }
+    
+    // MARK: - Utility
+    
+    private func makeToggleButton(title: String, isOn: Bool, action: @escaping () -> Void) -> UIView {
+        let glass = LiquidGlassView(blurRadius: 8, cornerRadius: 16, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         glass.translatesAutoresizingMaskIntoConstraints = false
         glass.heightAnchor.constraint(equalToConstant: 50).isActive = true
         glass.tintColorForGlass = isOn ? UIColor.green.withAlphaComponent(0.3) : UIColor.red.withAlphaComponent(0.3)
         
         let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         
-        // Store state
-        button.tag = isOn ? 1 : 0
+        button.addAction(for: .touchUpInside, {
+            action()
+        })
         
-        // Store the glass reference so we can update its color on tap
-        objc_setAssociatedObject(button, &AssociatedKeys.glassView, glass, .OBJC_ASSOCIATION_ASSIGN)
-        // Store action
-        objc_setAssociatedObject(button, &AssociatedKeys.toggleAction, action, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        
-        button.addTarget(self, action: #selector(glassButtonTapped(_:)), for: .touchUpInside)
-        
-        // Add button inside glass
         glass.addSubview(button)
         button.pinToEdges(of: glass)
         
         return glass
     }
-
-    @objc private func glassButtonTapped(_ sender: UIButton) {
-        let isOn = sender.tag == 0
-        sender.tag = isOn ? 1 : 0
-        
-        // Update the glass color
-        if let glass = objc_getAssociatedObject(sender, &AssociatedKeys.glassView) as? LiquidGlassView {
-            glass.tintColorForGlass = isOn ? UIColor.green.withAlphaComponent(0.3) : UIColor.red.withAlphaComponent(0.3)
-        }
-        
-        // Call the stored action
-        if let action = objc_getAssociatedObject(sender, &AssociatedKeys.toggleAction) as? (Bool) -> Void {
-            action(isOn)
-        }
+    
+    private func updateButtonTint(_ button: UIView?, isOn: Bool) {
+        guard let glass = button as? LiquidGlassView else { return }
+        glass.tintColorForGlass = isOn ? UIColor.green.withAlphaComponent(0.3) : UIColor.red.withAlphaComponent(0.3)
     }
-
-    // MARK: - Associated Object Key
-    private struct AssociatedKeys {
-        static var toggleAction = "toggleAction"
-        static var glassView = "glassView"
-    }
-
-}
-
-// MARK: - Associated Object Key
-private struct AssociatedKeys {
-    static var toggleAction = "toggleAction"
 }

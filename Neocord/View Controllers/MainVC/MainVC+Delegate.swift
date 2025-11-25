@@ -28,27 +28,27 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
         case dmCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DMButtonCell.reuseID, for: indexPath) as! DMButtonCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DMButtonCell.reuseID, for: indexPath) as? DMButtonCell else { return UICollectionViewCell() }
             cell.configure(with: dms[indexPath.item])
             return cell
             
         case sidebarCollectionView:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SidebarButtonCell.reuseID, for: indexPath) as! SidebarButtonCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SidebarButtonCell.reuseID, for: indexPath) as? SidebarButtonCell else { return UICollectionViewCell() }
             cell.configure(with: sidebarButtons[indexPath.item])
             return cell
             
         case channelsCollectionView:
             let item = displayedChannels[indexPath.item]
             if let category = item as? GuildCategory {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelCategoryCell.reuseID, for: indexPath) as! ChannelCategoryCell
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelCategoryCell.reuseID, for: indexPath) as? ChannelCategoryCell else { return UICollectionViewCell() }
                 cell.configure(with: category)
                 return cell
             } else if let text = item as? GuildText {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as! ChannelButtonCell
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as? ChannelButtonCell else { return UICollectionViewCell() }
                 cell.configure(with: text)
                 return cell
             } else if let forum = item as? GuildForum {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as! ChannelButtonCell
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as? ChannelButtonCell else { return UICollectionViewCell() }
                 cell.configure(with: forum)
                 return cell
             } else {
@@ -64,8 +64,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         switch collectionView {
         case dmCollectionView:
             let dm = dms[indexPath.item]
-            if dm.type == .dm { navigationController?.pushViewController(TextViewController(dm: dm as! DM), animated: true) }
-            else if dm.type == .groupDM { navigationController?.pushViewController(TextViewController(dm: dm as! GroupDM), animated: true) }
+            if dm.type == .dm, let dm = dm as? DM {
+                navigationController?.pushViewController(TextViewController(dm: dm), animated: true)
+            } else if dm.type == .groupDM, let groupDM = dm as? GroupDM {
+                navigationController?.pushViewController(TextViewController(dm: groupDM), animated: true)
+            }
             
         case sidebarCollectionView:
             let button = sidebarButtons[indexPath.item]
@@ -93,7 +96,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
                 navigationController?.pushViewController(TextViewController(channel: channel), animated: true)
             case .guildForum:
                 clientUser.subscribeToChannel(self.activeGuild!, channel)
-                navigationController?.pushViewController(ForumViewController(forum: channel as! GuildForum), animated: true)
+                if let forum = channel as? GuildForum { navigationController?.pushViewController(ForumViewController(forum: forum), animated: true) }
             default:
                 break
             }
@@ -195,15 +198,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
          
         sidebarCollectionView.performBatchUpdates({
             if isExpanded {
-                // Collapse
-
                 let endIndex = min(startIndex + guildsInFolder.count, sidebarButtons.count)
                 let indexPaths = (startIndex..<endIndex).map { IndexPath(item: $0, section: 0) }
                 sidebarButtons.removeSubrange(startIndex..<endIndex)
                 sidebarCollectionView.deleteItems(at: indexPaths)
             } else {
-                // Expand
-
                 sidebarButtons.insert(contentsOf: guildsInFolder.map { .guild($0) }, at: startIndex)
                 let indexPaths = (startIndex..<startIndex + guildsInFolder.count).map { IndexPath(item: $0, section: 0) }
                 sidebarCollectionView.insertItems(at: indexPaths)

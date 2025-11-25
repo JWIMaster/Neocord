@@ -10,7 +10,7 @@ Currently in the works, but supports a lot of features. VCs are planned but for 
 - Threads
 - Sending and recieving text with full markdown support
 - Recieving custom emoji (iOS 7+)
-- Recieving multiple images (iOS 7+)
+- Recieving, sending and saving images (limit of 1 image per message on iOS 6 only)
 - Presence indicators (online, offline, etc)
 - Guild folders with proper order and memory
 - Friends list

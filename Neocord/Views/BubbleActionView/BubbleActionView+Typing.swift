@@ -168,7 +168,6 @@ extension BubbleActionView {
     }
 }
 
-import UIKit
 import DeprecatedAPIKit
 
 extension UILabel {

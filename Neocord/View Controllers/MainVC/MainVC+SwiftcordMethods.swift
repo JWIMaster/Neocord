@@ -10,7 +10,7 @@ import SwiftcordLegacy
 
 extension ViewController {
     func fetchDMs() {
-        clientUser.getSortedDMs { [weak self] dms, error in
+        clientUser.getSortedDMs { [weak self] dms, _ in
             guard let self = self else { return }
             self.dms = dms
             self.dmCollectionView.reloadData()
@@ -19,7 +19,7 @@ extension ViewController {
     }
     
     func fetchGuilds() {
-        clientUser.getClientUserSettings() { settings, error in
+        clientUser.getClientUserSettings { settings, _ in
             let guildFolders = settings.guildFolders
             var orderID: [Snowflake] = []
             guard let guildFolders = guildFolders else {
@@ -32,7 +32,7 @@ extension ViewController {
                     orderID.append(id)
                 }
             }
-            clientUser.getUserGuilds() { [weak self] guilds, error in
+            clientUser.getUserGuilds { [weak self] guilds, _ in
                 guard let self = self else { return }
                 for (id, guild) in guilds {
                     self.guilds[id] = guild
@@ -54,7 +54,7 @@ extension ViewController {
     }
     
     func fetchChannels(for guild: Guild, completion: @escaping () -> Void) {
-        clientUser.getGuildChannels(for: guild.id!) { [weak self] channels, error in
+        clientUser.getGuildChannels(for: guild.id!) { [weak self] channels, _ in
             guard let self = self else { return }
             self.activeGuildChannels = channels
             self.flattenChannelsForDisplay()

@@ -24,6 +24,30 @@ public final class ThemeEngine {
             UserDefaults.standard.synchronize()
         }
     }
+    
+    public static var glassFilterExclusions: [LiquidGlassView.AdvancedFilterOptions] {
+        get {
+            switch device {
+            case .a4: return []
+            default:
+                guard let stored = UserDefaults.standard.array(forKey: "glassFilterExclusions") as? [String] else {
+                    if #unavailable(iOS 7.0.1) {
+                        return [.innerShadow]
+                    } else {
+                        return []
+                    }
+                }
+                return stored.compactMap { LiquidGlassView.AdvancedFilterOptions(rawValue: $0) }
+            }
+        }
+        set {
+            let strings = newValue.map { $0.rawValue }
+            UserDefaults.standard.set(strings, forKey: "glassFilterExclusions")
+            UserDefaults.standard.synchronize()
+        }
+    }
+
+    
     public static var enableAnimations: Bool {
         get {
             switch device {

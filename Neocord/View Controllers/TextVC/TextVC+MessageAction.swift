@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//import UIKitCompatKit
 import FoundationCompatKit
 import SwiftcordLegacy
 import UIKitExtensions
@@ -15,7 +14,7 @@ import iOS6BarFix
 import LiveFrost
 
 
-//MARK: Message Action Functions
+// MARK: Message Action Functions
 extension TextViewController {
     func takeMessageAction(_ message: Message) {
         CATransaction.begin()

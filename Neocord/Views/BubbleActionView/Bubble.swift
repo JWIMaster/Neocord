@@ -18,7 +18,7 @@ enum BubbleType {
 class Bubble: UIView {
     public let backgroundView: UIView = {
         if ThemeEngine.enableGlass {
-            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 17, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
+            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 17, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             bView.translatesAutoresizingMaskIntoConstraints = false
             bView.solidViewColour = .discordGray.withAlphaComponent(0.8)
             bView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)

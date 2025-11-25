@@ -18,11 +18,7 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
     var threads: [GuildThread] = []
     
     var offset: CGFloat {
-        if #available(iOS 6.0.1, *) {
-            return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
-        } else {
-            return UIApplication.shared.statusBarFrame.height*2+(self.navigationController?.navigationBar.frame.height)!
-        }
+        return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
     }
     
     lazy var collectionView: UICollectionView = {
@@ -135,7 +131,7 @@ extension ForumViewController: UICollectionViewDelegateFlowLayout, UICollectionV
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let thread = threads[indexPath.item]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as! ChannelButtonCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelButtonCell.reuseID, for: indexPath) as? ChannelButtonCell else { return UICollectionViewCell() }
         cell.configure(with: thread)
         return cell
     }

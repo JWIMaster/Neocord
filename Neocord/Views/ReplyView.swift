@@ -22,7 +22,9 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
                 bg.layer.cornerRadius = 14
                 return bg
             default:
-                return LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true)
+                let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+                glass.translatesAutoresizingMaskIntoConstraints = false
+                return glass
             }
         } else {
             let bg = UIView()
@@ -44,7 +46,11 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
     var reply: ReplyMessage?
     
     var messageText = UILabel()
-    var authorAvatar: UIImageView = UIImageView()
+    var authorAvatar: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
     let authorName = UILabel()
     let slClient: SLClient?
     

@@ -64,7 +64,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         clientUser.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: [userID])
     }
     
-    var profileBlur = LiquidGlassView(blurRadius: 12, cornerRadius: 0, snapshotTargetView: nil, disableBlur: false, filterOptions: [])
+    var profileBlur = LiquidGlassView(blurRadius: 12, cornerRadius: 0, snapshotTargetView: nil, disableBlur: false, filterExclusions: [.highlight, .depth, .darken, .innerShadow, .tint, .rim])
     
     public init(dm: DMChannel? = nil, channel: GuildChannel? = nil) {
         super.init(nibName: nil, bundle: nil)
@@ -230,7 +230,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
-        if let scrollView = otherGestureRecognizer.view as? UIScrollView,
+        if otherGestureRecognizer.view is UIScrollView,
            let pan = gestureRecognizer as? UIPanGestureRecognizer {
 
             let translation = pan.translation(in: pan.view)

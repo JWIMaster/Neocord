@@ -28,12 +28,15 @@ class SidebarButtonCell: UICollectionViewCell {
     
     private var backgroundColorView: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 0
             glass.shadowOpacity = 0
             return glass
         } else {
-            return UIView()
+            let bg = UIView()
+            bg.translatesAutoresizingMaskIntoConstraints = false
+            return bg
         }
     }()
     
@@ -117,7 +120,6 @@ class SidebarButtonCell: UICollectionViewCell {
 }
 
 
-import UIKit
 
 func createImageGrid(
     from images: [UIImage],
@@ -174,4 +176,3 @@ func createImageGrid(
     
     return gridImage
 }
-

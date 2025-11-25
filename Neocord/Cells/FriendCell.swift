@@ -27,8 +27,8 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private var backgroundGlass: UIView? = {
         if ThemeEngine.enableGlass {
-            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
-            lg.shadowOpacity = 0.6
+            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            lg.shadowOpacity = 0
             lg.shadowRadius = 0
             lg.solidViewColour = .clear
             lg.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private lazy var presenceIndicator: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.tintColorForGlass = presenceColor
             return glass

@@ -5,6 +5,8 @@ import UIKitCompatKit
 import SFSymbolsCompatKit
 
 
+
+
 public enum PresenceColor {
     static func color(for presence: PresenceType) -> UIColor {
         switch presence {
@@ -38,7 +40,7 @@ public extension UIColor {
     }
 }
 
-class DMButtonCell: UICollectionViewCell {
+class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
 
     static let reuseID = "DMButtonCell"
 
@@ -61,8 +63,8 @@ class DMButtonCell: UICollectionViewCell {
 
     private var backgroundGlass: UIView? = {
         if ThemeEngine.enableGlass {
-            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
-            lg.shadowOpacity = 0.6
+            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            lg.shadowOpacity = 0
             lg.shadowRadius = 0
             lg.solidViewColour = .clear
             lg.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +87,7 @@ class DMButtonCell: UICollectionViewCell {
 
     private lazy var presenceIndicator: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowColor = presenceColor.withAlphaComponent(1).cgColor
             glass.shadowRadius = 6
@@ -102,6 +104,8 @@ class DMButtonCell: UICollectionViewCell {
     private var presenceColor: UIColor = .offlineGray
     
     private var recipientIDs = Set<Snowflake>()
+    
+    var dm: DMChannel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -164,6 +168,7 @@ class DMButtonCell: UICollectionViewCell {
         case .dm:
             guard let dm = dm as? DM, let recipient = dm.recipient else { return }
             dmNameLabel.text = recipient.nickname ?? recipient.displayname ?? recipient.username
+            self.dm = dm
             
             // Keep track of the current user ID for this cell
             let currentRecipientID = recipient.id
@@ -196,6 +201,7 @@ class DMButtonCell: UICollectionViewCell {
                         if ThemeEngine.enableProfileTinting {
                             if let glass = self.backgroundGlass as? LiquidGlassView {
                                 glass.tintColorForGlass = color
+                                //glass.shadowColor = color.cgColor
                             } else {
                                 self.backgroundGlass?.backgroundColor = color
                             }
@@ -226,6 +232,7 @@ class DMButtonCell: UICollectionViewCell {
             break
         }
     }
+
 }
 
 

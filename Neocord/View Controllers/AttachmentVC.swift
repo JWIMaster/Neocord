@@ -26,7 +26,7 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
     }()
 
     private let bottomBar: LiquidGlassView = {
-        let view = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+        let view = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         view.solidViewColour = UIColor(red: 0.2, green: 0.2, blue: 0.22, alpha: 0.8)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

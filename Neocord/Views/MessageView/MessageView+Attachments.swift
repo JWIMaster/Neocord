@@ -41,11 +41,26 @@ extension MessageView {
         imageView.addGestureRecognizer(tapGesture)
         imageView.isUserInteractionEnabled = true
         
+        let quality: UIImage.ThumbnailQuality = {
+            switch device {
+            case .a4, .a5, .a6:
+                return .low
+            case .a7_a8:
+                return .medium
+            case .a9Plus:
+                return .high
+            case .a12Plus:
+                return .full
+            default:
+                return .low
+            }
+        }()
+        
         attachment.fetch { [weak imageView] attachment in
             guard let imageView = imageView, let image = attachment as? UIImage else { return }
             DispatchQueue.global(qos: .userInitiated).async {
                 autoreleasepool {
-                    let resizedImage = image.getThumbnail(ofQuality: .low)
+                    let resizedImage = image.getThumbnail(ofQuality: quality)
                     DispatchQueue.main.async {
                         imageView.image = resizedImage
                         imageView.backgroundColor = .clear
@@ -115,12 +130,27 @@ extension MessageView {
                 //Set height or else behaves poorly
                 imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1/aspectRatio).isActive = true
                 
+                let quality: UIImage.ThumbnailQuality = {
+                    switch device {
+                    case .a4, .a5, .a6:
+                        return .low
+                    case .a7_a8:
+                        return .medium
+                    case .a9Plus:
+                        return .high
+                    case .a12Plus:
+                        return .high
+                    default:
+                        return .low
+                    }
+                }()
+                
                 // Fetch image async
                 attachment.fetch { [weak imageView] attachment in
                     guard let imageView = imageView, let image = attachment as? UIImage else { return }
                     DispatchQueue.global(qos: .userInitiated).async {
                         autoreleasepool {
-                            let resizedImage = image.getThumbnail(ofQuality: .low)
+                            let resizedImage = image.getThumbnail(ofQuality: quality)
                             DispatchQueue.main.async {
                                 imageView.image = resizedImage
                                 imageView.backgroundColor = .clear

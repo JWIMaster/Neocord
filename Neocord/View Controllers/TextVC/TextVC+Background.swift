@@ -35,20 +35,18 @@ extension TextViewController {
             for recipient in recipients {
                 dmRecipients.append(recipient)
             }
-        } else if let channel = self.channel as? GuildChannel {
+        } else if let channel = self.channel {
             guard let channelGuild = channel.guild else { return }
             let guildMembers = channelGuild.members
 
-            for recipientID in self.userIDsInStack {
-                if guildMembers[recipientID] != nil {
-                    dmRecipients.append(guildMembers[recipientID]!.user)
-                }
+            for recipientID in self.userIDsInStack where guildMembers[recipientID] != nil {
+                dmRecipients.append(guildMembers[recipientID]!.user)
             }
             
         }
         
         for recipient in dmRecipients {
-            AvatarCache.shared.avatar(for: recipient) { image, color in
+            AvatarCache.shared.avatar(for: recipient) { _, color in
                 guard let color = color else { return }
                 avatarColors.append(color)
             }

@@ -1,0 +1,25 @@
+disabled_rules: # rule identifiers turned on by default to exclude from running
+  - colon
+  - comma
+  - control_statement
+  - trailing_whitespace
+  - vertical_whitespace
+  - line_length
+  - type_body_length
+  - type_name
+  - identifier_name
+  - trailing_newline
+  - comment_spacing
+  - mark
+  - cyclomatic_complexity
+  - file_length
+  - force_try
+  - function_body_length
+
+strict: false
+
+lenient: true
+
+
+
+

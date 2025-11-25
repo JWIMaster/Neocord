@@ -20,9 +20,6 @@ public func applyGaussianBlur(to layer: CALayer, radius: CGFloat) {
 
 
 
-import UIKit
-import QuartzCore
-
 /// Apply a variable blur to any CALayer using a gradient mask
 /// - Parameters:
 ///   - layer: The CALayer to blur

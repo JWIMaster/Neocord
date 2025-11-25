@@ -141,7 +141,6 @@ public class LoginManager {
                     }
 
                     if let parsed = Self.parseErrorPayload(from: data) {
-                        print(try! JSONSerialization.jsonObject(with: data))
                         switch parsed {
                         case .twoFactor(let ticket):
                             self.twoFactorTicket = ticket
@@ -233,7 +232,6 @@ public class LoginManager {
 
             // Parse error payloads
             if let parsed = Self.parseErrorPayload(from: data) {
-                print(try! JSONSerialization.jsonObject(with: data))
                 switch parsed {
                 case .twoFactor(let newTicket):
                     // Discord sometimes returns a new ticket if the old one expired

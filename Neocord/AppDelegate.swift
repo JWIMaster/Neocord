@@ -16,7 +16,6 @@ import SwiftcordLegacy
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
     private var backgroundEnterDate: Date?
 
@@ -25,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .white
         var rootVC: UIViewController
         var navController: UINavigationController
-        AvatarCache.shared.memoryCache.countLimit = 20
+        //AvatarCache.shared.memoryCache.countLimit = 20
 
         if token != nil {
             rootVC = ViewController()

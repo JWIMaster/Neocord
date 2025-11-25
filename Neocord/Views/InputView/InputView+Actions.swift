@@ -77,8 +77,7 @@ extension InputView {
         
         
         
-        clientUser.reply(to: replyMessage, with: newMessage, in: channel) { [weak self] error in
-            guard let self = self else { return }
+        clientUser.reply(to: replyMessage, with: newMessage, in: channel) { _ in
             parentVC.bubbleActionView?.removeContextBubble()
             parentVC.updateInputOffset()
         }
@@ -95,8 +94,7 @@ extension InputView {
         self.buttonIsActive = true
         self.textViewDidChange(self.textView)
         
-        clientUser.send(message: message, in: channel) { [weak self] error in
-            guard let self = self else { return }
+        clientUser.send(message: message, in: channel) { _ in
             
         }
     }
@@ -117,8 +115,7 @@ extension InputView {
         
         
         
-        clientUser.edit(message: editMessage, to: newMessage, in: channel) { [weak self] error in
-            guard let self = self else { return }
+        clientUser.edit(message: editMessage, to: newMessage, in: channel) { _ in
             parentVC.bubbleActionView?.removeContextBubble()
             parentVC.updateInputOffset()
         }

@@ -13,6 +13,7 @@ import SwiftcordLegacy
 import TSMarkdownParser
 import FoundationCompatKit
 
+
 extension MessageView {
     
     
@@ -20,6 +21,7 @@ extension MessageView {
         messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
         messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
         messageTextAndEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
+        messageTextAndEmoji.translatesAutoresizingMaskIntoConstraints = false
         
         messageText.translatesAutoresizingMaskIntoConstraints = false
         
@@ -73,6 +75,20 @@ extension MessageView {
         edited.backgroundColor = .clear
         edited.translatesAutoresizingMaskIntoConstraints = false
         edited.sizeToFit()
+    }
+    
+    func setupSelfPing() {
+        let isSelfUser = self.message?.mentions.contains { mention in
+            mention.id == clientUser.clientUser?.id
+        } ?? false
+
+        if isSelfUser {
+            let pinged = UIView()
+            pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+            pinged.layer.cornerRadius = 22
+            addSubview(pinged)
+            pinged.pinToEdges(of: self)
+        }
     }
     
     

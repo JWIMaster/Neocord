@@ -21,7 +21,7 @@ class RoleCell: UICollectionViewCell {
     
     var roleBackground: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             //glass.shadowRadius = 6
             //glass.shadowOpacity = 0.3
             glass.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,7 @@ class RoleCell: UICollectionViewCell {
         didSet {
             guard let role = role else { return }
             roleButton.setTitle(role.name, for: .normal)
-            if let _ = role.icon {
+            if role.icon != nil {
                 RoleIconCache.shared.icon(for: role) { [weak self] image in
                     guard let self = self, let image = image else { return }
                     DispatchQueue.global(qos: .userInitiated).async {

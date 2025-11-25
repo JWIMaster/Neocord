@@ -34,7 +34,34 @@ extension MessageView {
         authorAvatar.translatesAutoresizingMaskIntoConstraints = false
         
         AvatarCache.shared.avatar(for: author) { [weak self] image, color in
-            guard let self = self, let image = image, let color = color else { return }
+            guard let self = self else { return }
+            guard let image = image, let color = color else {
+                DispatchQueue.main.async {
+                    let resized = UIImage(named: "defaultavatar")!.resizeImage(UIImage(named: "defaultavatar")!, targetSize: CGSize(width: 30, height: 30), cornerRadius: 15)
+                    self.authorAvatar.image = resized
+                    self.authorAvatar.contentMode = .scaleAspectFit
+                    self.authorAvatar.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 30, height: 30), cornerRadius: 15).cgPath
+                    self.authorAvatar.layer.shadowRadius = 6
+                    self.authorAvatar.layer.shadowOpacity = 0.5
+                    self.authorAvatar.layer.shadowColor = UIColor.black.cgColor
+                    self.authorAvatar.layer.shouldRasterize = true
+                    self.authorAvatar.layer.rasterizationScale = UIScreen.main.scale
+                    
+                    if ThemeEngine.enableProfileTinting {
+                        if let messageBackground = self.messageBackground as? LiquidGlassView {
+                            messageBackground.tintColorForGlass = .blue.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
+                            messageBackground.shadowColor = UIColor.blue.withIncreasedSaturation(factor: 1.4).withAlphaComponent(1).cgColor
+                            messageBackground.shadowOpacity = 0.6
+                            messageBackground.setNeedsLayout()
+                        } else {
+                            self.messageBackground?.backgroundColor = .blue.withIncreasedSaturation(factor: 1.4)
+                            self.messageBackground?.setNeedsLayout()
+                        }
+                    }
+                }
+                return
+            }
+            
             
             MessageView.avatarQueue.async {
                 let resized = image.resizeImage(image, targetSize: CGSize(width: 30, height: 30))

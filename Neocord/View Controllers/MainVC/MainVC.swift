@@ -14,8 +14,9 @@ import LiveFrost
 import SFSymbolsCompatKit
 import FoundationCompatKit
 
+#if !targetEnvironment(macCatalyst)
 public typealias UIStackView = UIKitCompatKit.UIStackView
-
+#endif
 
 class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
@@ -75,7 +76,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var profileView: ProfileView?
     let activeContentView: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             return glass
@@ -143,7 +144,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var sidebarBackgroundView: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             return glass
@@ -190,11 +191,16 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         return fview
     }()
     
-    var mainContainerView = UIView()
+    var mainContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     var settingsButton: UIButton = {
         let button1 = UIButton(type: .custom)
         button1.setTitle("Settings", for: .normal)
+        button1.translatesAutoresizingMaskIntoConstraints = false
         button1.setImage(.init(systemName:"person.fill", tintColor: .white), for: .normal)
         return button1
     }()
@@ -202,6 +208,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var mainMenuButton: UIButton = {
         let button2 = UIButton(type: .custom)
         button2.setTitle("Menu", for: .normal)
+        button2.translatesAutoresizingMaskIntoConstraints = false
         button2.setImage(.init(systemName:"list.bullet.below.rectangle", tintColor: .white), for: .normal)
         return button2
     }()
@@ -209,6 +216,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var friendsButton: UIButton = {
         let button2 = UIButton(type: .custom)
         button2.setTitle("Friends", for: .normal)
+        button2.translatesAutoresizingMaskIntoConstraints = false
         button2.setImage(.init(systemName:"person.2.fill", tintColor: .white), for: .normal)
         return button2
     }()
@@ -218,7 +226,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         clientUser.connect()
-
+        
         clientUser.loadCache {
             self.setupOrderedGuilds()
             self.rebuildSidebarButtons()
@@ -297,7 +305,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         
         friendsButton.addAction(for: .touchUpInside) {
             self.friendsButton.isUserInteractionEnabled = false
-            var direction: UIView.SlideDirection = {
+            let direction: UIView.SlideDirection = {
                 switch self.currentlyActiveView {
                 case self.containerView:
                     return .left
@@ -491,10 +499,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         
         channelsCollectionView.reloadData()
     }
-
-    
-    
-    
 }
 
 

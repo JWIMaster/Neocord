@@ -35,6 +35,8 @@ public let clientUser = SLClient(token: token ?? "idk")
 
 
 
+
+
 public class StringCache {
     
     static let memoryCache = NSCache<NSString, NSString>()
@@ -118,76 +120,68 @@ public let isSimulator: Bool = {
 
 final class PerformanceManager {
     static var performanceClass: PerformanceClass {
-        get {
-            switch device {
-            case .a4:
-                return .potato
-            case .a5:
-                return .low
-            case .a6:
-                return .medium
-            case .a7_a8:
-                return .medium
-            case .a9Plus:
-                return .high
-            case .a12Plus:
-                return .ultraHigh
-            case .unknown:
-                return .low
-            }
+        switch device {
+        case .a4:
+            return .potato
+        case .a5:
+            return .low
+        case .a6:
+            return .medium
+        case .a7_a8:
+            return .medium
+        case .a9Plus:
+            return .high
+        case .a12Plus:
+            return .ultraHigh
+        case .unknown:
+            return .low
         }
     }
     static var scaleFactor: CGFloat {
-        get {
-            switch performanceClass {
-            case .ultraHigh:
-                return 0.5
-            case .high:
-                return 0.3
-            case .medium:
-                return 0.2
-            case .low:
-                return 0.1
-            case .potato:
-                return 0
-            }
+        switch performanceClass {
+        case .ultraHigh:
+            return 0.5
+        case .high:
+            return 0.3
+        case .medium:
+            return 0.2
+        case .low:
+            return 0.1
+        case .potato:
+            return 0
         }
     }
     static var disableBlur: Bool {
-        get {
-            if #available(iOS 9.0, *) {
-                if isSimulator { return false } else { return false }
-            } else {
-                //MARK: One day I will fix iOS 9- blur...
-                switch performanceClass {
-                case .ultraHigh:
-                    return false
-                case .high:
-                    return false
-                case .medium:
-                    return true
-                case .low:
-                    return true
-                case .potato:
-                    return true
-                }
+        if #available(iOS 9.0, *) {
+            if isSimulator { return false } else { return false }
+        } else {
+            //MARK: One day I will fix iOS 9- blur...
+            switch performanceClass {
+            case .ultraHigh:
+                return false
+            case .high:
+                return false
+            case .medium:
+                return true
+            case .low:
+                return true
+            case .potato:
+                return true
             }
         }
     }
     static var frameInterval: Int {
-        get {
-            switch performanceClass {
-            case .ultraHigh:
-                return 1
-            case .high:
-                return 2
-            case .medium:
-                return 6
-            case .low:
-                return 12
-            case .potato:
-                return 60*60*60
-            }
+        switch performanceClass {
+        case .ultraHigh:
+            return 1
+        case .high:
+            return 2
+        case .medium:
+            return 6
+        case .low:
+            return 12
+        case .potato:
+            return 60*60*60
         }
     }
 }
@@ -197,5 +191,11 @@ public extension UIColor {
     class var discordGray: UIColor {
         return UIColor(red: 0.2, green: 0.2, blue: 0.22, alpha: 1)
     }
+    
+    class var lightPurple: UIColor {
+        return UIColor(red: 97/255, green: 104/255, blue: 239/255, alpha: 1)
+    }
 }
+
+
 

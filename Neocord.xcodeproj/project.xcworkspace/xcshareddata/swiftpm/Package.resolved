@@ -15,7 +15,7 @@
       "location" : "https://github.com/JWIMaster/FoundationCompatKit.git",
       "state" : {
         "branch" : "master",
-        "revision" : "9bc6b1034bb141a4294d0f619492f90ba80d1599"
+        "revision" : "f3a201e8c1cca5121528cc6531dd0ef11d9039cb"
       }
     },
     {
@@ -51,7 +51,7 @@
       "location" : "https://github.com/JWIMaster/SFSymbolsCompatKit.git",
       "state" : {
         "branch" : "master",
-        "revision" : "601133a5716a241d733683a0f848e5bf366f693b"
+        "revision" : "b1a23b5a0fc2d35f20f4e791fb255e8d301f293a"
       }
     },
     {
@@ -69,7 +69,7 @@
       "location" : "https://github.com/JWIMaster/UIKitCompatKit.git",
       "state" : {
         "branch" : "master",
-        "revision" : "81b06eca765feacc8477b60510c902282ceccb4c"
+        "revision" : "148327a580b2e9e1b1039990270ec4d44aaafefc"
       }
     },
     {
@@ -78,7 +78,7 @@
       "location" : "https://github.com/JWIMaster/UIKitExtensions.git",
       "state" : {
         "branch" : "master",
-        "revision" : "e89f666ee639baddff0fd6ee9c44dc4060745a7a"
+        "revision" : "baa872346bf5d0b1ba3ceb4c93dce0525b4a5666"
       }
     }
   ],

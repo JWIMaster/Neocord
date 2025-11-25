@@ -28,6 +28,7 @@ class AuthenticationViewController: UIViewController {
     func setupUI() {
         // Token toggle
         tokenLabel.text = "Use Token"
+        tokenLabel.textColor = .black
         tokenLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tokenLabel)
 
@@ -242,8 +243,7 @@ class AuthenticationViewController: UIViewController {
 
     private func proceedToMainApp() {
         statusLabel.text = "Login successful!"
-        let startVC = ViewController()
-        let navController = LoadingViewController()
-        UIApplication.shared.keyWindow?.rootViewController = navController
+        let loadVC = LoadingViewController()
+        UIApplication.shared.keyWindow?.rootViewController = loadVC
     }
 }

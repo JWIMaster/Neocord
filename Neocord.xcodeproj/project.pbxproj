@@ -21,7 +21,6 @@
 		5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2914012EAB09440019DC0F /* ChannelButtonView.swift */; };
 		5F2914062EAC462F0019DC0F /* png8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2914052EAC462F0019DC0F /* png8.swift */; };
 		5F2914082EAC4EB00019DC0F /* defaultavatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F2914072EAC4EB00019DC0F /* defaultavatar.png */; };
-		5F34F86D2EBEBFB600877453 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F34F86C2EBEBFB600877453 /* Test.swift */; };
 		5F34F86F2EBEE80200877453 /* LoadingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F34F86E2EBEE80200877453 /* LoadingVC.swift */; };
 		5F50947D2EA4F268002646A2 /* TextVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F50947C2EA4F268002646A2 /* TextVC.swift */; };
 		5F5094822EA57D92002646A2 /* SharedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5094812EA57D92002646A2 /* SharedValues.swift */; };
@@ -64,6 +63,8 @@
 		5F9F58E12EB6E8CC00A09760 /* MessageView+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58E02EB6E8CC00A09760 /* MessageView+Gestures.swift */; };
 		5F9F58E62EB6EBCF00A09760 /* MainVC+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58E52EB6EBCF00A09760 /* MainVC+Delegate.swift */; };
 		5F9F58E82EB6FD3000A09760 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58E72EB6FD3000A09760 /* ProfileView.swift */; };
+		5FA7B1EE2ED3C90F008BCC5E /* MediaPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7B1ED2ED3C90F008BCC5E /* MediaPreviewView.swift */; };
+		5FA7B1F12ED3CB66008BCC5E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 5FA7B1F02ED3CB66008BCC5E /* .swiftlint.yml */; };
 		5FACCA242EBAC163007EC568 /* ForumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FACCA232EBAC163007EC568 /* ForumVC.swift */; };
 		5FACCA272EBAD448007EC568 /* ProfileView+Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FACCA262EBAD448007EC568 /* ProfileView+Swipe.swift */; };
 		5FE178362EAF17D000FC4AA4 /* TSMarkdownParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE178352EAF17D000FC4AA4 /* TSMarkdownParser */; };
@@ -80,6 +81,7 @@
 		5FE1784E2EAF3D1D00FC4AA4 /* SFSymbols-heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FE178422EAF3D1D00FC4AA4 /* SFSymbols-heavy.ttf */; };
 		5FE1784F2EAF3D1D00FC4AA4 /* glyph_lookup_clean.json in Resources */ = {isa = PBXBuildFile; fileRef = 5FE178432EAF3D1D00FC4AA4 /* glyph_lookup_clean.json */; };
 		5FE178512EB025F700FC4AA4 /* MessageActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE178502EB025F700FC4AA4 /* MessageActionView.swift */; };
+		5FE9785F2ED2D65000CDDD16 /* EmbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE9785E2ED2D65000CDDD16 /* EmbedView.swift */; };
 		5FEF14622EA0CF1A005598D3 /* UIKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 5FEF14612EA0CF1A005598D3 /* UIKitExtensions */; };
 		5FEF14A42EA373C2005598D3 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEF14A32EA373C2005598D3 /* MessageView.swift */; };
 		5FEF14A82EA4485B005598D3 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEF14A72EA4485B005598D3 /* InputView.swift */; };
@@ -101,12 +103,10 @@
 		5F2914012EAB09440019DC0F /* ChannelButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelButtonView.swift; sourceTree = "<group>"; };
 		5F2914052EAC462F0019DC0F /* png8.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = png8.swift; sourceTree = "<group>"; };
 		5F2914072EAC4EB00019DC0F /* defaultavatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultavatar.png; sourceTree = "<group>"; };
-		5F34F86C2EBEBFB600877453 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		5F34F86E2EBEE80200877453 /* LoadingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingVC.swift; sourceTree = "<group>"; };
 		5F50947C2EA4F268002646A2 /* TextVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextVC.swift; sourceTree = "<group>"; };
 		5F5094812EA57D92002646A2 /* SharedValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedValues.swift; sourceTree = "<group>"; };
 		5F5094852EA64674002646A2 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
-		5F5094872EA65A57002646A2 /* Cascade.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cascade.entitlements; sourceTree = "<group>"; };
 		5F54504F2EACB03E0066AEC6 /* AttachmentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentVC.swift; sourceTree = "<group>"; };
 		5F57B8AE2E9EEAC600CA2CE2 /* Neocord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Neocord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F57B8B12E9EEAC600CA2CE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +144,9 @@
 		5F9F58E02EB6E8CC00A09760 /* MessageView+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageView+Gestures.swift"; sourceTree = "<group>"; };
 		5F9F58E52EB6EBCF00A09760 /* MainVC+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+Delegate.swift"; sourceTree = "<group>"; };
 		5F9F58E72EB6FD3000A09760 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		5FA7B1ED2ED3C90F008BCC5E /* MediaPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPreviewView.swift; sourceTree = "<group>"; };
+		5FA7B1F02ED3CB66008BCC5E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neocord.entitlements; sourceTree = "<group>"; };
 		5FACCA232EBAC163007EC568 /* ForumVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumVC.swift; sourceTree = "<group>"; };
 		5FACCA262EBAD448007EC568 /* ProfileView+Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileView+Swipe.swift"; sourceTree = "<group>"; };
 		5FE178382EAF3D1D00FC4AA4 /* lookup.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = lookup.dat; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 		5FE178432EAF3D1D00FC4AA4 /* glyph_lookup_clean.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glyph_lookup_clean.json; sourceTree = "<group>"; };
 		5FE178502EB025F700FC4AA4 /* MessageActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageActionView.swift; sourceTree = "<group>"; };
 		5FE9785D2ED298CC00CDDD16 /* build */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build; sourceTree = "<group>"; };
+		5FE9785E2ED2D65000CDDD16 /* EmbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbedView.swift; sourceTree = "<group>"; };
 		5FEF14272EA0B406005598D3 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		5FEF14A32EA373C2005598D3 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		5FEF14A72EA4485B005598D3 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
@@ -209,6 +213,7 @@
 		5F50947F2EA578AB002646A2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5FA7B1F22ED3DACC008BCC5E /* EmbedView */,
 				5F764B992ED27EEB00034CFC /* BubbleActionView */,
 				5F139A4E2EC6C8CA0092EDA6 /* InputView */,
 				5FACCA252EBAD43A007EC568 /* ProfileView */,
@@ -220,6 +225,7 @@
 				5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */,
 				5F139A482EC5E3B30092EDA6 /* FriendsView.swift */,
 				5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */,
+				5FA7B1ED2ED3C90F008BCC5E /* MediaPreviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -227,6 +233,7 @@
 		5F57B8A52E9EEAC600CA2CE2 = {
 			isa = PBXGroup;
 			children = (
+				5FA7B1F02ED3CB66008BCC5E /* .swiftlint.yml */,
 				5F79871B2EB1E6470058566C /* README.md */,
 				5FE9785D2ED298CC00CDDD16 /* build */,
 				5F57B8C22E9EF1C400CA2CE2 /* Packages */,
@@ -247,11 +254,13 @@
 		5F57B8B02E9EEAC600CA2CE2 /* Neocord */ = {
 			isa = PBXGroup;
 			children = (
+				5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */,
+				5FA7B1F62ED5288F008BCC5E /* CacheManagers */,
+				5FA7B1F52ED52884008BCC5E /* CustomComponents */,
 				5F57B8CA2E9F327000CA2CE2 /* Default-568h@2x.png */,
 				5F57B8B32E9EEAC600CA2CE2 /* LaunchScreen.storyboard */,
 				5F9F58CE2EB57C0200A09760 /* Assets */,
 				5F2913A62EA999FA0019DC0F /* Info.plist */,
-				5F5094872EA65A57002646A2 /* Cascade.entitlements */,
 				5F57B8B12E9EEAC600CA2CE2 /* AppDelegate.swift */,
 				5F9F58E22EB6EA6800A09760 /* Cells */,
 				5F50947F2EA578AB002646A2 /* Views */,
@@ -342,15 +351,9 @@
 			children = (
 				5F5094812EA57D92002646A2 /* SharedValues.swift */,
 				5F0F1F862EB834A900CEF378 /* LoginManager.swift */,
-				5F5094852EA64674002646A2 /* CustomNavigationController.swift */,
-				5F2913A42EA989510019DC0F /* AvatarCache.swift */,
-				5F9F58CA2EB56FB800A09760 /* GuildAvatarCache.swift */,
 				5F2914052EAC462F0019DC0F /* png8.swift */,
 				5F9F58C32EB4311F00A09760 /* GuassianBlur.swift */,
 				5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */,
-				5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */,
-				5F34F86C2EBEBFB600877453 /* Test.swift */,
-				5F5AF8AA2EC8257500D0C660 /* RoleIconCache.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -364,6 +367,33 @@
 				5F139A4C2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift */,
 			);
 			path = MainVC;
+			sourceTree = "<group>";
+		};
+		5FA7B1F22ED3DACC008BCC5E /* EmbedView */ = {
+			isa = PBXGroup;
+			children = (
+				5FE9785E2ED2D65000CDDD16 /* EmbedView.swift */,
+			);
+			path = EmbedView;
+			sourceTree = "<group>";
+		};
+		5FA7B1F52ED52884008BCC5E /* CustomComponents */ = {
+			isa = PBXGroup;
+			children = (
+				5F5094852EA64674002646A2 /* CustomNavigationController.swift */,
+				5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */,
+			);
+			path = CustomComponents;
+			sourceTree = "<group>";
+		};
+		5FA7B1F62ED5288F008BCC5E /* CacheManagers */ = {
+			isa = PBXGroup;
+			children = (
+				5F2913A42EA989510019DC0F /* AvatarCache.swift */,
+				5F9F58CA2EB56FB800A09760 /* GuildAvatarCache.swift */,
+				5F5AF8AA2EC8257500D0C660 /* RoleIconCache.swift */,
+			);
+			path = CacheManagers;
 			sourceTree = "<group>";
 		};
 		5FACCA252EBAD43A007EC568 /* ProfileView */ = {
@@ -470,6 +500,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FA7B1F12ED3CB66008BCC5E /* .swiftlint.yml in Resources */,
 				5FE178472EAF3D1D00FC4AA4 /* SFSymbols-semibold.ttf in Resources */,
 				5F2914082EAC4EB00019DC0F /* defaultavatar.png in Resources */,
 				5FE178492EAF3D1D00FC4AA4 /* SFSymbols-thin.ttf in Resources */,
@@ -503,6 +534,7 @@
 				5F57B8B72E9EEAC600CA2CE2 /* MainVC.swift in Sources */,
 				5F34F86F2EBEE80200877453 /* LoadingVC.swift in Sources */,
 				5FACCA242EBAC163007EC568 /* ForumVC.swift in Sources */,
+				5FE9785F2ED2D65000CDDD16 /* EmbedView.swift in Sources */,
 				5F764B9B2ED27EFE00034CFC /* BubbleActionView.swift in Sources */,
 				5F9F58C92EB56F4100A09760 /* GuildButtonCell.swift in Sources */,
 				5F2914062EAC462F0019DC0F /* png8.swift in Sources */,
@@ -529,7 +561,6 @@
 				5F9F58C22EB4309B00A09760 /* TextVC+Input.swift in Sources */,
 				5F9F58E82EB6FD3000A09760 /* ProfileView.swift in Sources */,
 				5F5094862EA64674002646A2 /* CustomNavigationController.swift in Sources */,
-				5F34F86D2EBEBFB600877453 /* Test.swift in Sources */,
 				5F9F58BA2EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift in Sources */,
 				5F50947D2EA4F268002646A2 /* TextVC.swift in Sources */,
 				5F9F58DD2EB6E72200A09760 /* MessageView+Content.swift in Sources */,
@@ -540,6 +571,7 @@
 				5F764B9F2ED2867600034CFC /* BubbleActionView+Typing.swift in Sources */,
 				5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */,
 				5F139A4B2EC69A690092EDA6 /* FriendCell.swift in Sources */,
+				5FA7B1EE2ED3C90F008BCC5E /* MediaPreviewView.swift in Sources */,
 				5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */,
 				5F139A562EC6CA5C0092EDA6 /* Bubble.swift in Sources */,
 				5F9F58BE2EB4303000A09760 /* TextVC+MessageAction.swift in Sources */,
@@ -688,12 +720,14 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = Neocord/Neocord.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GA4W4X6894;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Neocord/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Saving images to photo library";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Viewing, saving and sending images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
@@ -706,6 +740,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = jwi.neocord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = YES;
@@ -723,12 +758,14 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = Neocord/Neocord.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GA4W4X6894;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Neocord/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Saving images to photo library";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Viewing, saving and sending images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
@@ -741,6 +778,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = jwi.neocord;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = YES;

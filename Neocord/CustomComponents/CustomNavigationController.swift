@@ -6,7 +6,7 @@ public class CustomNavigationController: UINavigationController {
 
     private let customNavBar: UIView? = {
         if ThemeEngine.enableGlass {
-            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur)
+            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glassView.frameInterval = PerformanceManager.frameInterval
             glassView.scaleFactor = PerformanceManager.scaleFactor
             glassView.solidViewColour = .discordGray.withAlphaComponent(0.8)
@@ -26,7 +26,11 @@ public class CustomNavigationController: UINavigationController {
     
     weak var snapshotTargetView: UIView?
     
-    public var navBarFrame: UIView = UIView()
+    public var navBarFrame: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private let titleLabel = UILabel()
     private let backButton = UIButton(type: .custom)
@@ -184,9 +188,9 @@ public extension UIView {
                 self.alpha = 0.0
                 self.isHidden = false
             }
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.25) {
                 self.alpha = hidden ? 0.0 : 1.0
-            }) { (complete) in
+            } completion: { _ in
                 self.isHidden = hidden
             }
         } else {

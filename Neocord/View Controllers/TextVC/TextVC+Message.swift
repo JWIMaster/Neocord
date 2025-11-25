@@ -27,7 +27,7 @@ extension TextViewController {
             fatalError("no channel")
         }
         
-        clientUser.getChannelMessages(for: textChannel.id!) { [weak self] messages, error in
+        clientUser.getChannelMessages(for: textChannel.id!) { [weak self] messages, _ in
             guard let self = self else { return }
             
             self.addMessagesToStack(messages)

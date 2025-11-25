@@ -27,6 +27,10 @@ class MessageActionView: UIView {
         MessageActionView.makeActionButton(text: "Reply", color: nil, image: UIImage(systemName: "arrowshape.turn.up.right.circle", tintColor: .white)!)
     }()
     
+    let copyButton: LiquidGlassView = {
+        MessageActionView.makeActionButton(text: "Copy", color: nil, image: UIImage(systemName: "square.fill.on.square.fill", tintColor: .white)!)
+    }()
+    
     let deleteButton: LiquidGlassView = {
         MessageActionView.makeActionButton(text: "Delete", color: UIColor(red: 232/255, green: 35/255, blue: 35/255, alpha: 0.4), image: UIImage(systemName: "trash.fill", tintColor: .white)!)
     }()
@@ -43,7 +47,11 @@ class MessageActionView: UIView {
     }()
     
     
-    let glassView = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+    var glassView: LiquidGlassView = {
+        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+        glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
+        return glass
+    }()
     var slClient: SLClient?
     var message: Message?
     var channel: TextChannel?
@@ -74,10 +82,12 @@ class MessageActionView: UIView {
     }
     
     static func makeActionButton(text: String, color: UIColor?, image: UIImage) -> LiquidGlassView {
-        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true)
+        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         glass.translatesAutoresizingMaskIntoConstraints = false
         if let color = color {
             glass.tintColorForGlass = color
+        } else {
+            glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
         }
         let button = LargeHitAreaButton(hitAreaInset: .init(top: -6, left: -30, bottom: -6, right: -30))
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -101,6 +111,7 @@ class MessageActionView: UIView {
         let replyButton = replyButton.subviews.compactMap({ $0 as? UIButton }).first
         let deleteButton = deleteButton.subviews.compactMap({ $0 as? UIButton }).first
         let editButton = editButton.subviews.compactMap({ $0 as? UIButton }).first
+        let copyButton = copyButton.subviews.compactMap({ $0 as? UIButton }).first
         let cancelButton = cancelButton.subviews.compactMap({ $0 as? UIButton }).first
         
         guard let replyButton = replyButton, let deleteButton = deleteButton, let editButton = editButton, let cancelButton = cancelButton else { return }
@@ -124,12 +135,20 @@ class MessageActionView: UIView {
                 dmVC.endMessageAction()
             }
         }
+        
+        copyButton?.addAction(for: .touchUpInside) { [weak self] in
+            guard let self = self, let message = self.message else { return }
+            UIPasteboard.general.string = message.content
+            if let dmVC = self.parentViewController as? TextViewController {
+                dmVC.endMessageAction()
+            }
+        }
 
         deleteButton.addAction(for: .touchUpInside) { [weak self] in
             guard let self = self, let message = self.message, let channel = self.channel, let slClient = self.slClient else { return }
             
             if let dmVC = self.parentViewController as? TextViewController {
-                slClient.delete(message: message, in: channel) { error in
+                slClient.delete(message: message, in: channel) { _ in
                     // handle error if needed
                 }
                 dmVC.endMessageAction()
@@ -153,10 +172,12 @@ class MessageActionView: UIView {
         if message?.author == slClient.clientUser {
             stackView.addArrangedSubview(replyButton)
             stackView.addArrangedSubview(editButton)
+            stackView.addArrangedSubview(copyButton)
             stackView.addArrangedSubview(deleteButton)
             stackView.addArrangedSubview(cancelButton)
         } else {
             stackView.addArrangedSubview(replyButton)
+            stackView.addArrangedSubview(copyButton)
             stackView.addArrangedSubview(cancelButton)
         }
 
