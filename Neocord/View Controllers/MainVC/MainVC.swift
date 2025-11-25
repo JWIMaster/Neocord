@@ -16,7 +16,9 @@ import FoundationCompatKit
 
 #if !targetEnvironment(macCatalyst)
 #if compiler(<6.0)
+#if !MODERN_BUILD
 public typealias UIStackView = UIKitCompatKit.UIStackView
+#endif
 #endif
 #endif
 
