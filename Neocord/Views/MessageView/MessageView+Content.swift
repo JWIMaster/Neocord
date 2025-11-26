@@ -19,7 +19,14 @@ extension MessageView {
     
     func setupText() {
         messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
-        messageTextAndEmoji.setMarkdown("\(message?.content ?? "unknown")")
+        let text: String = {
+            if let relationship = clientUser.relationships[(message?.author?.id)!], relationship.0 == .blocked {
+                return "User blocked"
+            } else {
+                return message?.content ?? "unknown"
+            }
+        }()
+        messageTextAndEmoji.setMarkdown("\(text)")
         messageTextAndEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
         messageTextAndEmoji.translatesAutoresizingMaskIntoConstraints = false
         
@@ -92,7 +99,6 @@ extension MessageView {
             
             Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
-                print("a")
                 UIView.animate(withDuration: 2.5) {
                     pinged.backgroundColor = .orange.withAlphaComponent(0.3)
                 }

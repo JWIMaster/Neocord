@@ -179,6 +179,7 @@ class ProfileView: UIView {
         ])
         
         bioBackground.pinToEdges(of: bioWithEmoji, insetBy: .init(top: -10, left: -10, bottom: -10, right: -10))
+        bioBackground.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         
         // Banner, avatar, name
         NSLayoutConstraint.activate([

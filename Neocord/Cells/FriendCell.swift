@@ -198,3 +198,101 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         }
     }
 }
+
+import UIKit
+
+public final class FeltView: UIView {
+
+    public var feltColor: UIColor = UIColor(red: 0.88, green: 0.16, blue: 0.16, alpha: 1) {
+        didSet { updateColors() }
+    }
+
+    public var cornerRadius: CGFloat = 14 {
+        didSet { layer.cornerRadius = cornerRadius }
+    }
+
+    private let baseLayer = CAGradientLayer()
+    private let fibreLayer = CAReplicatorLayer()
+    private let fibrePrototype = CALayer()
+    private let noiseLayer = CAReplicatorLayer()
+    private let noiseDot = CALayer()
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+
+        clipsToBounds = true
+        layer.cornerRadius = cornerRadius
+
+        // BASE FELT GRADIENT
+        baseLayer.colors = [
+            feltColor.withAlphaComponent(1).cgColor,
+            feltColor.withAlphaComponent(0.92).cgColor
+        ]
+        baseLayer.startPoint = CGPoint(x: 0, y: 0)
+        baseLayer.endPoint = CGPoint(x: 1, y: 1)
+        layer.addSublayer(baseLayer)
+
+        // FIBRES (soft long strands)
+        fibreLayer.instanceCount = 180
+        fibreLayer.instanceTransform = CATransform3DMakeTranslation(0, 1.2, 0)
+        fibreLayer.instanceAlphaOffset = -0.004
+
+        fibrePrototype.backgroundColor = UIColor.white.withAlphaComponent(0.035).cgColor
+        fibrePrototype.cornerRadius = 1
+        fibreLayer.addSublayer(fibrePrototype)
+        layer.addSublayer(fibreLayer)
+
+        // NOISE SPECKS
+        noiseLayer.instanceCount = 260
+        noiseLayer.instanceTransform = CATransform3DMakeTranslation(1.5, 0, 0)
+        noiseLayer.instanceAlphaOffset = -0.003
+
+        noiseDot.backgroundColor = UIColor.white.withAlphaComponent(0.06).cgColor
+        noiseDot.cornerRadius = 0.6
+        noiseLayer.addSublayer(noiseDot)
+        layer.addSublayer(noiseLayer)
+
+        backgroundColor = .clear
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        baseLayer.frame = bounds
+
+        // fibres: long faint lines
+        fibrePrototype.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: bounds.width,
+            height: 1.2
+        )
+        fibreLayer.frame = bounds
+
+        // noise: tiny dots scattered
+        noiseDot.frame = CGRect(x: 0, y: 0, width: 1.2, height: 1.2)
+        noiseLayer.frame = bounds
+
+        // scatter noise more by randomising base position
+        noiseDot.position = CGPoint(
+            x: CGFloat.random(in: 0...bounds.width),
+            y: CGFloat.random(in: 0...bounds.height)
+        )
+    }
+
+    private func updateColors() {
+        baseLayer.colors = [
+            feltColor.cgColor,
+            feltColor.withAlphaComponent(0.92).cgColor
+        ]
+    }
+}

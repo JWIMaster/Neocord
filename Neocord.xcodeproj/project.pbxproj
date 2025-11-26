@@ -40,6 +40,7 @@
 		5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */; };
 		5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */; };
 		5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE912EBC7A5200577B00 /* SettingsView.swift */; };
+		5F6CA5452ED659DE00D2261E /* ThemeableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6CA5442ED659DE00D2261E /* ThemeableView.swift */; };
 		5F724FD02EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */; };
 		5F724FD22EC1B064002A9E25 /* DMsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F724FD12EC1B064002A9E25 /* DMsIcon.png */; };
 		5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */; };
@@ -121,6 +122,7 @@
 		5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEngine.swift; sourceTree = "<group>"; };
 		5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		5F64FE912EBC7A5200577B00 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5F6CA5442ED659DE00D2261E /* ThemeableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeableView.swift; sourceTree = "<group>"; };
 		5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+SwiftcordMethods.swift"; sourceTree = "<group>"; };
 		5F724FD12EC1B064002A9E25 /* DMsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DMsIcon.png; path = Assets.xcassets/AppIcon.appiconset/DMsIcon.png; sourceTree = "<group>"; };
 		5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordMarkdownView.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				5F139A482EC5E3B30092EDA6 /* FriendsView.swift */,
 				5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */,
 				5FA7B1ED2ED3C90F008BCC5E /* MediaPreviewView.swift */,
+				5F6CA5442ED659DE00D2261E /* ThemeableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F6CA5452ED659DE00D2261E /* ThemeableView.swift in Sources */,
 				5F139A4D2EC6A3AA0092EDA6 /* MainVC+ProfileView.swift in Sources */,
 				5F139A492EC5E3B30092EDA6 /* FriendsView.swift in Sources */,
 				5F9F58E62EB6EBCF00A09760 /* MainVC+Delegate.swift in Sources */,

@@ -236,7 +236,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             self.rebuildSidebarButtons()
             self.setupMainView()
         }
-        
     }
     
     func setupMainView() {

@@ -38,6 +38,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             return glass
         } else {
             let background = UIView()
+            background.translatesAutoresizingMaskIntoConstraints = false 
             background.layer.cornerRadius = 22
             return background
         }
@@ -51,7 +52,6 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     var member: GuildMember?
     var guildTextChannel: GuildChannel?
     var isSameUser: Bool = false
-    var embedView: EmbedView?
     
     
     static let markdownQueue: DispatchQueue = DispatchQueue(label: "com.jwi.markdownrender", attributes: .concurrent, target: .global(qos: .userInitiated))
@@ -123,6 +123,13 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         }
         
         messageContent.addArrangedSubview(messageTextAndEmoji)
+        if let embeds = message?.embeds, !embeds.isEmpty {
+            for embed in embeds {
+                let embedView = EmbedView(embed: embed)
+                embedView.translatesAutoresizingMaskIntoConstraints = false
+                messageContent.addArrangedSubview(embedView)
+            }
+        }
         addSubview(messageContent)
         addSubview(messageBackground)
         sendSubviewToBack(messageBackground)
