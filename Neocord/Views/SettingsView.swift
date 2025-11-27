@@ -116,6 +116,7 @@ class SettingsView: UIView {
         let label = UILabel()
         label.text = "Glass Options"
         label.textColor = .white
+        label.backgroundColor = .clear
         label.font = UIFont.boldSystemFont(ofSize: 18)
         contentStack.addArrangedSubview(label)
         
