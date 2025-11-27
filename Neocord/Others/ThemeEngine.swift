@@ -47,7 +47,7 @@ public final class ThemeEngine {
         }
     }
 
-    
+
     public static var enableAnimations: Bool {
         get {
             switch device {

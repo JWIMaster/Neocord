@@ -39,13 +39,8 @@ extension MessageView {
                 DispatchQueue.main.async {
                     let resized = UIImage(named: "defaultavatar")!.resizeImage(UIImage(named: "defaultavatar")!, targetSize: CGSize(width: 30, height: 30), cornerRadius: 15)
                     self.authorAvatar.image = resized
-                    self.authorAvatar.contentMode = .scaleAspectFit
-                    self.authorAvatar.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 30, height: 30), cornerRadius: 15).cgPath
-                    self.authorAvatar.layer.shadowRadius = 6
-                    self.authorAvatar.layer.shadowOpacity = 0.5
-                    self.authorAvatar.layer.shadowColor = UIColor.black.cgColor
-                    self.authorAvatar.layer.shouldRasterize = true
-                    self.authorAvatar.layer.rasterizationScale = UIScreen.main.scale
+                    //self.authorAvatar.layer.shouldRasterize = true
+                    //self.authorAvatar.layer.rasterizationScale = UIScreen.main.scale
                     
                     if ThemeEngine.enableProfileTinting {
                         if let messageBackground = self.messageBackground as? LiquidGlassView {
@@ -68,13 +63,8 @@ extension MessageView {
                 
                 DispatchQueue.main.async {
                     self.authorAvatar.image = resized
-                    self.authorAvatar.contentMode = .scaleAspectFit
-                    self.authorAvatar.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 30, height: 30), cornerRadius: 15).cgPath
-                    self.authorAvatar.layer.shadowRadius = 6
-                    self.authorAvatar.layer.shadowOpacity = 0.5
-                    self.authorAvatar.layer.shadowColor = UIColor.black.cgColor
-                    self.authorAvatar.layer.shouldRasterize = true
-                    self.authorAvatar.layer.rasterizationScale = UIScreen.main.scale
+                    //self.authorAvatar.layer.shouldRasterize = true
+                    //self.authorAvatar.layer.rasterizationScale = UIScreen.main.scale
                     
                     if ThemeEngine.enableProfileTinting {
                         if let messageBackground = self.messageBackground as? LiquidGlassView {

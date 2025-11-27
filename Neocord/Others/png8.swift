@@ -44,3 +44,4 @@ class LegacyLogger {
         try? "".write(toFile: logFilePath, atomically: true, encoding: .utf8)
     }
 }
+

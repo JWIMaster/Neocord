@@ -4,7 +4,7 @@ import FoundationCompatKit
 import SwiftcordLegacy
 
 
-//MARK: MOST OF THIS CHATGPT COOKED UP FROM DISCORDLITE, WHILE I DO UNDERSTAND IT, IT'S VERY DELICATE. Please note, the base 64 user agent must be the same as mine if you want 2fa support.
+
 public class LoginManager {
 
     public enum LoginError: Error {
@@ -49,7 +49,7 @@ public class LoginManager {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue(self.superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
+        request.setValue(discordSuperPropertiesBase64, forHTTPHeaderField: "X-Super-Properties")
         request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
 
         session.dataTask(with: request) { [weak self] data, _, error in
@@ -104,7 +104,7 @@ public class LoginManager {
                 var request = URLRequest(url: url)
                 request.httpMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.setValue(self.superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
+                request.setValue(discordSuperPropertiesBase64, forHTTPHeaderField: "X-Super-Properties")
                 request.setValue(fp, forHTTPHeaderField: "X-Fingerprint")
                 request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
                 request.setValue("*/*", forHTTPHeaderField: "Accept") // ADDED
@@ -176,7 +176,7 @@ public class LoginManager {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(superPropertiesBase64(), forHTTPHeaderField: "X-Super-Properties")
+        request.setValue(discordSuperPropertiesBase64, forHTTPHeaderField: "X-Super-Properties")
         request.setValue(fp, forHTTPHeaderField: "X-Fingerprint")
         request.setValue("Discord-iOS-Client (Swiftcord, 1.0)", forHTTPHeaderField: "User-Agent") // Funni
         request.setValue("*/*", forHTTPHeaderField: "Accept") // ADDED
@@ -250,67 +250,6 @@ public class LoginManager {
 
             completion(.failure(.unknown))
         }.resume()
-    }
-
-
-
-    private func superPropertiesBase64() -> String {
-        let props: [String: Any?] = [
-            "os": "iOS",
-            "browser": "Discord Client", //Match the client
-            "release_channel": "stable",
-            "client_version": "0.0.326", // Specifically chosen
-            "os_version": "15.5", // This just seems to work
-            "os_arch": "arm64", // Again, seems to work
-            "app_arch": "arm64", // This is seemingly needed
-            "system_locale": "en-US",
-            "browser_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.326 Chrome/128.0.6613.186 Electron/32.2.2 Safari/537.36", //Again, rather odd, but seemingly this works and others don't
-            "browser_version": "32.2.2", // Probably needed
-            "os_sdk_version": "23", // Same as above
-            "client_build_number": 209354, // This is very important
-            "native_build_number": NSNull(), // Rather odd, but also needs to be here
-            "client_event_source": NSNull() // Don't even know what this is, but it needs to be here
-        ]
-        let data = try! JSONSerialization.data(withJSONObject: Self.cleanJSON(props)) // Use cleanJSON to handle NSNull
-        return discordSuperPropertiesBase64
-        return base64Encode(data: data)
-    }
-    
-    private func base64Encode(data: Data) -> String {
-        let base64Chars = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
-        var result = ""
-        let bytes = [UInt8](data)
-        var i = 0
-
-        while i < bytes.count {
-            let byte0 = bytes[i]
-            let byte1 = i + 1 < bytes.count ? bytes[i + 1] : 0
-            let byte2 = i + 2 < bytes.count ? bytes[i + 2] : 0
-
-            let index0 = byte0 >> 2
-            let index1 = ((byte0 & 0x03) << 4) | (byte1 >> 4)
-            let index2 = ((byte1 & 0x0F) << 2) | (byte2 >> 6)
-            let index3 = byte2 & 0x3F
-
-            result.append(base64Chars[Int(index0)])
-            result.append(base64Chars[Int(index1)])
-
-            if i + 1 < bytes.count {
-                result.append(base64Chars[Int(index2)])
-            } else {
-                result.append("=")
-            }
-
-            if i + 2 < bytes.count {
-                result.append(base64Chars[Int(index3)])
-            } else {
-                result.append("=")
-            }
-
-            i += 3
-        }
-
-        return result
     }
 
     private static func cleanJSON(_ dict: [String: Any?]) -> [String: Any] {

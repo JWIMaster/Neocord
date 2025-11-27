@@ -13,8 +13,6 @@ import SwiftcordLegacy
 import TSMarkdownParser
 import FoundationCompatKit
 
-
-
 public class MessageView: UIView, UIGestureRecognizerDelegate {
     let messageContent: UIStackView = {
         let stack = UIStackView()
@@ -26,7 +24,15 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     }()
     var messageText = UILabel()
     var messageAttachments: UIImageView?
-    var authorAvatar: UIImageView = UIImageView()
+    var authorAvatar: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 30, height: 30), cornerRadius: 15).cgPath
+        iv.layer.shadowRadius = 6
+        iv.layer.shadowOpacity = 0.5
+        iv.layer.shadowColor = UIColor.black.cgColor
+        return iv
+    }()
     public var averageAvatarColor: UIColor?
     let authorName = UILabel()
     let timestamp = UILabel()
