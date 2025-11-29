@@ -20,7 +20,7 @@ build_ipa() {
 
   echo "📦 Archiving project: $PROJECT_NAME ($archs)..."
 
-  xcodebuild archive \
+  /Applications/Xcode13.app/Contents/Developer/usr/bin/xcodebuild archive \
     -scheme "$PROJECT_NAME" \
     -configuration Release \
     -sdk iphoneos \
