@@ -2,7 +2,7 @@ import UIKit
 import UIKitCompatKit
 import UIKitExtensions
 
-public class CustomNavigationController: UINavigationController {
+public class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate {
 
     private let customNavBar: UIView? = {
         if ThemeEngine.enableGlass {

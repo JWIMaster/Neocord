@@ -25,6 +25,24 @@ public final class ThemeEngine {
         }
     }
     
+    public static var chosenTheme: ThemeOptions {
+        get {
+            switch device {
+            case .a4: return .fallback
+            default:
+                guard let stored = UserDefaults.standard.string(forKey: "chosenTheme") else {
+                    return .glass
+                }
+                return ThemeOptions(rawValue: stored) ?? .glass
+            }
+        }
+        set {
+            let valueString = newValue.rawValue
+            UserDefaults.standard.set(valueString, forKey: "chosenTheme")
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
     public static var glassFilterExclusions: [LiquidGlassView.AdvancedFilterOptions] {
         get {
             switch device {
@@ -80,5 +98,13 @@ public final class ThemeEngine {
     
     init() {
         
+    }
+    
+    public enum ThemeOptions: String {
+        case glass, fallback, native
+    }
+    
+    public func makeThemedView(_ glassExclusionOverrides: [LiquidGlassView.AdvancedFilterOptions]? = nil) -> UIView {
+        return UIView()
     }
 }

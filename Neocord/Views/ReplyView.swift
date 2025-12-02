@@ -19,6 +19,7 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
             switch device {
             case .a4:
                 let bg = UIView()
+                bg.translatesAutoresizingMaskIntoConstraints = false
                 bg.layer.cornerRadius = 14
                 return bg
             default:
@@ -28,6 +29,7 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
             }
         } else {
             let bg = UIView()
+            bg.translatesAutoresizingMaskIntoConstraints = false
             bg.layer.cornerRadius = 14
             return bg
         }

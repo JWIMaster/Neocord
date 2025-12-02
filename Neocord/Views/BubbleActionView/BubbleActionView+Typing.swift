@@ -44,7 +44,9 @@ extension BubbleActionView {
     
     public func addContextBubble(with text: String) {
         self.contextBubble = Bubble(text: text, type: .context)
-        self.contextBubble?.cancelButton?.addAction(for: .touchUpInside) {
+        self.contextBubble?.translatesAutoresizingMaskIntoConstraints = false
+        self.contextBubble?.cancelButton?.addAction(for: .touchUpInside) { [weak self] in
+            guard let self = self else { return }
             self.cancelAction()
         }
         self.bubbleStack.addArrangedSubview(contextBubble!)
@@ -99,6 +101,7 @@ extension BubbleActionView {
     private func addTypingBubble(for name: String) {
         let wasParentAtBottom = parentIsAtBottom
         typingBubble = Bubble(text: "\(name) is typing", type: .regular)
+        typingBubble?.translatesAutoresizingMaskIntoConstraints = false
         bubbleStack.addArrangedSubview(typingBubble!)
         layoutIfNeeded()
         

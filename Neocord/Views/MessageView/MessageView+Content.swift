@@ -63,6 +63,7 @@ extension MessageView {
     func setupReply() {
         guard let replyMessage = message?.replyMessage, let slClient = self.slClient else { return }
         self.replyView = ReplyMessageView(slClient, reply: replyMessage)
+        self.replyView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func setupEdited() {

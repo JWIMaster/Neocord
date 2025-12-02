@@ -219,7 +219,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         
         timestamp.setContentHuggingPriority(.required, for: .horizontal)
         timestamp.setContentCompressionResistancePriority(.required, for: .horizontal)
-        
+
         
         NSLayoutConstraint.activate([
             messageBackground.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -231,6 +231,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             messageContent.leadingAnchor.constraint(equalTo: messageBackground.leadingAnchor, constant: 20),
             messageContent.trailingAnchor.constraint(equalTo: messageBackground.trailingAnchor, constant: -20),
             messageContent.bottomAnchor.constraint(equalTo: messageBackground.bottomAnchor, constant: -6),
+            
             
             
             authorName.topAnchor.constraint(equalTo: messageBackground.topAnchor, constant: 4),
