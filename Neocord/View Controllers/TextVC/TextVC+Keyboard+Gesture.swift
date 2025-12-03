@@ -73,11 +73,11 @@ extension TextViewController {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // Make back swipe wait if the other gesture is a reply swipe
-        if gestureRecognizer == backGesture,
+        /*if gestureRecognizer == backGesture,
            let otherPan = otherGestureRecognizer as? UIPanGestureRecognizer,
            otherPan.view is MessageView {
             return true
-        }
+        }*/
         
         // Existing logic: tap waits for long press
         if gestureRecognizer is UITapGestureRecognizer, otherGestureRecognizer is UILongPressGestureRecognizer {

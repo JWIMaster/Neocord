@@ -227,7 +227,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     private var backSwipeLocked = false
     private let scrollLockThreshold: CGFloat = 5 // points
 
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+    /*public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
         if otherGestureRecognizer.view is UIScrollView,
@@ -247,7 +247,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         }
 
         return true
-    }
+    }*/
 
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         backSwipeLocked = false

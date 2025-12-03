@@ -31,13 +31,6 @@ extension TextViewController {
         
         view.layoutIfNeeded()
         self.setupBubbleActionView(for: textChannel)
-        /*self.updateInputOffset()
-        scrollView.contentInset.top = (navigationController?.navigationBar.frame.height) ?? 0
-        
-        scrollView.layoutIfNeeded()
-        scrollToBottom(animated: false)
-        
-        initialViewSetupComplete = true*/
     }
     
     func updateInputOffset() {
