@@ -22,7 +22,11 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         stack.distribution = .equalSpacing
         return stack
     }()
-    var messageText = UILabel()
+    var messageText: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     var messageAttachments: UIImageView?
     var authorAvatar: UIImageView = {
         let iv = UIImageView()
@@ -111,7 +115,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         setupTimestamp()
         setupGestureRecogniser()
         setupReply()
-        setupSelfPing()
+        //setupSelfPing()
         setupSubviews()
         setupContraints()
         setupAttachments()
