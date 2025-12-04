@@ -48,7 +48,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             return glass
         } else {
             let background = UIView()
-            background.translatesAutoresizingMaskIntoConstraints = false 
+            background.translatesAutoresizingMaskIntoConstraints = false
             background.layer.cornerRadius = 22
             return background
         }
@@ -63,6 +63,14 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     var guildTextChannel: GuildChannel?
     var isSameUser: Bool = false
     
+    var pingHighlightView: UIView = {
+        let pinged = UIView()
+        pinged.layer.cornerRadius = 22
+        pinged.translatesAutoresizingMaskIntoConstraints = false
+        return pinged
+    }()
+    
+    var clientUserPinged: Bool = false
     
     static let markdownQueue: DispatchQueue = DispatchQueue(label: "com.jwi.markdownrender", attributes: .concurrent, target: .global(qos: .userInitiated))
     
@@ -115,7 +123,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         setupTimestamp()
         setupGestureRecogniser()
         setupReply()
-        //setupSelfPing()
+        setupSelfPing()
         setupSubviews()
         setupContraints()
         setupAttachments()
@@ -126,6 +134,10 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     func setupSubviews() {
         guard let messageBackground = messageBackground else { return }
+        
+        if clientUserPinged {
+            addSubview(pingHighlightView)
+        }
         
         if let replyView = replyView {
             replyView.translatesAutoresizingMaskIntoConstraints = false
@@ -203,6 +215,10 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     func setupContraints() {
         guard let messageBackground = messageBackground else { return }
+        
+        if clientUserPinged {
+            self.pingHighlightView.pinToEdges(of: self)
+        }
         
         if let replyView = replyView {
             NSLayoutConstraint.activate([

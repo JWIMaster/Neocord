@@ -86,32 +86,29 @@ extension MessageView {
     }
     
     func setupSelfPing() {
-        let isSelfUser = self.message?.mentions.contains { mention in
+        clientUserPinged = self.message?.mentions.contains { mention in
             mention.id == clientUser.clientUser?.id
         } ?? false
 
-        if isSelfUser {
-            let pinged = UIView()
-            pinged.backgroundColor = .orange.withAlphaComponent(0.3)
+        if clientUserPinged {
+            pingHighlightView.backgroundColor = .orange.withAlphaComponent(0.3)
             
-            UIView.animate(withDuration: 2.5) {
-                pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+            UIView.animate(withDuration: 2.5) { [weak self] in
+                guard let self = self else { return }
+                self.pingHighlightView.backgroundColor = .orange.withAlphaComponent(0.1)
             }
             
             Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 UIView.animate(withDuration: 2.5) {
-                    pinged.backgroundColor = .orange.withAlphaComponent(0.3)
+                    self.pingHighlightView.backgroundColor = .orange.withAlphaComponent(0.3)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                     UIView.animate(withDuration: 2.5) {
-                        pinged.backgroundColor = .orange.withAlphaComponent(0.1)
+                        self.pingHighlightView.backgroundColor = .orange.withAlphaComponent(0.1)
                     }
                 }
             }
-            pinged.layer.cornerRadius = 22
-            addSubview(pinged)
-            pinged.pinToEdges(of: self)
         }
     }
     

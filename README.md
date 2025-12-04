@@ -40,3 +40,9 @@ Currently in the works, but supports a lot of features. VCs are planned but for 
 - A7+ chipset, 1GB+ of RAM
 - iOS 9+
 
+## Build
+### Option 1 - iOS 6+ armv7/arm64 build
+You must use Xcode 13.4, macOS 12, and my custom Swift 5.1.5 and Swift 5.10.1 toolchains which are provided on my website, https://www.j-w-i.org . After following the instructions there, download the SwiftcordLegacy package from my repo and place both this project and that project in your "Desktop" folder. Then, inside the folder for this project, run "./build". The output will be two IPAs that are named accordingly as to what their usage should be.
+
+### Option 2 - iOS 12.0+ arm64 build
+Use any version of Xcode that is 14+, on any macOS that will run it. I highly recommend using Swift 5.10 to build, but you shouldn't have to. 

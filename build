@@ -25,6 +25,7 @@ build_ipa() {
     -configuration Release \
     -sdk iphoneos \
     TOOLCHAINS="$TOOLCHAIN_ID" \
+    IPHONEOS_DEPLOYMENT_TARGET=7.0 \
     ARCHS="$archs" \
     CODE_SIGN_IDENTITY="" \
     CODE_SIGNING_REQUIRED=NO \

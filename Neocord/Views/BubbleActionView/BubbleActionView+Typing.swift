@@ -66,6 +66,8 @@ extension BubbleActionView {
     public func removeContextBubble() {
         guard let contextBubble = self.contextBubble else { return }
         self.bubbleStack.removeArrangedSubview(contextBubble)
+        contextBubble.removeFromSuperview()
+        self.setNeedsLayout()
         self.layoutIfNeeded()
     }
     
