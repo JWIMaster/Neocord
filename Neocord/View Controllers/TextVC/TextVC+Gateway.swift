@@ -40,7 +40,7 @@ extension TextViewController {
     //Websocket create message function
     func createMessage(_ message: Message) {
         guard let messageID = message.id, let userID = message.author?.id, !messageIDsInStack.contains(messageID) else { return }
-        
+        clientUser.acknowledge(messageID: messageID, in: message.channelID!, completion: { _ in })
 
         let isDMMessage = (self.dm?.id == message.channelID)
         let isGuildMessage = (self.channel?.id == message.channelID)
