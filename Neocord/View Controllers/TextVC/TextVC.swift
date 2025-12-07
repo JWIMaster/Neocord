@@ -227,28 +227,6 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     private var backSwipeLocked = false
     private let scrollLockThreshold: CGFloat = 5 // points
 
-    /*public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        
-        if otherGestureRecognizer.view is UIScrollView,
-           let pan = gestureRecognizer as? UIPanGestureRecognizer {
-
-            let translation = pan.translation(in: pan.view)
-            
-            if !backSwipeLocked {
-                // If vertical movement exceeds threshold, lock out swipe
-                if abs(translation.y) > scrollLockThreshold && abs(translation.y) > abs(translation.x) {
-                    backSwipeLocked = true
-                }
-            }
-
-            // Allow swipe only if not locked
-            return !backSwipeLocked
-        }
-
-        return true
-    }*/
-
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         backSwipeLocked = false
     }

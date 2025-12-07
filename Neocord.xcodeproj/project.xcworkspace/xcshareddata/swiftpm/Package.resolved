@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "etfkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWIMaster/ETFKit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "41412c9448addebb57d1af5b15caf12e08736951"
+      }
+    },
+    {
       "identity" : "foundationcompatkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JWIMaster/FoundationCompatKit.git",

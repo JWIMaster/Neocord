@@ -91,6 +91,26 @@ class ProfileView: UIView {
         }
     }()
     
+    private lazy var presenceIndicator: UIView = {
+        if ThemeEngine.enableGlass {
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 10, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            glass.shadowColor = presenceColor.withAlphaComponent(1).cgColor
+            glass.shadowRadius = 6
+            glass.tintColorForGlass = presenceColor
+            return glass
+        } else {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = presenceColor
+            return view
+        }
+    }()
+
+    private var presenceColor: UIColor {
+        return PresenceColor.color(for: clientUser.presences[(user?.id)!] ?? .offline)
+    }
+    
     /*func makeRole(name: String, color: UIColor) -> UIView {
         
     }*/
@@ -102,7 +122,6 @@ class ProfileView: UIView {
         self.user = user
         super.init(frame: .zero)
         setup() // Build base layout immediately
-        
         // Fetch updated user info in the background
         clientUser.getUserProfile(withID: user.id!) { [weak self] user, userProfile, _ in
             guard let self = self else { return }
@@ -140,6 +159,7 @@ class ProfileView: UIView {
         
         containerView.addSubview(profileBanner)
         containerView.addSubview(profilePicture)
+        containerView.addSubview(presenceIndicator)
         containerView.addSubview(displayname)
         containerView.addSubview(username)
         
@@ -152,6 +172,15 @@ class ProfileView: UIView {
         }
         
         addSubview(grabber) // grabber sits at the top of the view
+    }
+    
+    private func updatePresenceIndicatorColor() {
+        if let glass = presenceIndicator as? LiquidGlassView {
+            glass.tintColorForGlass = presenceColor
+            glass.shadowColor = presenceColor.cgColor
+        } else {
+            presenceIndicator.backgroundColor = presenceColor
+        }
     }
     
     func setupConstraints() {
@@ -193,14 +222,16 @@ class ProfileView: UIView {
             profilePicture.widthAnchor.constraint(equalToConstant: 80),
             profilePicture.heightAnchor.constraint(equalToConstant: 80),
             
+            presenceIndicator.heightAnchor.constraint(equalToConstant: 20),
+            presenceIndicator.widthAnchor.constraint(equalToConstant: 20),
+            presenceIndicator.bottomAnchor.constraint(equalTo: profilePicture.bottomAnchor),
+            presenceIndicator.trailingAnchor.constraint(equalTo: profilePicture.trailingAnchor),
+            
             displayname.topAnchor.constraint(equalTo: profilePicture.bottomAnchor, constant: 4),
             displayname.leadingAnchor.constraint(equalTo: profilePicture.leadingAnchor),
             
             username.topAnchor.constraint(equalTo: displayname.bottomAnchor, constant: 4),
-            username.leadingAnchor.constraint(equalTo: displayname.leadingAnchor),
-            
-            
-            //bio.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            username.leadingAnchor.constraint(equalTo: displayname.leadingAnchor)
         ])
         
         
@@ -220,6 +251,7 @@ class ProfileView: UIView {
                 roleCollectionView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.8),
                 roleCollectionView.topAnchor.constraint(equalTo: bioBackground.bottomAnchor, constant: 20),
                 roleCollectionView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+                roleCollectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 22),
                 bottomConstraint
             ])
 
@@ -246,18 +278,7 @@ class ProfileView: UIView {
     }
     
     func setupBio() {
-        //bioStringParsing()
-        bio.backgroundColor = .clear
-        //bio.isScrollEnabled = false
-        //bio.isEditable = false
-        bio.numberOfLines = 0
-        bio.lineBreakMode = .byWordWrapping
-        bio.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
-        bio.textColor = .white
-        
         bioWithEmoji.backgroundColor = .clear
-        //bio.isScrollEnabled = false
-        //bio.isEditable = false
         bioWithEmoji.numberOfLines = 0
         bioWithEmoji.lineBreakMode = .byWordWrapping
         bioWithEmoji.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 80
@@ -265,31 +286,6 @@ class ProfileView: UIView {
         let bioText = user?.bio ?? "unknown"
         bioWithEmoji.setMarkdown(bioText)
     }
-    
-    func bioStringParsing() {
-        let bioText = user?.bio ?? "unknown"
-        
-        let attributedText = NSMutableAttributedString(
-            string: "About me\n",
-            attributes: [
-                .font: UIFont.boldSystemFont(ofSize: 13),
-                .foregroundColor: UIColor.gray
-            ]
-        )
-        
-        let bioContent = NSAttributedString(
-            string: bioText,
-            attributes: [
-                .font: UIFont.systemFont(ofSize: 14),
-                .foregroundColor: UIColor.white
-            ]
-        )
-        
-        attributedText.append(bioContent)
-        bio.attributedText = attributedText
-        bio.sizeToFit()
-    }
-    
     
     func setupProfilePicture() {
         guard let user = user else { return }
@@ -429,11 +425,6 @@ class ProfileView: UIView {
         scrollView.clipsToBounds = true
         scrollView.layer.cornerRadius = 22
 
-        // Force bio label to size to content
-        let maxWidth = scrollView.bounds.width * 0.8
-        let size = bio.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
-        bio.frame.size.height = size.height
-
         // Force containerView to expand to fit content
         containerView.layoutIfNeeded()
         
@@ -462,8 +453,7 @@ class ProfileView: UIView {
 
         setupProfilePicture()
         updateProfileColors()
-        
-        bio.setNeedsLayout()
+        updatePresenceIndicatorColor()
         bioWithEmoji.setNeedsLayout()
         backgroundView?.setNeedsLayout()
         bioBackground?.setNeedsLayout()

@@ -227,6 +227,15 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     lazy var currentlyActiveView: UIView = containerView
     
+    var loadingView: LoadingView = {
+        let loading = LoadingView()
+        loading.translatesAutoresizingMaskIntoConstraints = false
+        loading.transform = CGAffineTransform(translationX: 0, y: -50)
+        loading.alpha = 0
+        loading.isUserInteractionEnabled = false
+        return loading
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         clientUser.connect()
@@ -246,9 +255,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             SetWantsFullScreenLayout(self, true)
         }
         
-   
+        
         setupMainViewSubviews()
         setupConstraints()
+        showLoadingView()
         setupButtonActions()
         setupToolbar()
         readyWatcher()
@@ -276,13 +286,38 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         view.addSubview(toolbar)
     }
     
+    func showLoadingView() {
+        self.containerView.addSubview(loadingView)
+        UIView.animate(withDuration: 0.5) {
+            self.loadingView.transform = CGAffineTransform(translationX: 0, y: 0)
+            self.loadingView.alpha = 1
+        }
+        
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 6),
+            loadingView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+        ])
+    }
+    
+    func hideLoadingView() {
+        UIView.animate(withDuration: 0.5) {
+            self.loadingView.alpha = 0
+            self.loadingView.transform = CGAffineTransform(translationX: 0, y: -50)
+        } completion: { _ in
+            self.loadingView.removeFromSuperview()
+        }
+    }
+
+    
     func readyWatcher() {
         clientUser.onReady = {
             DispatchQueue.main.async {
+                self.hideLoadingView()
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 self.setupOrderedGuilds()
                 self.rebuildSidebarButtons()
+                self.channelsCollectionView.reloadData()
                 self.sidebarCollectionView.reloadData()
                 self.dmCollectionView.reloadData()
                 self.friendsContainerView.reloadFriends()

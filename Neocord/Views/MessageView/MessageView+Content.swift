@@ -137,4 +137,8 @@ extension MessageView {
         timestamp.translatesAutoresizingMaskIntoConstraints = false
         timestamp.sizeToFit()
     }
+    
+    func setupReactions() {
+        
+    }
 }

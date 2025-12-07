@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             SetStatusBarBlackTranslucent()
             SetWantsFullScreenLayout(navController, true)
-
             window?.clipsToBounds = false
             window?.frame = UIScreen.main.bounds
             window?.rootViewController = navController

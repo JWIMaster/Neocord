@@ -135,7 +135,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     // MARK: Channels Setup
     func setupChannelCollectionView(for guild: Guild) {
-        guard activeGuild?.id != guild.id || displayedChannels.isEmpty || !guild.fullGuild else { return }
+        guard activeGuild?.id != guild.id || displayedChannels.isEmpty else { return }
         activeGuild = guild
         updateTitle(guild.name ?? "Loading…")
         if activeContentView.subviews.first != channelsCollectionView || activeContentView.subviews.first == dmCollectionView{
@@ -150,7 +150,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         }
         
         UIView.animate(withDuration: 0.25) { self.channelsCollectionView.alpha = 0 }
-        
         let loadingLabel = UILabel()
         loadingLabel.text = "Loading channels…"
         loadingLabel.textColor = .lightGray
