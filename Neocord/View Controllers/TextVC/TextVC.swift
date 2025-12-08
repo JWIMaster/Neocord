@@ -48,6 +48,11 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     let logger = LegacyLogger(fileName: "legacy_debug.txt")
     
+    var messageCreateObserver: NSObjectProtocol?
+    var messageDeleteObserver: NSObjectProtocol?
+    var messageUpdateObserver: NSObjectProtocol?
+    var typingStartObserver: NSObjectProtocol?
+    
     var messageStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +83,22 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     deinit {
         safelyRemoveScrollView()
+        if let observer = messageCreateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = messageDeleteObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = messageUpdateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = typingStartObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        messageCreateObserver = nil
+        messageUpdateObserver = nil
+        messageDeleteObserver = nil
+        typingStartObserver = nil
     }
     
     var isAtBottom: Bool {
@@ -252,8 +273,6 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
             }
         }
     }
-
-
 }
 
 

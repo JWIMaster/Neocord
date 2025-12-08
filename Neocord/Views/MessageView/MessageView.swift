@@ -75,7 +75,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = 4
+        stack.spacing = 0
         return stack
     }()
     
@@ -182,6 +182,10 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .guildMemberChunk, object: nil)
+    }
+    
     func setupMembers() {
         guard let messageAuthorID = self.message?.author?.id else { return }
         
@@ -190,13 +194,21 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             applyMember()
         }
         
-        slClient?.gateway?.addGuildMemberChunkObserver { [weak self] members in
+        NotificationCenter.default.addObserver(forName: .guildMemberChunk, object: nil, queue: .main) { notification in
+            if let members = notification.object as? [Snowflake: GuildMember],
+                let member = members[messageAuthorID] {
+                self.member = member
+                self.applyMember()
+            }
+        }
+        
+        /*slClient?.gateway?.addGuildMemberChunkObserver { [weak self] members in
             guard let self = self else { return }
             if let member = members[messageAuthorID] {
                 self.member = member
                 self.applyMember()
             }
-        }
+        }*/
     }
     
     func applyMember() {
@@ -264,7 +276,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         NSLayoutConstraint.activate([
             messageBackground.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             messageBackground.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            messageBackground.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            
             
             
             messageContent.topAnchor.constraint(equalTo: messageBackground.topAnchor, constant: 20),
@@ -287,6 +299,17 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             authorAvatar.topAnchor.constraint(equalTo: authorName.topAnchor),
             authorAvatar.trailingAnchor.constraint(equalTo: messageContent.leadingAnchor, constant: -4)
         ])
+        
+        if hasReactions {
+            NSLayoutConstraint.activate([
+                
+                reactionStack.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                reactionStack.topAnchor.constraint(equalTo: messageBackground.bottomAnchor),
+                reactionStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            ])
+        } else {
+            NSLayoutConstraint.activate([ messageBackground.bottomAnchor.constraint(equalTo: self.bottomAnchor) ])
+        }
     }
     
     public func updateMessage(_ message: Message) {

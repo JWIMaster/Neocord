@@ -21,9 +21,11 @@ extension TextViewController {
     func attachGatewayObservers() {
         guard let gateway = clientUser.gateway else { return }
         // Assign closures
-        gateway.onMessageCreate = { [weak self] message in
+        
+        /*gateway.onMessageCreate = { [weak self] message in
             self?.createMessage(message)
         }
+
         gateway.onMessageUpdate = { [weak self] message in
             self?.updateMessage(message)
         }
@@ -33,6 +35,35 @@ extension TextViewController {
         
         gateway.onTypingStart = { [weak self] channelID, userID in
             self?.typingStarted(by: userID, in: channelID)
+        }*/
+        
+        messageCreateObserver = NotificationCenter.default.addObserver(forName: .messageCreate, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            print("hi")
+            if let message = notification.object as? Message {
+                self.createMessage(message)
+            }
+        }
+        
+        messageDeleteObserver = NotificationCenter.default.addObserver(forName: .messageDelete, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let message = notification.object as? Message {
+                self.deleteMessage(message)
+            }
+        }
+        
+        messageUpdateObserver = NotificationCenter.default.addObserver(forName: .messageUpdate, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let message = notification.object as? Message {
+                self.updateMessage(message)
+            }
+        }
+        
+        typingStartObserver = NotificationCenter.default.addObserver(forName: .typingStart, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let typingInfo = notification.object as? (Snowflake, Snowflake) {
+                self.typingStarted(by: typingInfo.1, in: typingInfo.0)
+            }
         }
     }
     
@@ -40,13 +71,12 @@ extension TextViewController {
     //Websocket create message function
     func createMessage(_ message: Message) {
         guard let messageID = message.id, let userID = message.author?.id, !messageIDsInStack.contains(messageID) else { return }
-        clientUser.acknowledge(messageID: messageID, in: message.channelID!, completion: { _ in })
 
         let isDMMessage = (self.dm?.id == message.channelID)
         let isGuildMessage = (self.channel?.id == message.channelID)
         
         guard isDMMessage || isGuildMessage else { return }
-        
+        clientUser.acknowledge(messageID: messageID, in: message.channelID!, completion: { _ in })
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             guard let user = message.author else { return }

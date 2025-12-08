@@ -141,7 +141,7 @@ extension MessageView {
     func setupReactions() {
         guard let reactions = message?.reactions, !reactions.isEmpty else { return }
         for reaction in reactions {
-            let reactionView = ReactionButtonView(reaction: reaction)
+            let reactionView = ReactionButtonView(reaction: reaction, channelID: (self.message?.channelID)!, messageID: (self.message?.id)!)
             reactionView.translatesAutoresizingMaskIntoConstraints = false
             reactionStack.addArrangedSubview(reactionView)
         }
