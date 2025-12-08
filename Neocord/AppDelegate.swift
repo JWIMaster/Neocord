@@ -25,7 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var rootVC: UIViewController
         var navController: UINavigationController
         //AvatarCache.shared.memoryCache.countLimit = 20
+        
+        for family in UIFont.familyNames.sorted() {
+            print("Family: \(family)")
+            for name in UIFont.fontNames(forFamilyName: family) {
+                print("    Font: \(name)")
+            }
+        }
 
+        
         if token != nil {
             rootVC = ViewController()
             navController = CustomNavigationController(rootViewController: rootVC)

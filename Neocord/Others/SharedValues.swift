@@ -195,6 +195,13 @@ public extension UIColor {
     class var lightPurple: UIColor {
         return UIColor(red: 97/255, green: 104/255, blue: 239/255, alpha: 1)
     }
+    
+    class var pastelBlue: UIColor {
+        return UIColor(red: 48.0/255.0,
+                       green: 121.0/255.0,
+                       blue: 240.0/255.0,
+                       alpha: 1.0)
+    }
 }
 
 

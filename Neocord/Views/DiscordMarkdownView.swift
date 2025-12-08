@@ -18,6 +18,16 @@ class DiscordMarkdownView: UILabel {
     let parser: TSMarkdownParser = {
         let parser = TSMarkdownParser.standard()
         parser.skipLinkAttribute = true
+        /*parser.defaultAttributes = [
+            NSAttributedString.Key.font.rawValue: UIFont(name: "ggsans-Medium", size: 17)!
+        ]
+        parser.emphasisAttributes = [
+            NSAttributedString.Key.font.rawValue: UIFont(name: "ggsans-MediumItalic", size: 17)!
+        ]
+        parser.linkAttributes = [
+            NSAttributedString.Key.foregroundColor.rawValue: UIColor.pastelBlue,
+            NSAttributedString.Key.underlineStyle.rawValue: NSUnderlineStyle.single.rawValue
+        ]*/
         return parser
     }()
     var message: DiscordMessage?
@@ -221,7 +231,7 @@ class DiscordMarkdownView: UILabel {
     // MARK: - Emoji Fetching
 
     private func fetchEmojiAsync(id: String, completion: @escaping (UIImage?) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        /*DispatchQueue.global(qos: .userInitiated).async {
             guard let url = URL(string: "https://cdn.discordapp.com/emojis/\(id).png?v=1"),
                   let data = try? Data(contentsOf: url),
                   let image = UIImage(data: data)
@@ -232,6 +242,11 @@ class DiscordMarkdownView: UILabel {
 
             Self.emojiCache[id] = image
             completion(image)
+        }*/
+        
+        EmojiCache.shared.fetchEmoji(id: id) { emojiImage in
+            Self.emojiCache[id] = emojiImage
+            completion(emojiImage)
         }
     }
 

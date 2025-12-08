@@ -139,6 +139,11 @@ extension MessageView {
     }
     
     func setupReactions() {
-        
+        guard let reactions = message?.reactions, !reactions.isEmpty else { return }
+        for reaction in reactions {
+            let reactionView = ReactionButtonView(reaction: reaction)
+            reactionView.translatesAutoresizingMaskIntoConstraints = false
+            reactionStack.addArrangedSubview(reactionView)
+        }
     }
 }

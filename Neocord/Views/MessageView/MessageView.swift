@@ -70,7 +70,24 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         return pinged
     }()
     
+    var reactionStack: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 4
+        return stack
+    }()
+    
     var clientUserPinged: Bool = false
+    
+    var hasReactions: Bool {
+        if let reactions = message?.reactions, !reactions.isEmpty {
+            return true
+        } else {
+            return false
+        }
+    }
     
     static let markdownQueue: DispatchQueue = DispatchQueue(label: "com.jwi.markdownrender", attributes: .concurrent, target: .global(qos: .userInitiated))
     
@@ -124,6 +141,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         setupGestureRecogniser()
         setupReply()
         setupSelfPing()
+        setupReactions()
         setupSubviews()
         setupContraints()
         setupAttachments()
@@ -159,6 +177,9 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         addSubview(timestamp)
         addSubview(edited)
         addSubview(authorAvatar)
+        if hasReactions {
+            addSubview(reactionStack)
+        }
     }
     
     func setupMembers() {
