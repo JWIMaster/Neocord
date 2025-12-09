@@ -39,7 +39,6 @@ extension TextViewController {
         
         messageCreateObserver = NotificationCenter.default.addObserver(forName: .messageCreate, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            print("hi")
             if let message = notification.object as? Message {
                 self.createMessage(message)
             }

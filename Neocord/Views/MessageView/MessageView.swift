@@ -113,6 +113,10 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     lazy var messageTextAndEmoji = DiscordMarkdownView(frame: .zero, message: self.message)
     
+    var guildMemberChunkObserver: NSObjectProtocol?
+    var messageReactionAddObserver: NSObjectProtocol?
+    var messageReactionRemoveObserver: NSObjectProtocol?
+    
     public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false) {
         super.init(frame: .zero)
         self.slClient = slClient
@@ -183,7 +187,14 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .guildMemberChunk, object: nil)
+        if let observer = self.guildMemberChunkObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = self.messageReactionAddObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        self.guildMemberChunkObserver = nil
+        self.messageReactionAddObserver = nil
     }
     
     func setupMembers() {
@@ -194,7 +205,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             applyMember()
         }
         
-        NotificationCenter.default.addObserver(forName: .guildMemberChunk, object: nil, queue: .main) { notification in
+        guildMemberChunkObserver = NotificationCenter.default.addObserver(forName: .guildMemberChunk, object: nil, queue: .main) { notification in
             if let members = notification.object as? [Snowflake: GuildMember],
                 let member = members[messageAuthorID] {
                 self.member = member

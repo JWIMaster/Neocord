@@ -51,6 +51,8 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private var friend: User?
     
+    var presenceUpdateObserver: NSObjectProtocol?
+    
     private lazy var presenceIndicator: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 6, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
@@ -117,6 +119,13 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         friend = nil
     }
 
+    deinit {
+        if let observer = self.presenceUpdateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        self.presenceUpdateObserver = nil
+    }
+    
     private func updatePresenceIndicatorColor() {
         if let glass = presenceIndicator as? LiquidGlassView {
             glass.tintColorForGlass = presenceColor
@@ -133,12 +142,24 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         presenceColor = PresenceColor.color(for: presence)
         updatePresenceIndicatorColor()
         
-        clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
+        /*clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
             guard let self = self, let updatedPresence = presenceDict[user.id!] else { return }
             self.presenceColor = PresenceColor.color(for: updatedPresence)
             DispatchQueue.main.async {
                 if self.friend?.id == user.id {
                     self.updatePresenceIndicatorColor()
+                }
+            }
+        }*/
+        
+        presenceUpdateObserver = NotificationCenter.default.addObserver(forName: .presenceUpdate, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let presenceDict = notification.object as? [Snowflake: PresenceType], let updatedPresence = presenceDict[user.id!] {
+                self.presenceColor = PresenceColor.color(for: updatedPresence)
+                DispatchQueue.main.async {
+                    if self.friend?.id == user.id {
+                        self.updatePresenceIndicatorColor()
+                    }
                 }
             }
         }

@@ -179,6 +179,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     private var _activeGuildID: Snowflake?
     
+    var readyProcessedObserver: NSObjectProtocol?
+    
     var displayedChannels: [GuildChannel] = []
     
     var settingsContainerView: SettingsView = {
@@ -310,7 +312,22 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     
     func readyWatcher() {
-        clientUser.onReady = {
+        /*clientUser.onReady = {
+            DispatchQueue.main.async {
+                self.hideLoadingView()
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                self.setupOrderedGuilds()
+                self.rebuildSidebarButtons()
+                self.channelsCollectionView.reloadData()
+                self.sidebarCollectionView.reloadData()
+                self.dmCollectionView.reloadData()
+                self.friendsContainerView.reloadFriends()
+                CATransaction.commit()
+            }
+        }*/
+        readyProcessedObserver =  NotificationCenter.default.addObserver(forName: .readyProcessed, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 self.hideLoadingView()
                 CATransaction.begin()
@@ -324,6 +341,13 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
                 CATransaction.commit()
             }
         }
+    }
+    
+    deinit {
+        if let observer = self.readyProcessedObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        self.readyProcessedObserver = nil
     }
     
     func setupToolbar() {

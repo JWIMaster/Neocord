@@ -145,5 +145,51 @@ extension MessageView {
             reactionView.translatesAutoresizingMaskIntoConstraints = false
             reactionStack.addArrangedSubview(reactionView)
         }
+        
+        messageReactionAddObserver = NotificationCenter.default.addObserver(forName: .messageReactionAdd, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            guard let reaction = notification.object as? Reaction, reaction.messageID == self.message?.id else { return }
+            
+            for reactionView in reactionStack.arrangedSubviews {
+                guard let buttonView = reactionView as? ReactionButtonView else { continue }
+                if buttonView.reaction.emoji == reaction.emoji {
+                    buttonView.reaction.count! += 1
+                    buttonView.updateReaction()
+                    return
+                }
+            }
+            
+            let reactionView = ReactionButtonView(reaction: reaction, channelID: (self.message?.channelID)!, messageID: (self.message?.id)!)
+            reactionView.translatesAutoresizingMaskIntoConstraints = false
+            reactionStack.addArrangedSubview(reactionView)
+        }
+        
+        messageReactionRemoveObserver = NotificationCenter.default.addObserver(forName: .messageReactionRemove, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            guard let reaction = notification.object as? Reaction, reaction.messageID == self.message?.id else { return }
+            
+            for reactionView in reactionStack.arrangedSubviews {
+                guard let buttonView = reactionView as? ReactionButtonView else { continue }
+                if buttonView.reaction.emoji == reaction.emoji {
+                    buttonView.reaction.count! -= 1
+                    if reaction.me! {
+                        buttonView.isOwnReaction = false
+                    }
+                    buttonView.updateReaction()
+                    if buttonView.reaction.count == 0 {
+                        self.message?.reactions.removeAll { $0.emoji == reaction.emoji }
+                        UIView.animate(withDuration: 0.5) {
+                            self.reactionStack.removeArrangedSubview(buttonView)
+                            buttonView.removeFromSuperview()
+                        }
+                    }
+                    return
+                }
+            }
+            
+            let reactionView = ReactionButtonView(reaction: reaction, channelID: (self.message?.channelID)!, messageID: (self.message?.id)!)
+            reactionView.translatesAutoresizingMaskIntoConstraints = false
+            reactionStack.addArrangedSubview(reactionView)
+        }
     }
 }

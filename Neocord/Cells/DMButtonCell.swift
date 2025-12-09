@@ -105,6 +105,8 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private var recipientIDs = Set<Snowflake>()
     
+    var presenceUpdateObserver: NSObjectProtocol?
+    
     var dm: DMChannel?
 
     override init(frame: CGRect) {
@@ -162,6 +164,13 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             presenceIndicator.backgroundColor = presenceColor
         }
     }
+    
+    deinit {
+        if let observer = self.presenceUpdateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        self.presenceUpdateObserver = nil
+    }
 
     func configure(with dm: DMChannel) {
         switch dm.type {
@@ -179,12 +188,24 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             presenceColor = PresenceColor.color(for: presence)
             updatePresenceIndicatorColor()
             
-            clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
+            /*clientUser.gateway?.addPresenceUpdateObserver { [weak self] presenceDict in
                 guard let self = self, let updatedPresence = presenceDict[currentRecipientID!] else { return }
                 self.presenceColor = PresenceColor.color(for: updatedPresence)
                 DispatchQueue.main.async {
                     if self.recipientIDs.contains(recipient.id!) {
                         self.updatePresenceIndicatorColor()
+                    }
+                }
+            }*/
+            
+            presenceUpdateObserver = NotificationCenter.default.addObserver(forName: .presenceUpdate, object: nil, queue: .main) { [weak self] notification in
+                guard let self = self else { return }
+                if let presenceDict = notification.object as? [Snowflake: PresenceType], let updatedPresence = presenceDict[currentRecipientID!] {
+                    self.presenceColor = PresenceColor.color(for: updatedPresence)
+                    DispatchQueue.main.async {
+                        if self.recipientIDs.contains(recipient.id!) {
+                            self.updatePresenceIndicatorColor()
+                        }
                     }
                 }
             }

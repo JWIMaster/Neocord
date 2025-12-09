@@ -66,7 +66,8 @@ class ReactionButtonView: UIButton {
                 clientUser.create(reaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
                 self.isOwnReaction = true
             } else {
-                print("hi")
+                clientUser.delete(ownReaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
+                self.isOwnReaction = false
             }
         }
         setup()
@@ -89,6 +90,10 @@ class ReactionButtonView: UIButton {
         self.titleLabel?.font = .systemFont(ofSize: 12)
         self.setTitleColor(.white, for: .normal)
 
+        self.updateReaction()
+    }
+    
+    func updateReaction() {
         if let emojiName = reaction.emoji?.name, reaction.emoji?.id == nil {
             // No image: just show text
             self.setImage(nil, for: .normal)
