@@ -150,7 +150,7 @@ extension MessageView {
             guard let self = self else { return }
             guard let reaction = notification.object as? Reaction, reaction.messageID == self.message?.id else { return }
             
-            for reactionView in reactionStack.arrangedSubviews {
+            for reactionView in self.reactionStack.arrangedSubviews {
                 guard let buttonView = reactionView as? ReactionButtonView else { continue }
                 if buttonView.reaction.emoji == reaction.emoji {
                     buttonView.reaction.count! += 1
@@ -161,14 +161,14 @@ extension MessageView {
             
             let reactionView = ReactionButtonView(reaction: reaction, channelID: (self.message?.channelID)!, messageID: (self.message?.id)!)
             reactionView.translatesAutoresizingMaskIntoConstraints = false
-            reactionStack.addArrangedSubview(reactionView)
+            self.reactionStack.addArrangedSubview(reactionView)
         }
         
         messageReactionRemoveObserver = NotificationCenter.default.addObserver(forName: .messageReactionRemove, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             guard let reaction = notification.object as? Reaction, reaction.messageID == self.message?.id else { return }
             
-            for reactionView in reactionStack.arrangedSubviews {
+            for reactionView in self.reactionStack.arrangedSubviews {
                 guard let buttonView = reactionView as? ReactionButtonView else { continue }
                 if buttonView.reaction.emoji == reaction.emoji {
                     buttonView.reaction.count! -= 1
@@ -189,7 +189,7 @@ extension MessageView {
             
             let reactionView = ReactionButtonView(reaction: reaction, channelID: (self.message?.channelID)!, messageID: (self.message?.id)!)
             reactionView.translatesAutoresizingMaskIntoConstraints = false
-            reactionStack.addArrangedSubview(reactionView)
+            self.reactionStack.addArrangedSubview(reactionView)
         }
     }
 }
