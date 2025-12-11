@@ -16,6 +16,7 @@
 		5F139A522EC6C8E10092EDA6 /* InputView+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */; };
 		5F139A542EC6C8EB0092EDA6 /* LargeHitAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */; };
 		5F139A562EC6CA5C0092EDA6 /* Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F139A552EC6CA5C0092EDA6 /* Bubble.swift */; };
+		5F15C8E02EEA7DB5004E0F4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15C8DF2EEA7DB5004E0F4C /* SceneDelegate.swift */; };
 		5F2913A52EA989510019DC0F /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913A42EA989510019DC0F /* AvatarCache.swift */; };
 		5F2914002EAB093C0019DC0F /* DMButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */; };
 		5F2914022EAB09440019DC0F /* ChannelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2914012EAB09440019DC0F /* ChannelButtonView.swift */; };
@@ -102,6 +103,7 @@
 		5F139A512EC6C8E10092EDA6 /* InputView+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputView+Actions.swift"; sourceTree = "<group>"; };
 		5F139A532EC6C8EB0092EDA6 /* LargeHitAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeHitAreaButton.swift; sourceTree = "<group>"; };
 		5F139A552EC6CA5C0092EDA6 /* Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bubble.swift; sourceTree = "<group>"; };
+		5F15C8DF2EEA7DB5004E0F4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5F2913A42EA989510019DC0F /* AvatarCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCache.swift; sourceTree = "<group>"; };
 		5F2913A62EA999FA0019DC0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5F2913FF2EAB093C0019DC0F /* DMButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMButtonCell.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 		5F57B8B02E9EEAC600CA2CE2 /* Neocord */ = {
 			isa = PBXGroup;
 			children = (
+				5F15C8DF2EEA7DB5004E0F4C /* SceneDelegate.swift */,
 				5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */,
 				5FA7B1F62ED5288F008BCC5E /* CacheManagers */,
 				5FA7B1F52ED52884008BCC5E /* CustomComponents */,
@@ -568,6 +571,7 @@
 				5F724FD02EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift in Sources */,
 				5F0F1F872EB834A900CEF378 /* LoginManager.swift in Sources */,
 				5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */,
+				5F15C8E02EEA7DB5004E0F4C /* SceneDelegate.swift in Sources */,
 				5F5AF8AB2EC8257500D0C660 /* RoleIconCache.swift in Sources */,
 				5FEF14A82EA4485B005598D3 /* InputView.swift in Sources */,
 				5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */,
