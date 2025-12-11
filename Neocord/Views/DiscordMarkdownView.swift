@@ -18,16 +18,10 @@ class DiscordMarkdownView: UILabel {
     let parser: TSMarkdownParser = {
         let parser = TSMarkdownParser.standard()
         parser.skipLinkAttribute = true
-        /*parser.defaultAttributes = [
-            NSAttributedString.Key.font.rawValue: UIFont(name: "ggsans-Medium", size: 17)!
-        ]
-        parser.emphasisAttributes = [
-            NSAttributedString.Key.font.rawValue: UIFont(name: "ggsans-MediumItalic", size: 17)!
-        ]
         parser.linkAttributes = [
             NSAttributedString.Key.foregroundColor.rawValue: UIColor.pastelBlue,
             NSAttributedString.Key.underlineStyle.rawValue: NSUnderlineStyle.single.rawValue
-        ]*/
+        ]
         return parser
     }()
     var message: DiscordMessage?

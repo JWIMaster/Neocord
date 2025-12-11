@@ -104,7 +104,16 @@ public final class ThemeEngine {
         case glass, fallback, native
     }
     
-    public func makeThemedView(_ glassExclusionOverrides: [LiquidGlassView.AdvancedFilterOptions]? = nil) -> UIView {
-        return UIView()
+    public class func makeThemedView(cornerRadius: CGFloat = 22, blurRadius: CGFloat = 0, disableBlur: Bool = true) -> UIView {
+        if Self.enableGlass {
+            let glass = LiquidGlassView(blurRadius: blurRadius, cornerRadius: cornerRadius, snapshotTargetView: nil, disableBlur: disableBlur, filterExclusions: Self.glassFilterExclusions)
+            glass.translatesAutoresizingMaskIntoConstraints = false
+            return glass
+        } else {
+            let background = UIView()
+            background.translatesAutoresizingMaskIntoConstraints = false
+            background.layer.cornerRadius = cornerRadius
+            return background
+        }
     }
 }

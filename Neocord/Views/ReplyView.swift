@@ -14,7 +14,7 @@ import TSMarkdownParser
 import FoundationCompatKit
 
 public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
-    let messageBackground: UIView? = {
+    let messageBackground: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
@@ -69,7 +69,6 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
     }
     
     private func setupSubviews() {
-        guard let messageBackground = messageBackground else { return }
         replyContent.addArrangedSubview(authorAvatar)
         replyContent.addArrangedSubview(authorName)
         replyContent.addArrangedSubview(messageText)
@@ -133,8 +132,6 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
     }
     
     private func setupConstraints() {
-        guard let messageBackground = messageBackground else { return }
-
         authorAvatar.widthAnchor.constraint(equalToConstant: 20).isActive = true
         authorAvatar.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
@@ -181,8 +178,8 @@ public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
                             messageBackground.shadowOpacity = 0.6
                             messageBackground.setNeedsLayout()
                         } else {
-                            self.messageBackground?.backgroundColor = color.withIncreasedSaturation(factor: 1.4)
-                            self.messageBackground?.setNeedsLayout()
+                            self.messageBackground.backgroundColor = color.withIncreasedSaturation(factor: 1.4)
+                            self.messageBackground.setNeedsLayout()
                         }
                     }
                 }

@@ -41,7 +41,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     let authorName = UILabel()
     let timestamp = UILabel()
     let edited = UILabel()
-    let messageBackground: UIView? = {
+    let messageBackground: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
@@ -155,8 +155,6 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     }
     
     func setupSubviews() {
-        guard let messageBackground = messageBackground else { return }
-        
         if clientUserPinged {
             addSubview(pingHighlightView)
         }
@@ -193,8 +191,12 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         if let observer = self.messageReactionAddObserver {
             NotificationCenter.default.removeObserver(observer)
         }
+        if let observer = self.messageReactionRemoveObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
         self.guildMemberChunkObserver = nil
         self.messageReactionAddObserver = nil
+        self.messageReactionRemoveObserver = nil
     }
     
     func setupMembers() {
@@ -239,8 +241,6 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     
     func setupBackground() {
-        guard let messageBackground = messageBackground else { return }
-        
         messageBackground.translatesAutoresizingMaskIntoConstraints = false
         messageBackground.isUserInteractionEnabled = false
         
@@ -257,8 +257,6 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     
     func setupContraints() {
-        guard let messageBackground = messageBackground else { return }
-        
         if clientUserPinged {
             self.pingHighlightView.pinToEdges(of: self)
         }

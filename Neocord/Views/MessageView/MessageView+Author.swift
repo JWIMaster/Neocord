@@ -49,8 +49,8 @@ extension MessageView {
                             messageBackground.shadowOpacity = 0.6
                             messageBackground.setNeedsLayout()
                         } else {
-                            self.messageBackground?.backgroundColor = .blue.withIncreasedSaturation(factor: 1.4)
-                            self.messageBackground?.setNeedsLayout()
+                            self.messageBackground.backgroundColor = .blue.withIncreasedSaturation(factor: 1.4)
+                            self.messageBackground.setNeedsLayout()
                         }
                     }
                 }
@@ -73,8 +73,8 @@ extension MessageView {
                             messageBackground.shadowOpacity = 0.6
                             messageBackground.setNeedsLayout()
                         } else {
-                            self.messageBackground?.backgroundColor = color.withIncreasedSaturation(factor: 1.4)
-                            self.messageBackground?.setNeedsLayout()
+                            self.messageBackground.backgroundColor = color.withIncreasedSaturation(factor: 1.4)
+                            self.messageBackground.setNeedsLayout()
                         }
                     }
                 }

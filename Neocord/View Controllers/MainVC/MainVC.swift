@@ -146,7 +146,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         return navigationController?.navigationBar.frame.height ?? 0
     }
     
-    var sidebarBackgroundView: UIView? = {
+    var sidebarBackgroundView: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
@@ -268,12 +268,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         if ThemeEngine.enableAnimations {
             activeContentView.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
             toolbar.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
-            sidebarBackgroundView?.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
+            sidebarBackgroundView.springAnimation(scaleDuration: 0.5, bounceDuration: 0.4)
         }
     }
     
     func setupMainViewSubviews() {
-        guard let sidebarBackgroundView = sidebarBackgroundView else { return }
         view.addSubview(mainContainerView)
         mainContainerView.addSubview(containerView)
         mainContainerView.addSubview(settingsContainerView)
@@ -465,7 +464,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupConstraints() {
-        guard let sidebarBackgroundView = sidebarBackgroundView else { return }
 
         // MARK: Toolbar layout
         if let customController = navigationController as? CustomNavigationController {
@@ -532,7 +530,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     func flattenChannelsForDisplay() {
         guard let guild = activeGuild else { return }
         displayedChannels.removeAll()
-
         let textChannels = guild.channels.values.compactMap { $0 as GuildChannel }
             .filter { !($0 is GuildCategory) }
 
