@@ -246,6 +246,6 @@ class AuthenticationViewController: UIViewController {
         statusLabel.text = "Login successful!"
         let loadVC = LoadingViewController()
         clientUser = SLClient(token: token ?? "idk")
-        UIApplication.shared.keyWindow?.rootViewController = loadVC
+        UIApplication.shared.currentKeyWindow?.rootViewController = loadVC
     }
 }

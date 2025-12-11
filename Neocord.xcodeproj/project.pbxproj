@@ -269,6 +269,7 @@
 		5F57B8B02E9EEAC600CA2CE2 /* Neocord */ = {
 			isa = PBXGroup;
 			children = (
+				5F57B8B12E9EEAC600CA2CE2 /* AppDelegate.swift */,
 				5F15C8DF2EEA7DB5004E0F4C /* SceneDelegate.swift */,
 				5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */,
 				5FA7B1F62ED5288F008BCC5E /* CacheManagers */,
@@ -277,7 +278,6 @@
 				5F57B8B32E9EEAC600CA2CE2 /* LaunchScreen.storyboard */,
 				5F9F58CE2EB57C0200A09760 /* Assets */,
 				5F2913A62EA999FA0019DC0F /* Info.plist */,
-				5F57B8B12E9EEAC600CA2CE2 /* AppDelegate.swift */,
 				5F9F58E22EB6EA6800A09760 /* Cells */,
 				5F50947F2EA578AB002646A2 /* Views */,
 				5F50947E2EA5789A002646A2 /* View Controllers */,

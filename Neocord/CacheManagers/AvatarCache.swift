@@ -5,19 +5,19 @@ import ImageIO
 import MobileCoreServices
 
 final class AvatarCache {
+
     static let shared = AvatarCache()
 
-    public let memoryCache = NSCache<NSString, UIImage>()
+    private let memoryCache = NSCache<NSString, UIImage>()
     private let colorCache = NSCache<NSString, UIColor>()
-    public var keys = Set<NSString>()
+    private let inflight = NSMapTable<NSString, NSMutableArray>(keyOptions: .strongMemory, valueOptions: .strongMemory)
 
-    private let cacheQueue = DispatchQueue(label: "avatar.cache.queue")
-    
-    private let cacheDirectory: String = {
+    private let queue = DispatchQueue(label: "avatar.cache.queue", target: .global(qos: .userInitiated))
+
+    private let cacheDir: String = {
         let dirs = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
         return dirs.first ?? NSTemporaryDirectory()
     }()
-    
 
     func avatar(for user: User, completion: @escaping (UIImage?, UIColor?) -> Void) {
         guard let id = user.id?.rawValue else {
@@ -27,123 +27,122 @@ final class AvatarCache {
 
         let avatarHash = user.avatarString ?? "default"
         let cacheKey = "\(id)-\(avatarHash)" as NSString
-        let filePath = cacheDirectory + "/" + (cacheKey as String) + ".png"
+        let filePath = cacheDir + "/" + (cacheKey as String) + ".png"
 
-        // Memory cache
-        if let cachedImage = memoryCache.object(forKey: cacheKey),
-           let cachedColor = colorCache.object(forKey: cacheKey) {
-            completion(cachedImage, cachedColor)
+        // MEMORY CACHE
+        if let img = memoryCache.object(forKey: cacheKey),
+           let col = colorCache.object(forKey: cacheKey) {
+            completion(img, col)
             return
         }
 
-        // Disk cache
-        if let diskData = try? Data(contentsOf: URL(fileURLWithPath: filePath)),
-           let image = UIImage(data: diskData) {
-            memoryCache.setObject(image, forKey: cacheKey)
-            self.cacheQueue.async {
-                let avgColor = self.colorCache.object(forKey: cacheKey) ?? image.averageColor() ?? .gray
-                self.colorCache.setObject(avgColor, forKey: cacheKey)
-                DispatchQueue.main.async {
-                    completion(image, avgColor)
-                }
-            }
-            return
-        }
+        queue.async {
+            // DISK CACHE (async)
+            if FileManager.default.fileExists(atPath: filePath),
+               let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)),
+               let img = UIImage(data: data) {
 
-        // Download from CDN
-        guard let avatarHash = user.avatarString else {
-            completion(nil, nil)
-            return
-        }
+                let col = self.colorCache.object(forKey: cacheKey) ?? img.averageColor() ?? .gray
 
-        let url = URL(string: "https://cdn.discordapp.com/avatars/\(id)/\(avatarHash).png?size=128")!
-        URLSessionCompat.shared.dataTask(with: URLRequest(url: url)) { data, _, _ in
-            guard let data = data, let image = UIImage(data: data) else {
-                completion(nil, nil)
+                self.memoryCache.setObject(img, forKey: cacheKey)
+                self.colorCache.setObject(col, forKey: cacheKey)
+
+                DispatchQueue.main.async { completion(img, col) }
                 return
             }
 
-            let circularImage = self.makeCircular(image: image)
-
-            // Cache image and color
-            self.cacheQueue.async {
-                self.memoryCache.setObject(circularImage, forKey: cacheKey)
-
-                // Convert to PNG8
-                if let png8Data = self.png8Data(from: circularImage) {
-                    try? png8Data.write(to: URL(fileURLWithPath: filePath), options: .atomic)
-                }
-
-                let avgColor = circularImage.averageColor() ?? .white
-                self.colorCache.setObject(avgColor, forKey: cacheKey)
-
-                DispatchQueue.main.async {
-                    completion(circularImage, avgColor)
-                }
+            // No avatar hash means default
+            guard let avatarHash = user.avatarString else {
+                DispatchQueue.main.async { completion(nil, nil) }
+                return
             }
-        }.resume()
+
+            // SINGLE FLIGHT: queue identical requests
+            if let waiting = self.inflight.object(forKey: cacheKey) {
+                waiting.add(completion)
+                return
+            } else {
+                let arr = NSMutableArray(object: completion)
+                self.inflight.setObject(arr, forKey: cacheKey)
+            }
+
+            let url = URL(string: "https://cdn.discordapp.com/avatars/\(id)/\(avatarHash).png?size=128")!
+
+            URLSessionCompat.shared.dataTask(with: URLRequest(url: url)) { data, _, _ in
+                guard let data = data, let img = UIImage(data: data) else {
+                    self.completeAll(for: cacheKey, image: nil, color: nil)
+                    return
+                }
+
+                self.queue.async {
+                    // Circular mask
+                    let circ = self.circular(image: img)
+
+                    // Average color only once
+                    let avg = circ.averageColor() ?? .white
+
+                    self.memoryCache.setObject(circ, forKey: cacheKey)
+                    self.colorCache.setObject(avg, forKey: cacheKey)
+
+                    // Async PNG8 conversion lowest priority
+                    DispatchQueue.global(qos: .utility).async {
+                        if let png = self.png8Data(from: circ) {
+                            try? png.write(to: URL(fileURLWithPath: filePath), options: .atomic)
+                        }
+                    }
+
+                    self.completeAll(for: cacheKey, image: circ, color: avg)
+                }
+            }.resume()
+        }
+    }
+
+    private func completeAll(for key: NSString, image: UIImage?, color: UIColor?) {
+        guard let arr = inflight.object(forKey: key) else { return }
+        inflight.removeObject(forKey: key)
+
+        let completions = arr.compactMap { $0 as? (UIImage?, UIColor?) -> Void }
+        DispatchQueue.main.async {
+            completions.forEach { $0(image, color) }
+        }
     }
 
     // MARK: - Helpers
 
-    private func makeCircular(image: UIImage) -> UIImage {
-        let diameter = min(image.size.width, image.size.height)
-        let rect = CGRect(x: 0, y: 0, width: diameter, height: diameter)
+    private func circular(image: UIImage) -> UIImage {
+        let side = min(image.size.width, image.size.height)
+        let rect = CGRect(origin: .zero, size: CGSize(width: side, height: side))
 
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, image.scale)
-        let path = UIBezierPath(ovalIn: rect)
-        path.addClip()
-        image.draw(in: rect)
-        let circularImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return circularImage ?? image
+        let renderer = UIGraphicsImageRenderer(size: rect.size, format: image.imageRendererFormat)
+        return renderer.image { ctx in
+            UIBezierPath(ovalIn: rect).addClip()
+            image.draw(in: rect)
+        }
     }
 
-    /// Convert UIImage to PNG8 (256 colours max, preserves alpha)
     private func png8Data(from image: UIImage) -> Data? {
-        guard let cgImage = image.cgImage else { return nil }
-
-        let width = cgImage.width
-        let height = cgImage.height
-
-        guard let context = CGContext(
-            data: nil,
-            width: width,
-            height: height,
-            bitsPerComponent: 8,
-            bytesPerRow: 0,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
-        ) else { return nil }
-
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-        guard let drawnImage = context.makeImage() else { return nil }
+        guard let cg = image.cgImage else { return nil }
 
         let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data, kUTTypePNG, 1, nil) else { return nil }
+        guard let dest = CGImageDestinationCreateWithData(data, kUTTypePNG, 1, nil) else { return nil }
 
-        let properties: CFDictionary = [
-            kCGImagePropertyColorModel: kCGImagePropertyColorModelRGB,
-            kCGImagePropertyDepth: 8
-        ] as CFDictionary
+        CGImageDestinationAddImage(dest, cg, [
+            kCGImagePropertyDepth: 8,
+            kCGImagePropertyColorModel: kCGImagePropertyColorModelRGB
+        ] as CFDictionary)
 
-        CGImageDestinationAddImage(destination, drawnImage, properties)
-        guard CGImageDestinationFinalize(destination) else { return nil }
-
-        return data as Data
+        return CGImageDestinationFinalize(dest) ? (data as Data) : nil
     }
 
-    public func clearCache() {
-        cacheQueue.async {
+    public func clear() {
+        queue.async {
             self.memoryCache.removeAllObjects()
             self.colorCache.removeAllObjects()
 
-            let fileManager = FileManager.default
-            if let files = try? fileManager.contentsOfDirectory(atPath: self.cacheDirectory) {
-                for file in files where file.hasSuffix(".png") {
-                    let filePath = self.cacheDirectory + "/" + file
-                    try? fileManager.removeItem(atPath: filePath)
+            let fm = FileManager.default
+            if let files = try? fm.contentsOfDirectory(atPath: self.cacheDir) {
+                for f in files where f.hasSuffix(".png") {
+                    try? fm.removeItem(atPath: self.cacheDir + "/" + f)
                 }
             }
         }

@@ -101,7 +101,7 @@ class SettingsView: UIView {
         resetTokenButton = makeToggleButton(title: "Reset Token", isOn: false) {
             clientUser.disconnect()
             token = nil
-            UIApplication.shared.keyWindow?.rootViewController = AuthenticationViewController()
+            UIApplication.shared.currentKeyWindow?.rootViewController = AuthenticationViewController()
         }
         
         contentStack.addArrangedSubview(glassButton)

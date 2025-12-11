@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  Neocord
 //
-//  Created by Joshua Walraven on 11/12/2025.
+//  Created by JWI on 11/12/2025.
 //
 
 
@@ -66,6 +66,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     currentVC.getMessages()
                 }
             }
+        }
+    }
+}
+
+extension UIApplication {
+    var currentKeyWindow: UIWindow? {
+        if #available(iOS 13, *) {
+            return connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }
+        } else {
+            return keyWindow
         }
     }
 }

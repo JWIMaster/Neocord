@@ -38,7 +38,7 @@ extension TextViewController {
             messageActionView.alpha = 1
             messageActionView.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.containerView.isUserInteractionEnabled = false
-            if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
+            if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 0
             }
         }
@@ -90,7 +90,7 @@ extension TextViewController {
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = topOffset
-            if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
+            if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 0
             }
         }, completion: nil)

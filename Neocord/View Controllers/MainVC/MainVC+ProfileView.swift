@@ -39,7 +39,7 @@ extension ViewController {
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = topOffset
-            if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
+            if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 0
             }
         }, completion: nil)
@@ -55,7 +55,7 @@ extension ViewController {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = parent.bounds.height
             self.containerView.layer.filters = nil
-            if let nav = UIApplication.shared.keyWindow?.rootViewController as? CustomNavigationController {
+            if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 1
             }
         }, completion: nil)
