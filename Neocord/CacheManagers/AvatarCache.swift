@@ -66,8 +66,8 @@ final class AvatarCache {
                 self.inflight.setObject(arr, forKey: cacheKey)
             }
 
+            // Start network load
             let url = URL(string: "https://cdn.discordapp.com/avatars/\(id)/\(avatarHash).png?size=128")!
-
             URLSessionCompat.shared.dataTask(with: URLRequest(url: url)) { data, _, _ in
                 guard let data = data, let img = UIImage(data: data) else {
                     self.completeAll(for: cacheKey, image: nil, color: nil)
@@ -75,16 +75,15 @@ final class AvatarCache {
                 }
 
                 self.queue.async {
-                    // Circular mask
+                    // Circular mask (no UIGraphicsImageRenderer)
                     let circ = self.circular(image: img)
 
-                    // Average color only once
                     let avg = circ.averageColor() ?? .white
 
                     self.memoryCache.setObject(circ, forKey: cacheKey)
                     self.colorCache.setObject(avg, forKey: cacheKey)
 
-                    // Async PNG8 conversion lowest priority
+                    // PNG8 conversion in background
                     DispatchQueue.global(qos: .utility).async {
                         if let png = self.png8Data(from: circ) {
                             try? png.write(to: URL(fileURLWithPath: filePath), options: .atomic)
@@ -110,14 +109,23 @@ final class AvatarCache {
     // MARK: - Helpers
 
     private func circular(image: UIImage) -> UIImage {
-        let side = min(image.size.width, image.size.height)
-        let rect = CGRect(origin: .zero, size: CGSize(width: side, height: side))
+        let diameter = min(image.size.width, image.size.height)
+        let rect = CGRect(origin: .zero, size: CGSize(width: diameter, height: diameter))
 
-        let renderer = UIGraphicsImageRenderer(size: rect.size, format: image.imageRendererFormat)
-        return renderer.image { ctx in
-            UIBezierPath(ovalIn: rect).addClip()
-            image.draw(in: rect)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, image.scale)
+        guard let ctx = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return image
         }
+
+        ctx.addEllipse(in: rect)
+        ctx.clip()
+        image.draw(in: rect)
+
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return result ?? image
     }
 
     private func png8Data(from image: UIImage) -> Data? {
