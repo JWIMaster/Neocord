@@ -19,6 +19,7 @@ extension TextViewController {
     func takeMessageAction(_ message: Message) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
+        UIView.setAnimationsEnabled(false)
         applyGaussianBlur(to: containerView.layer, radius: 12)
         var messageActionView: MessageActionView
         if let channel = channel {
@@ -31,6 +32,7 @@ extension TextViewController {
         view.addSubview(messageActionView)
         messageActionView.translatesAutoresizingMaskIntoConstraints = false
         messageActionView.pinToCenter(of: view)
+        UIView.setAnimationsEnabled(true)
         CATransaction.commit()
         
         
@@ -106,7 +108,7 @@ extension TextViewController {
             profile.frame.origin.y = parent.bounds.height
             self.containerView.layer.filters = nil
             self.profileBlur.blurRadius = 0
-            if let nav = UIApplication.shared.windows.first?.rootViewController as? CustomNavigationController {
+            if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 1
             }
         }, completion: nil)

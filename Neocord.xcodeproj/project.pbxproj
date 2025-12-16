@@ -41,6 +41,7 @@
 		5F64FE8E2EBC45E100577B00 /* ThemeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */; };
 		5F64FE902EBC486E00577B00 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */; };
 		5F64FE922EBC7A5200577B00 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F64FE912EBC7A5200577B00 /* SettingsView.swift */; };
+		5F6CA5EB2EF1192A0063D80B /* BannerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6CA5EA2EF119260063D80B /* BannerCache.swift */; };
 		5F713E132EDBBFF8006FC7BB /* DMsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F713E122EDBBFF7006FC7BB /* DMsIcon.png */; };
 		5F724FD02EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */; };
 		5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */; };
@@ -127,6 +128,7 @@
 		5F64FE8D2EBC45E100577B00 /* ThemeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEngine.swift; sourceTree = "<group>"; };
 		5F64FE8F2EBC486E00577B00 /* CustomToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		5F64FE912EBC7A5200577B00 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5F6CA5EA2EF119260063D80B /* BannerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCache.swift; sourceTree = "<group>"; };
 		5F713E122EDBBFF7006FC7BB /* DMsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DMsIcon.png; sourceTree = "<group>"; };
 		5F724FCF2EC179B7002A9E25 /* MainVC+SwiftcordMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainVC+SwiftcordMethods.swift"; sourceTree = "<group>"; };
 		5F724FD32EC1D7FD002A9E25 /* DiscordMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordMarkdownView.swift; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 		5FA7B1F62ED5288F008BCC5E /* CacheManagers */ = {
 			isa = PBXGroup;
 			children = (
+				5F6CA5EA2EF119260063D80B /* BannerCache.swift */,
 				5F2913A42EA989510019DC0F /* AvatarCache.swift */,
 				5F9F58CA2EB56FB800A09760 /* GuildAvatarCache.swift */,
 				5F5AF8AA2EC8257500D0C660 /* RoleIconCache.swift */,
@@ -613,6 +616,7 @@
 				5F724FD42EC1D7FD002A9E25 /* DiscordMarkdownView.swift in Sources */,
 				5F9F58C02EB4309300A09760 /* TextVC+Background.swift in Sources */,
 				5FEF15162EA4E616005598D3 /* AuthenticationVC.swift in Sources */,
+				5F6CA5EB2EF1192A0063D80B /* BannerCache.swift in Sources */,
 				5FEF14A42EA373C2005598D3 /* MessageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

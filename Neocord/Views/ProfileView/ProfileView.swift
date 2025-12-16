@@ -147,6 +147,7 @@ class ProfileView: UIView {
         setupRoles()
         setupConstraints()
         setupGestureRecognizer()
+        setupProfileBanner()
     }
     
     func setupSubviews() {
@@ -215,7 +216,7 @@ class ProfileView: UIView {
             profileBanner.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 40),
             profileBanner.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 2),
             profileBanner.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -2),
-            profileBanner.heightAnchor.constraint(equalToConstant: 100),
+            profileBanner.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2.5),
             
             profilePicture.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             profilePicture.centerYAnchor.constraint(equalTo: profileBanner.bottomAnchor),
@@ -305,7 +306,7 @@ class ProfileView: UIView {
                 self.profilePicture.layer.rasterizationScale = UIScreen.main.scale
                 self.profilePicture.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 80, height: 80), cornerRadius: 40).cgPath
                 
-                self.profileBanner.backgroundColor = color
+                //self.profileBanner.backgroundColor = color
                 if self.backgroundView is LiquidGlassView, let bioBackground = self.bioBackground as? LiquidGlassView {
                     bioBackground.tintColorForGlass = color.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
                     bioBackground.setNeedsLayout()
@@ -313,6 +314,18 @@ class ProfileView: UIView {
                     self.backgroundView?.backgroundColor = color.withIncreasedSaturation(factor: 1.4)
                     self.backgroundView?.setNeedsLayout()
                 }
+            }
+        }
+    }
+    
+    func setupProfileBanner() {
+        guard let userProfile = userProfile, let user = user else { return }
+        BannerCache.shared.banner(for: userProfile, user) { [weak self] bannerImage, colour in
+            guard let self = self else { return }
+            if let bannerImage = bannerImage {
+                self.profileBanner.image = bannerImage
+            } else if let colour = colour {
+                self.profileBanner.backgroundColor = colour
             }
         }
     }
@@ -454,6 +467,7 @@ class ProfileView: UIView {
         setupProfilePicture()
         updateProfileColors()
         updatePresenceIndicatorColor()
+        setupProfileBanner()
         bioWithEmoji.setNeedsLayout()
         backgroundView?.setNeedsLayout()
         bioBackground?.setNeedsLayout()

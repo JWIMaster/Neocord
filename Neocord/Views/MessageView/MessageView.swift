@@ -207,7 +207,8 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
             applyMember()
         }
         
-        guildMemberChunkObserver = NotificationCenter.default.addObserver(forName: .guildMemberChunk, object: nil, queue: .main) { notification in
+        guildMemberChunkObserver = NotificationCenter.default.addObserver(forName: .guildMemberChunk, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
             if let members = notification.object as? [Snowflake: GuildMember],
                 let member = members[messageAuthorID] {
                 self.member = member
@@ -226,7 +227,8 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     
     func applyMember() {
         guard let member = self.member else { return }
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if let guildNickname = member.guildNickname {
                 self.authorName.text = guildNickname
             }

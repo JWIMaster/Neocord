@@ -70,7 +70,7 @@ extension TextViewController {
     //Websocket create message function
     func createMessage(_ message: Message) {
         guard let messageID = message.id, let userID = message.author?.id, !messageIDsInStack.contains(messageID) else { return }
-
+        self.messageIDsInStack.insert(messageID)
         let isDMMessage = (self.dm?.id == message.channelID)
         let isGuildMessage = (self.channel?.id == message.channelID)
         
@@ -96,7 +96,6 @@ extension TextViewController {
             }
             
             // Track message and user IDs
-            self.messageIDsInStack.insert(messageID)
             if !self.userIDsInStack.contains(userID) {
                 self.userIDsInStack.insert(userID)
             }

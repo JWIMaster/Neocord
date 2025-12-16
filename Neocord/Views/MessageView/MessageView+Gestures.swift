@@ -126,8 +126,8 @@ extension MessageView {
             let feedback = UIImpactFeedbackGenerator(style: .medium)
             feedback.impactOccurred()
         }
-        if let dmVC = parentViewController as? TextViewController {
-            dmVC.takeMessageAction(self.message!)
+        if let textVC = parentViewController as? TextViewController {
+            textVC.takeMessageAction(self.message!)
         }
     }
     
