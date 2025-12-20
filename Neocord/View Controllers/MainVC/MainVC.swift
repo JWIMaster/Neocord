@@ -59,7 +59,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }()
     
     var offset: CGFloat {
-        return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
+        if #available(iOS 11.0, *) {
+            return (self.navigationController?.navigationBar.frame.height)! + view.safeAreaInsets.top
+        } else {
+            return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
+        }
     }
     
     var expandedFolderIDs: Set<String> {

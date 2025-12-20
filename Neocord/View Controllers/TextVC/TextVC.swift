@@ -63,6 +63,14 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         return stack
     }()
     
+    var topOffset: CGFloat {
+        if #available(iOS 11.0, *) {
+            return view.safeAreaInsets.top
+        } else {
+            return UIApplication.shared.statusBarFrame.height
+        }
+    }
+    
     func requestMemberIfNeeded(_ userID: Snowflake) {
         guard !requestedUserIDs.contains(userID), let guildID = channel?.guild?.id else { return }
         requestedUserIDs.insert(userID)
@@ -101,6 +109,20 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         typingStartObserver = nil
     }
     
+    var isAtTop: Bool {
+        guard let firstMessage = messageStack.arrangedSubviews.first else {
+            return true
+        }
+
+        let firstFrameInScroll = scrollView.convert(firstMessage.frame,
+                                                    from: firstMessage.superview)
+
+        let visibleTop = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
+
+        return firstFrameInScroll.minY >= visibleTop
+    }
+
+    
     var isAtBottom: Bool {
         if let inputView = textInputView {
             let inputFrameInScroll = scrollView.convert(inputView.frame, from: inputView.superview)
@@ -113,7 +135,8 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         }
         return true
     }
-
+    
+    var refreshControl = UIRefreshControl()
     
     func safelyRemoveScrollView() {
         scrollView.delegate = nil
@@ -154,6 +177,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         setupConstraints()
         getMessages()
         attachGatewayObservers()
+        setupScrollView()
         addTopAndBottomShadows(to: self.view, shadowHeight: 50)
         
         //animatedBackground()
@@ -165,7 +189,17 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
             self.attachGatewayObservers()
         }
     }
-
+    
+    
+    func setupScrollView() {
+        self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        self.scrollView.refreshControl = self.refreshControl
+    }
+    
+    @objc func didPullToRefresh() {
+        self.getMessagesBeforeTopMessage()
+        self.refreshControl.endRefreshing()
+    }
     
     func setupSubviews() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,8 +221,13 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         scrollView.pinToEdges(of: containerView)
         scrollView.pinToCenter(of: containerView)
         
+        if #available(iOS 11.0, *) {
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        } else {
+            containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIApplication.shared.statusBarFrame.height).isActive = true
+        }
+        
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIApplication.shared.statusBarFrame.height),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])

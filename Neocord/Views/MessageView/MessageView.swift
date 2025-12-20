@@ -117,11 +117,16 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     var messageReactionAddObserver: NSObjectProtocol?
     var messageReactionRemoveObserver: NSObjectProtocol?
     
-    public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false) {
+    var dmChannel: DMChannel?
+    
+    var scrollToBottom = true
+    
+    public init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false, dmChannel: DMChannel? = nil) {
         super.init(frame: .zero)
         self.slClient = slClient
         self.message = message
         self.isSameUser = isSameUser
+        self.dmChannel = dmChannel
         self.isClientUser = {
             return message.author == slClient.clientUser
         }()
@@ -131,12 +136,18 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
         self.setup()
     }
     
+    public convenience init(_ slClient: SLClient, message: Message, guildTextChannel: GuildChannel? = nil, isSameUser: Bool = false, dmChannel: DMChannel? = nil, scrollToBottom: Bool = true) {
+        self.init(slClient, message: message, guildTextChannel: guildTextChannel, isSameUser: isSameUser, dmChannel: dmChannel)
+        self.scrollToBottom = scrollToBottom
+    }
+    
     
     func setup() {
         if guildTextChannel != nil {
             setupMembers()
         }
         setupText()
+        setupCall()
         setupBackground()
         setupAuthorName()
         setupAuthorAvatar()
@@ -324,6 +335,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     }
     
     public func updateMessage(_ message: Message) {
+        guard message.type != .call else { return }
         self.messageText.text = message.content
         self.messageTextAndEmoji.setMarkdown(message.content ?? "unknown")
         self.message?.content = message.content

@@ -16,6 +16,16 @@ import LiveFrost
 
 //MARK: REST API Message functions
 extension TextViewController {
+    func getMessagesBeforeTopMessage() {
+        guard let topMessageView = messageStack.arrangedSubviews.first as? MessageView else { return }
+        guard let message = topMessageView.message, let channelID = message.channelID else { return }
+        clientUser.getChannelMessages(before: message, for: channelID) { [weak self] messages, _ in
+            guard let self = self else { return }
+            self.addMessagesToTopOfStack(messages)
+        }
+    }
+    
+    
     //REST API past 50 message get function
     func getMessages() {
         var textChannel: TextChannel
@@ -60,12 +70,38 @@ extension TextViewController {
                         requestedUserIDs.insert(userID)
                     }
                 } else {
-                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser)
+                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm)
                 }
                 self.messageStack.addArrangedSubview(messageView)
                 messageIDsInStack.insert(messageID)
                 scrollView.layoutIfNeeded()
                 scrollToBottom(animated: true)
+                if !userIDsInStack.contains(userID) { userIDsInStack.insert(userID) }
+            }
+        }
+        guard let guildID = self.channel?.guild?.id else { return }
+        clientUser.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: self.requestedUserIDs)
+    }
+    
+    func addMessagesToTopOfStack(_ messages: [Message]) {
+        let messages = messages.reversed()
+        for message in messages {
+            if let messageID = message.id, let user = message.author, let userID = user.id, !messageIDsInStack.contains(messageID) {
+                var messageView: MessageView
+                var isSameUser: Bool
+                self.secondLastUserToSpeak = self.lastUserToSpeak
+                self.lastUserToSpeak = user
+                isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
+                if let channel = channel {
+                    messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser, scrollToBottom: false)
+                    if !requestedUserIDs.contains(userID) {
+                        requestedUserIDs.insert(userID)
+                    }
+                } else {
+                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm, scrollToBottom: false)
+                }
+                self.messageStack.insertArrangedSubview(messageView, at: 0)
+                messageIDsInStack.insert(messageID)
                 if !userIDsInStack.contains(userID) { userIDsInStack.insert(userID) }
             }
         }

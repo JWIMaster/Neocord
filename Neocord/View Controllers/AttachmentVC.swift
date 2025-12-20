@@ -27,16 +27,24 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
 
     private let bottomBar: LiquidGlassView = {
         let view = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
-        view.solidViewColour = UIColor(red: 0.2, green: 0.2, blue: 0.22, alpha: 0.8)
+        view.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private let shareButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setTitle("Share", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        button.backgroundColor = .clear
+        button.titleLabel?.font = .systemFont(ofSize: 17)
         button.setTitleColor(.white, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private var backButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("Back", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -68,16 +76,24 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(attachment)
         view.addSubview(bottomBar)
         bottomBar.addSubview(shareButton)
+        view.addSubview(backButton)
 
         scrollView.pinToEdges(of: view)
 
         bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 6).isActive = true
+        } else {
+            bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 6).isActive = true
+        }
         bottomBar.heightAnchor.constraint(equalToConstant: (self.parent?.navigationController?.navigationBar.frame.height) ?? 44).isActive = true
 
         shareButton.centerXAnchor.constraint(equalTo: bottomBar.centerXAnchor).isActive = true
         shareButton.centerYAnchor.constraint(equalTo: bottomBar.centerYAnchor).isActive = true
+        
+        backButton.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
         // Set the attachment frame to its intrinsic size if it's an image
         if let imageView = attachment as? UIImageView, let image = imageView.image {
@@ -90,6 +106,10 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
 
     private func setupActions() {
         shareButton.addTarget(self, action: #selector(presentShareSheet), for: .touchUpInside)
+        backButton.addAction(for: .touchUpInside) { [weak self] in
+            guard let self = self else { return }
+            self.dismiss(animated: true)
+        }
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

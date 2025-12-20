@@ -46,7 +46,6 @@ class ProfileView: UIView {
         }
     }()
     
-    var bio = UILabel()
     var bioWithEmoji = DiscordMarkdownView()
     
     var containerView = UIView()
@@ -111,9 +110,7 @@ class ProfileView: UIView {
         return PresenceColor.color(for: clientUser.presences[(user?.id)!] ?? .offline)
     }
     
-    /*func makeRole(name: String, color: UIColor) -> UIView {
-        
-    }*/
+    var defaultColour: UIColor?
     
     // MARK: - Init
     
@@ -187,7 +184,7 @@ class ProfileView: UIView {
     func setupConstraints() {
         guard let backgroundView = backgroundView, let bioBackground = bioBackground else { return }
         
-        let views = [backgroundView, scrollView, containerView, profileBanner, profilePicture, displayname, username, bio, bioBackground, grabber, bioWithEmoji]
+        let views = [backgroundView, scrollView, containerView, profileBanner, profilePicture, displayname, username, bioBackground, grabber, bioWithEmoji]
         for v in views { v.translatesAutoresizingMaskIntoConstraints = false }
         
         // Background
@@ -306,7 +303,7 @@ class ProfileView: UIView {
                 self.profilePicture.layer.rasterizationScale = UIScreen.main.scale
                 self.profilePicture.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 80, height: 80), cornerRadius: 40).cgPath
                 
-                //self.profileBanner.backgroundColor = color
+                self.defaultColour = color
                 if self.backgroundView is LiquidGlassView, let bioBackground = self.bioBackground as? LiquidGlassView {
                     bioBackground.tintColorForGlass = color.withIncreasedSaturation(factor: 1.4).withAlphaComponent(0.4)
                     bioBackground.setNeedsLayout()
@@ -326,6 +323,8 @@ class ProfileView: UIView {
                 self.profileBanner.image = bannerImage
             } else if let colour = colour {
                 self.profileBanner.backgroundColor = colour
+            } else {
+                self.profileBanner.backgroundColor = self.defaultColour
             }
         }
     }

@@ -91,7 +91,7 @@ extension TextViewController {
                 self.messageStack.addArrangedSubview(messageView)
                 self.requestMemberIfNeeded(userID)
             } else {
-                let messageView = MessageView(clientUser, message: message, isSameUser: isSameUser)
+                let messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm)
                 self.messageStack.addArrangedSubview(messageView)
             }
             
