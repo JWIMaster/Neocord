@@ -86,7 +86,7 @@ class SidebarButtonCell: UICollectionViewCell {
             let group = DispatchGroup()
             
             for (index, guildID) in guildIDs.enumerated() {
-                if let guild = clientUser.guilds[guildID] {
+                if let guild = activeClient.guilds[guildID] {
                     group.enter()
                     GuildAvatarCache.shared.avatar(for: guild) { image in
                         guildImages[index] = image ?? UIImage()

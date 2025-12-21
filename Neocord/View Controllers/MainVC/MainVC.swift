@@ -26,12 +26,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var dms: [DMChannel] {
         get {
-            return Array(clientUser.dms.values).sorted { $0.lastMessageID?.rawValue ?? 0 > $1.lastMessageID?.rawValue ?? 0 }
+            return Array(activeClient.dms.values).sorted { $0.lastMessageID?.rawValue ?? 0 > $1.lastMessageID?.rawValue ?? 0 }
         }
         set {
             for dm in newValue {
                 if let id = dm.id {
-                    clientUser.dms[id] = dm
+                    activeClient.dms[id] = dm
                 }
             }
         }
@@ -41,11 +41,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var guilds: [Snowflake: Guild] {
         get {
-            return clientUser.guilds
+            return activeClient.guilds
         }
         set {
             for (id, guild) in newValue {
-                clientUser.guilds[id] = guild
+                activeClient.guilds[id] = guild
             }
         }
     }
@@ -175,7 +175,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var activeGuild: Guild? {
         get {
             guard let id = _activeGuildID else { return nil }
-            return clientUser.guilds[id] // always get the up-to-date object
+            return activeClient.guilds[id] // always get the up-to-date object
         }
         set {
             _activeGuildID = newValue?.id
@@ -244,9 +244,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        clientUser.connect()
+        activeClient.connect()
         
-        clientUser.loadCache {
+        activeClient.loadCache {
             self.setupOrderedGuilds()
             self.rebuildSidebarButtons()
             self.setupMainView()
@@ -400,7 +400,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     func rebuildSidebarButtons() {
         var items: [SidebarButtonType] = [.dms]
 
-        guard let folders = clientUser.clientUserSettings?.guildFolders else {
+        guard let folders = activeClient.clientUserSettings?.guildFolders else {
             items.append(contentsOf: orderedGuilds.map { .guild($0) })
             sidebarButtons = items
             return
@@ -438,7 +438,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     func setupOrderedGuilds() {
-        guard let settings = clientUser.clientUserSettings else { return }
+        guard let settings = activeClient.clientUserSettings else { return }
         let guildFolders = settings.guildFolders
         var orderID: [Snowflake] = []
         guard let guildFolders = guildFolders else {

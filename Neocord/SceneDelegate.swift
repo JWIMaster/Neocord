@@ -53,7 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        clientUser.saveCache()
+        activeClient.saveCache()
         backgroundEnterDate = Date()
     }
 

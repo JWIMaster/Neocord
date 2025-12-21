@@ -184,7 +184,7 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             self.recipientIDs.insert(currentRecipientID!)
             
             // Set initial presence
-            let presence = clientUser.presences[currentRecipientID!] ?? .offline
+            let presence = activeClient.presences[currentRecipientID!] ?? .offline
             presenceColor = PresenceColor.color(for: presence)
             updatePresenceIndicatorColor()
             

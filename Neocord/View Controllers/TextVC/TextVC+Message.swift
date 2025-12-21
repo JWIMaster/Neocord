@@ -19,7 +19,7 @@ extension TextViewController {
     func getMessagesBeforeTopMessage() {
         guard let topMessageView = messageStack.arrangedSubviews.first as? MessageView else { return }
         guard let message = topMessageView.message, let channelID = message.channelID else { return }
-        clientUser.getChannelMessages(before: message, for: channelID) { [weak self] messages, _ in
+        activeClient.getChannelMessages(before: message, for: channelID) { [weak self] messages, _ in
             guard let self = self else { return }
             self.addMessagesToTopOfStack(messages)
         }
@@ -37,7 +37,7 @@ extension TextViewController {
             fatalError("no channel")
         }
         
-        clientUser.getChannelMessages(for: textChannel.id!) { [weak self] messages, _ in
+        activeClient.getChannelMessages(for: textChannel.id!) { [weak self] messages, _ in
             guard let self = self else { return }
             
             self.addMessagesToStack(messages)
@@ -65,12 +65,12 @@ extension TextViewController {
                 self.lastUserToSpeak = user
                 isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
                 if let channel = channel {
-                    messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser)
+                    messageView = MessageView(activeClient, message: message, guildTextChannel: channel, isSameUser: isSameUser)
                     if !requestedUserIDs.contains(userID) {
                         requestedUserIDs.insert(userID)
                     }
                 } else {
-                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm)
+                    messageView = MessageView(activeClient, message: message, isSameUser: isSameUser, dmChannel: self.dm)
                 }
                 self.messageStack.addArrangedSubview(messageView)
                 messageIDsInStack.insert(messageID)
@@ -80,7 +80,7 @@ extension TextViewController {
             }
         }
         guard let guildID = self.channel?.guild?.id else { return }
-        clientUser.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: self.requestedUserIDs)
+        activeClient.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: self.requestedUserIDs)
     }
     
     func addMessagesToTopOfStack(_ messages: [Message]) {
@@ -93,12 +93,12 @@ extension TextViewController {
                 self.lastUserToSpeak = user
                 isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
                 if let channel = channel {
-                    messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser, scrollToBottom: false)
+                    messageView = MessageView(activeClient, message: message, guildTextChannel: channel, isSameUser: isSameUser, scrollToBottom: false)
                     if !requestedUserIDs.contains(userID) {
                         requestedUserIDs.insert(userID)
                     }
                 } else {
-                    messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm, scrollToBottom: false)
+                    messageView = MessageView(activeClient, message: message, isSameUser: isSameUser, dmChannel: self.dm, scrollToBottom: false)
                 }
                 self.messageStack.insertArrangedSubview(messageView, at: 0)
                 messageIDsInStack.insert(messageID)
@@ -106,7 +106,7 @@ extension TextViewController {
             }
         }
         guard let guildID = self.channel?.guild?.id else { return }
-        clientUser.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: self.requestedUserIDs)
+        activeClient.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: self.requestedUserIDs)
     }
     
     func scrollToMessage(withID messageID: Snowflake) {

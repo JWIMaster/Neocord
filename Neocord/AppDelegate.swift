@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        clientUser.saveCache()
+        activeClient.saveCache()
         backgroundEnterDate = Date()
     }
     

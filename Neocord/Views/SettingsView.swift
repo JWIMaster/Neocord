@@ -99,7 +99,7 @@ class SettingsView: UIView {
         }
         
         resetTokenButton = makeToggleButton(title: "Reset Token", isOn: false) {
-            clientUser.disconnect()
+            activeClient.disconnect()
             token = nil
             UIApplication.shared.currentKeyWindow?.rootViewController = AuthenticationViewController()
         }

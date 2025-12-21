@@ -63,10 +63,10 @@ class ReactionButtonView: UIButton {
         self.addAction(for: .touchUpInside) { [weak self] in
             guard let self = self else { return }
             if !self.isOwnReaction {
-                clientUser.create(reaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
+                activeClient.create(reaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
                 self.isOwnReaction = true
             } else {
-                clientUser.delete(ownReaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
+                activeClient.delete(ownReaction: self.reaction, in: self.channelID, on: self.messageID, completion: { _ in })
                 self.isOwnReaction = false
             }
         }

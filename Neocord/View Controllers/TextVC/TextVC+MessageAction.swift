@@ -23,9 +23,9 @@ extension TextViewController {
         applyGaussianBlur(to: containerView.layer, radius: 12)
         var messageActionView: MessageActionView
         if let channel = channel {
-            messageActionView = MessageActionView(clientUser, message, channel)
+            messageActionView = MessageActionView(activeClient, message, channel)
         } else {
-            messageActionView = MessageActionView(clientUser, message, self.dm!)
+            messageActionView = MessageActionView(activeClient, message, self.dm!)
         }
         messageActionView.alpha = 0
         messageActionView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)

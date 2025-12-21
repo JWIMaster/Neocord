@@ -31,7 +31,7 @@ public var token: String? {
 public var activeChannel: Snowflake = Snowflake(0)
 
 
-public var clientUser = SLClient(token: token ?? "idk")
+public var activeClient = SLClient(token: token ?? "idk")
 
 
 

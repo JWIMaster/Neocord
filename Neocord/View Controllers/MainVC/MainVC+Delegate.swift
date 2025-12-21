@@ -66,10 +66,10 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         case dmCollectionView:
             let dm = dms[indexPath.item]
             if dm.type == .dm, let dm = dm as? DM {
-                clientUser.acknowledge(messageID: dm.lastMessageID!, in: dm.id!, completion: { _ in })
+                activeClient.acknowledge(messageID: dm.lastMessageID!, in: dm.id!, completion: { _ in })
                 navigationController?.pushViewController(TextViewController(dm: dm), animated: true)
             } else if dm.type == .groupDM, let groupDM = dm as? GroupDM {
-                clientUser.acknowledge(messageID: groupDM.lastMessageID!, in: groupDM.id!, completion: { _ in })
+                activeClient.acknowledge(messageID: groupDM.lastMessageID!, in: groupDM.id!, completion: { _ in })
                 navigationController?.pushViewController(TextViewController(dm: groupDM), animated: true)
             }
             
@@ -95,11 +95,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
             switch channel.type {
             case .guildText:
                 //MARK: Must manually subscribe or else big guild's channel's events will not be picked up, leading to no websocket messages
-                clientUser.subscribeToChannel(self.activeGuild!, channel)
-                clientUser.acknowledge(messageID: channel.lastMessageID!, in: channel.id!, completion: { _ in })
+                activeClient.subscribeToChannel(self.activeGuild!, channel)
+                activeClient.acknowledge(messageID: channel.lastMessageID!, in: channel.id!, completion: { _ in })
                 navigationController?.pushViewController(TextViewController(channel: channel), animated: true)
             case .guildForum:
-                clientUser.subscribeToChannel(self.activeGuild!, channel)
+                activeClient.subscribeToChannel(self.activeGuild!, channel)
                 if let forum = channel as? GuildForum { navigationController?.pushViewController(ForumViewController(forum: forum), animated: true) }
             default:
                 break

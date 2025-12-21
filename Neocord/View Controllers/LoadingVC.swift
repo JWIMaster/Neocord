@@ -19,7 +19,7 @@ class LoadingViewController: UIViewController {
         loader.style = .gray
         view.addSubview(loader)
         loader.pinToCenter(of: view)
-        clientUser.connect()
+        activeClient.connect()
         
         readyProcessedObserver = NotificationCenter.default.addObserver(forName: .readyProcessed, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }

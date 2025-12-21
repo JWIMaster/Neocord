@@ -60,7 +60,7 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
         addBackGesture()
         
         // Listen for Thread List Sync events from the gateway
-        clientUser.gateway?.handleThreadListSync = { [weak self] guildId in
+        activeClient.gateway?.handleThreadListSync = { [weak self] guildId in
             guard let self = self else { return }
             guard guildId == self.forum.guild?.id else { return }
             self.loadThreads()
@@ -79,7 +79,7 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
             loadingLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
-        clientUser.getForumThreads(for: self.forum) { threads in
+        activeClient.getForumThreads(for: self.forum) { threads in
             DispatchQueue.main.async {
                 loadingLabel.removeFromSuperview()
                 self.threads = threads.sorted {
@@ -145,7 +145,7 @@ extension ForumViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let thread = threads[indexPath.item]
         guard let guild = forum.guild else { return }
-        clientUser.subscribeToChannel(guild, thread)
+        activeClient.subscribeToChannel(guild, thread)
         navigationController?.pushViewController(TextViewController(channel: thread), animated: true)
     }
 

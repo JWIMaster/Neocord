@@ -20,7 +20,7 @@ extension MessageView {
     func setupText() {
         messageTextAndEmoji.text = "\(message?.content ?? "unknown")"
         let text: String = {
-            if let relationship = clientUser.relationships[(message?.author?.id)!], relationship.0 == .blocked {
+            if let relationship = activeClient.relationships[(message?.author?.id)!], relationship.0 == .blocked {
                 return "User blocked"
             } else {
                 return message?.content ?? "unknown"
@@ -68,7 +68,7 @@ extension MessageView {
     
     func setupCall() {
         guard let call = self.message?.call, let participants = call.participants else { return }
-        if let dm = self.dmChannel as? DM, let clientUser = clientUser.clientUser, let recipient = dm.recipient {
+        if let dm = self.dmChannel as? DM, let clientUser = activeClient.clientUser, let recipient = dm.recipient {
             let content = "\(clientUser.username ?? "unknown") and \(recipient.username ?? "unknown") were in a call"
             self.messageTextAndEmoji.setMarkdown(content)
         } else if let groupDM = self.dmChannel as? GroupDM {
@@ -84,8 +84,8 @@ extension MessageView {
             }
             
             var usernames = finalParticipants.compactMap { $0.username }
-            if participants.contains(clientUser.clientUser!.id!) {
-                usernames.append(clientUser.clientUser!.username ?? "unknown")
+            if participants.contains(activeClient.clientUser!.id!) {
+                usernames.append(activeClient.clientUser!.username ?? "unknown")
             }
             
             var contentString: String = ""

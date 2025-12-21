@@ -107,7 +107,7 @@ class ProfileView: UIView {
     }()
 
     private var presenceColor: UIColor {
-        return PresenceColor.color(for: clientUser.presences[(user?.id)!] ?? .offline)
+        return PresenceColor.color(for: activeClient.presences[(user?.id)!] ?? .offline)
     }
     
     var defaultColour: UIColor?
@@ -120,7 +120,7 @@ class ProfileView: UIView {
         super.init(frame: .zero)
         setup() // Build base layout immediately
         // Fetch updated user info in the background
-        clientUser.getUserProfile(withID: user.id!) { [weak self] user, userProfile, _ in
+        activeClient.getUserProfile(withID: user.id!) { [weak self] user, userProfile, _ in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.user = user

@@ -63,7 +63,7 @@ class FriendsView: UIView {
     
     func reloadFriends() {
         self.friends = []
-        let sortedUsers = clientUser.friends.sorted {
+        let sortedUsers = activeClient.friends.sorted {
             let name1 = $0.displayname ?? $0.username ?? "unknown"
             let name2 = $1.displayname ?? $1.username ?? "unknown"
             return name1.localizedCaseInsensitiveCompare(name2) == .orderedAscending

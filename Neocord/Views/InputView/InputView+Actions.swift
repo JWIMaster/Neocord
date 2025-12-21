@@ -67,7 +67,7 @@ extension InputView {
         
         guard let channel = self.channel, let replyMessage = self.replyMessage, var currentText = self.textView.text, let parentVC = self.parentViewController as? TextViewController else { return }
         currentText = self.formatDiscordCommands(in: currentText)
-        let newMessage = Message(clientUser, ["content": currentText])
+        let newMessage = Message(activeClient, ["content": currentText])
         
         self.textView.text = nil
         self.editMessage = nil
@@ -77,7 +77,7 @@ extension InputView {
         
         
         
-        clientUser.reply(to: replyMessage, with: newMessage, in: channel) { _ in
+        activeClient.reply(to: replyMessage, with: newMessage, in: channel) { _ in
             parentVC.bubbleActionView?.removeContextBubble()
             parentVC.updateInputOffset()
         }
@@ -89,12 +89,12 @@ extension InputView {
         
         guard let channel = self.channel, var currentText = self.textView.text else { return }
         currentText = self.formatDiscordCommands(in: currentText)
-        let message = Message(clientUser, ["content": currentText])
+        let message = Message(activeClient, ["content": currentText])
         self.textView.text = nil
         self.buttonIsActive = true
         self.textViewDidChange(self.textView)
         
-        clientUser.send(message: message, in: channel) { _ in
+        activeClient.send(message: message, in: channel) { _ in
             
         }
     }
@@ -105,7 +105,7 @@ extension InputView {
         
         guard let channel = self.channel, let editMessage = self.editMessage, var currentText = self.textView.text, let parentVC = self.parentViewController as? TextViewController else { return }
         currentText = self.formatDiscordCommands(in: currentText)
-        let newMessage = Message(clientUser, ["content": currentText])
+        let newMessage = Message(activeClient, ["content": currentText])
         
         self.textView.text = nil
         self.editMessage = nil
@@ -115,7 +115,7 @@ extension InputView {
         
         
         
-        clientUser.edit(message: editMessage, to: newMessage, in: channel) { _ in
+        activeClient.edit(message: editMessage, to: newMessage, in: channel) { _ in
             parentVC.bubbleActionView?.removeContextBubble()
             parentVC.updateInputOffset()
         }

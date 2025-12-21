@@ -245,7 +245,7 @@ class AuthenticationViewController: UIViewController {
     private func proceedToMainApp() {
         statusLabel.text = "Login successful!"
         let loadVC = LoadingViewController()
-        clientUser = SLClient(token: token ?? "idk")
+        activeClient = SLClient(token: token ?? "idk")
         UIApplication.shared.currentKeyWindow?.rootViewController = loadVC
     }
 }

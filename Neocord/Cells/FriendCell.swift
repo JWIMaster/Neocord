@@ -138,7 +138,7 @@ class FriendCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.friendName.text = user.nickname ?? user.displayname ?? user.username
         self.friend = user
         
-        let presence = clientUser.presences[user.id!] ?? .offline
+        let presence = activeClient.presences[user.id!] ?? .offline
         presenceColor = PresenceColor.color(for: presence)
         updatePresenceIndicatorColor()
         

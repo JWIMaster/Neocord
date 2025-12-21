@@ -35,7 +35,7 @@ extension MessageView {
     
     func setupSelfPing() {
         clientUserPinged = self.message?.mentions.contains { mention in
-            mention.id == clientUser.clientUser?.id
+            mention.id == activeClient.clientUser?.id
         } ?? false
 
         if clientUserPinged {

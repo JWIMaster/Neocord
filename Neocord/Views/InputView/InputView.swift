@@ -270,7 +270,7 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
 
         // send the image using the client
         if let channel = self.channel {
-            clientUser.send(image: image, in: channel) { _ in
+            activeClient.send(image: image, in: channel) { _ in
                 
             }
         }

@@ -19,7 +19,7 @@ import LiveFrost
 extension TextViewController {
     ///Attach websocket watchers to do realtime message events
     func attachGatewayObservers() {
-        guard let gateway = clientUser.gateway else { return }
+        guard let gateway = activeClient.gateway else { return }
         // Assign closures
         
         /*gateway.onMessageCreate = { [weak self] message in
@@ -75,7 +75,7 @@ extension TextViewController {
         let isGuildMessage = (self.channel?.id == message.channelID)
         
         guard isDMMessage || isGuildMessage else { return }
-        clientUser.acknowledge(messageID: messageID, in: message.channelID!, completion: { _ in })
+        activeClient.acknowledge(messageID: messageID, in: message.channelID!, completion: { _ in })
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             guard let user = message.author else { return }
@@ -87,11 +87,11 @@ extension TextViewController {
             self.lastUserToSpeak = user
             isSameUser = (self.lastUserToSpeak == self.secondLastUserToSpeak)
             if isGuildMessage, let channel = self.channel {
-                let messageView = MessageView(clientUser, message: message, guildTextChannel: channel, isSameUser: isSameUser)
+                let messageView = MessageView(activeClient, message: message, guildTextChannel: channel, isSameUser: isSameUser)
                 self.messageStack.addArrangedSubview(messageView)
                 self.requestMemberIfNeeded(userID)
             } else {
-                let messageView = MessageView(clientUser, message: message, isSameUser: isSameUser, dmChannel: self.dm)
+                let messageView = MessageView(activeClient, message: message, isSameUser: isSameUser, dmChannel: self.dm)
                 self.messageStack.addArrangedSubview(messageView)
             }
             
@@ -144,15 +144,15 @@ extension TextViewController {
     
     func typingStarted(by userID: Snowflake, in channelID: Snowflake) {
         if let dm = self.dm as? DM, dm.id! == channelID {
-            if userID == clientUser.clientUser?.id! {
-                self.bubbleActionView?.handleTyping(for: clientUser.clientUser!)
+            if userID == activeClient.clientUser?.id! {
+                self.bubbleActionView?.handleTyping(for: activeClient.clientUser!)
             } else if userID == dm.recipient?.id! {
                 self.bubbleActionView?.handleTyping(for: dm.recipient!)
             }
         } else if let groupDM = self.dm as? GroupDM, groupDM.id! == channelID {
             
         } else if let channel = self.channel, channel.id! == channelID {
-            if let channelMembers = clientUser.guilds[channel.guild!.id!]?.members {
+            if let channelMembers = activeClient.guilds[channel.guild!.id!]?.members {
                 let channelUserDict: [Snowflake: User] = Dictionary(
                     uniqueKeysWithValues: channelMembers.compactMap { (key: Snowflake, member: GuildMember) -> (Snowflake, User)? in
                         guard let id = member.user.id else { return nil }

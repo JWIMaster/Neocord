@@ -74,7 +74,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     func requestMemberIfNeeded(_ userID: Snowflake) {
         guard !requestedUserIDs.contains(userID), let guildID = channel?.guild?.id else { return }
         requestedUserIDs.insert(userID)
-        clientUser.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: [userID])
+        activeClient.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: [userID])
     }
     
     var profileBlur = LiquidGlassView(blurRadius: 12, cornerRadius: 0, snapshotTargetView: nil, disableBlur: false, filterExclusions: [.highlight, .depth, .darken, .innerShadow, .tint, .rim])
@@ -181,7 +181,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         addTopAndBottomShadows(to: self.view, shadowHeight: 50)
         //animatedBackground()
         
-        guard let gateway = clientUser.gateway else { return }
+        guard let gateway = activeClient.gateway else { return }
         
         gateway.onReconnect = { [weak self] in
             guard let self = self else { return }
