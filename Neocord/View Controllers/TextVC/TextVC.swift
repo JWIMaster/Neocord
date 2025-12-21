@@ -179,7 +179,6 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         attachGatewayObservers()
         setupScrollView()
         addTopAndBottomShadows(to: self.view, shadowHeight: 50)
-        
         //animatedBackground()
         
         guard let gateway = clientUser.gateway else { return }
