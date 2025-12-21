@@ -108,19 +108,6 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         messageDeleteObserver = nil
         typingStartObserver = nil
     }
-    
-    var isAtTop: Bool {
-        guard let firstMessage = messageStack.arrangedSubviews.first else {
-            return true
-        }
-
-        let firstFrameInScroll = scrollView.convert(firstMessage.frame,
-                                                    from: firstMessage.superview)
-
-        let visibleTop = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
-
-        return firstFrameInScroll.minY >= visibleTop
-    }
 
     
     var isAtBottom: Bool {
@@ -191,8 +178,10 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     
     func setupScrollView() {
-        self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        self.scrollView.refreshControl = self.refreshControl
+        if #available(iOS 10.0, *) {
+            self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+            self.scrollView.refreshControl = self.refreshControl
+        }
     }
     
     @objc func didPullToRefresh() {
