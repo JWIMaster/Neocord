@@ -178,10 +178,8 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     
     func setupScrollView() {
-        if #available(iOS 10.0, *) {
-            self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-            self.scrollView.refreshControl = self.refreshControl
-        }
+        self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        self.scrollView.refreshControl = self.refreshControl
     }
     
     @objc func didPullToRefresh() {
@@ -304,3 +302,41 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
 
 
 
+
+import UIKit
+import ObjectiveC
+
+private var RefreshControlKey: UInt8 = 0
+
+extension UIScrollView {
+
+    @available(iOS, introduced: 6.0, deprecated: 10.0)
+    public var refreshControl: UIRefreshControl? {
+        get {
+            return objc_getAssociatedObject(self, &RefreshControlKey) as? UIRefreshControl
+        }
+        set {
+            let old = refreshControl
+            old?.removeFromSuperview()
+
+            objc_setAssociatedObject(
+                self,
+                &RefreshControlKey,
+                newValue,
+                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+            )
+
+            guard let control = newValue else { return }
+
+            if let tableView = self as? UITableView {
+                tableView.backgroundView?.addSubview(control)
+                tableView.backgroundView = UIView()
+                tableView.addSubview(control)
+            } else if let collectionView = self as? UICollectionView {
+                collectionView.addSubview(control)
+            } else {
+                addSubview(control)
+            }
+        }
+    }
+}
