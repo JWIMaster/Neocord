@@ -141,7 +141,7 @@ extension MessageView {
                     case .a12Plus:
                         return .high
                     default:
-                        return .low
+                        return .high
                     }
                 }()
                 

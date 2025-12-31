@@ -6,7 +6,7 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
 
     private let customNavBar: UIView? = {
         if ThemeEngine.enableGlass {
-            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 12, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 22, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glassView.frameInterval = PerformanceManager.frameInterval
             glassView.scaleFactor = PerformanceManager.scaleFactor
             glassView.solidViewColour = .discordGray.withAlphaComponent(0.8)
@@ -15,7 +15,7 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
             return glassView
         } else {
             let navBar = UIView()
-            navBar.layer.cornerRadius = 12
+            navBar.layer.cornerRadius = 22
             navBar.backgroundColor = .discordGray.withAlphaComponent(0.8)
             navBar.layer.shadowRadius = 12
             navBar.layer.shadowOpacity = 0.6

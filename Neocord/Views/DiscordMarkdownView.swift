@@ -140,7 +140,9 @@ class DiscordMarkdownView: UILabel {
 
             if !matches.isEmpty {
                 for match in matches {
-                    let start = full.index(full.startIndex, offsetBy: match.range.location)
+                    guard let matchRange = Range(match.range, in: full) else { continue }
+
+                    let start = matchRange.lowerBound
 
                     if pos < start {
                         let text = String(full[pos..<start])
@@ -152,8 +154,9 @@ class DiscordMarkdownView: UILabel {
                         parts.append(.mention(name))
                     }
 
-                    pos = full.index(start, offsetBy: match.range.length)
+                    pos = matchRange.upperBound
                 }
+
 
                 if pos < full.endIndex {
                     parts.append(.text(String(full[pos...])))

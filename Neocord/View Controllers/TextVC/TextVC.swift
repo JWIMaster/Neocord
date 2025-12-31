@@ -280,62 +280,16 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if ThemeEngine.enableAnimations {
-            switch device {
-            case .a4, .a5, .a6:
-                break
-            default:
-                for view in messageStack.arrangedSubviews {
-                    let viewFrameInScroll = scrollView.convert(view.frame, from: view.superview)
-                    let isVisibleNow = scrollView.bounds.intersects(viewFrameInScroll)
-                    
-                    if isVisibleNow && !currentlyVisibleViews.contains(view) {
-                        currentlyVisibleViews.add(view)
-                        view.springAnimation(bounceAmount: -4)
-                    } else if !isVisibleNow && currentlyVisibleViews.contains(view) {
-                        currentlyVisibleViews.remove(view)
-                    }
+            for view in messageStack.arrangedSubviews {
+                let viewFrameInScroll = scrollView.convert(view.frame, from: view.superview)
+                let isVisibleNow = scrollView.bounds.intersects(viewFrameInScroll)
+                
+                if isVisibleNow && !currentlyVisibleViews.contains(view) {
+                    currentlyVisibleViews.add(view)
+                    view.springAnimation(bounceAmount: -4)
+                } else if !isVisibleNow && currentlyVisibleViews.contains(view) {
+                    currentlyVisibleViews.remove(view)
                 }
-            }
-        }
-    }
-}
-
-
-
-
-import UIKit
-import ObjectiveC
-
-private var RefreshControlKey: UInt8 = 0
-
-extension UIScrollView {
-
-    @available(iOS, introduced: 6.0, deprecated: 10.0)
-    public var refreshControl: UIRefreshControl? {
-        get {
-            return objc_getAssociatedObject(self, &RefreshControlKey) as? UIRefreshControl
-        }
-        set {
-            let old = refreshControl
-            old?.removeFromSuperview()
-
-            objc_setAssociatedObject(
-                self,
-                &RefreshControlKey,
-                newValue,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
-
-            guard let control = newValue else { return }
-
-            if let tableView = self as? UITableView {
-                tableView.backgroundView?.addSubview(control)
-                tableView.backgroundView = UIView()
-                tableView.addSubview(control)
-            } else if let collectionView = self as? UICollectionView {
-                collectionView.addSubview(control)
-            } else {
-                addSubview(control)
             }
         }
     }

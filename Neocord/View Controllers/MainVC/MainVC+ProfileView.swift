@@ -35,7 +35,7 @@ extension ViewController {
             profileView?.springAnimation(bounceAmount: -20)
         }
         
-        self.containerView.isUserInteractionEnabled = false
+        self.mainView.isUserInteractionEnabled = false
         
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = topOffset
@@ -48,13 +48,13 @@ extension ViewController {
 
     func removeProfileView() {
         guard let profile = profileView, let parent = profile.superview else { return }
-        self.containerView.isUserInteractionEnabled = true
+        self.mainView.isUserInteractionEnabled = true
         
         profile.removeFromSuperview()
         self.profileView = nil
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             profile.frame.origin.y = parent.bounds.height
-            self.containerView.layer.filters = nil
+            self.mainView.layer.filters = nil
             if let nav = UIApplication.shared.currentKeyWindow?.rootViewController as? CustomNavigationController {
                 nav.navBarOpacity = 1
             }

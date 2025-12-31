@@ -25,6 +25,14 @@ public final class ThemeEngine {
         }
     }
     
+    public static var isHighPowerDevice: Bool {
+        if device != .a4, device != .a5, device != .a6, device != .a7_a8 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     public static var chosenTheme: ThemeOptions {
         get {
             switch device {

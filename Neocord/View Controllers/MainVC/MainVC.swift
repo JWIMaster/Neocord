@@ -52,7 +52,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var activeGuildChannels: [GuildChannel] = []
     
-    var containerView: UIView = {
+    var mainView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -187,21 +187,21 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var displayedChannels: [GuildChannel] = []
     
-    var settingsContainerView: SettingsView = {
+    var settingsView: SettingsView = {
         let settingsView = SettingsView()
         settingsView.translatesAutoresizingMaskIntoConstraints = false
         settingsView.isHidden = true
         return settingsView
     }()
     
-    var friendsContainerView: FriendsView = {
+    var friendsView: FriendsView = {
         let fview = FriendsView()
         fview.translatesAutoresizingMaskIntoConstraints = false
         fview.isHidden = true
         return fview
     }()
     
-    var mainContainerView: UIView = {
+    var containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -210,6 +210,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var settingsButton: UIButton = {
         let button1 = UIButton(type: .custom)
         button1.setTitle("Settings", for: .normal)
+        button1.titleLabel?.font = .systemFont(ofSize: 12)
         button1.translatesAutoresizingMaskIntoConstraints = false
         button1.setImage(.init(systemName:"person.fill", tintColor: .white), for: .normal)
         return button1
@@ -218,6 +219,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var mainMenuButton: UIButton = {
         let button2 = UIButton(type: .custom)
         button2.setTitle("Menu", for: .normal)
+        button2.titleLabel?.font = .systemFont(ofSize: 12)
         button2.translatesAutoresizingMaskIntoConstraints = false
         button2.setImage(.init(systemName:"list.bullet.below.rectangle", tintColor: .white), for: .normal)
         return button2
@@ -226,12 +228,13 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var friendsButton: UIButton = {
         let button2 = UIButton(type: .custom)
         button2.setTitle("Friends", for: .normal)
+        button2.titleLabel?.font = .systemFont(ofSize: 12)
         button2.translatesAutoresizingMaskIntoConstraints = false
-        button2.setImage(.init(systemName:"person.2.fill", tintColor: .white), for: .normal)
+        button2.setImage(.init(systemName:"person.crop.circle.fill.badge.checkmark", tintColor: .white), for: .normal)
         return button2
     }()
     
-    lazy var currentlyActiveView: UIView = containerView
+    lazy var currentlyActiveView: UIView = mainView
     
     var loadingView: LoadingView = {
         let loading = LoadingView()
@@ -277,14 +280,14 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupMainViewSubviews() {
-        view.addSubview(mainContainerView)
-        mainContainerView.addSubview(containerView)
-        mainContainerView.addSubview(settingsContainerView)
-        mainContainerView.addSubview(friendsContainerView)
+        view.addSubview(containerView)
+        containerView.addSubview(mainView)
+        containerView.addSubview(settingsView)
+        containerView.addSubview(friendsView)
         
-        containerView.addSubview(sidebarBackgroundView)
+        mainView.addSubview(sidebarBackgroundView)
         
-        containerView.addSubview(activeContentView)
+        mainView.addSubview(activeContentView)
         
         sidebarBackgroundView.addSubview(sidebarCollectionView)
         
@@ -292,15 +295,15 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func showLoadingView() {
-        self.containerView.addSubview(loadingView)
+        self.mainView.addSubview(loadingView)
         UIView.animate(withDuration: 0.5) {
             self.loadingView.transform = CGAffineTransform(translationX: 0, y: 0)
             self.loadingView.alpha = 1
         }
         
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 6),
-            loadingView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            loadingView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 6),
+            loadingView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
         ])
     }
     
@@ -340,7 +343,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
                 self.channelsCollectionView.reloadData()
                 self.sidebarCollectionView.reloadData()
                 self.dmCollectionView.reloadData()
-                self.friendsContainerView.reloadFriends()
+                self.friendsView.reloadFriends()
                 CATransaction.commit()
             }
         }
@@ -358,42 +361,99 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupButtonActions() {
+        if ThemeEngine.isHighPowerDevice {
+            self.mainMenuButton.layer.shadowOpacity = 0.6
+            self.mainMenuButton.layer.shadowRadius = 12
+            self.mainMenuButton.layer.shadowColor = .white
+        }
+        
         settingsButton.addAction(for: .touchUpInside) {
             self.settingsButton.isUserInteractionEnabled = false
             
-            UIView.transition(from: self.currentlyActiveView, to: self.settingsContainerView, direction: .left, in: self.mainContainerView, completionHandler: {
+            if ThemeEngine.isHighPowerDevice {
+                UIView.animate(withDuration: 0.5) {
+                    self.settingsButton.layer.shadowColor = .white
+                    self.settingsButton.layer.shadowOpacity = 0.6
+                    self.settingsButton.layer.shadowRadius = 12
+                    
+                    self.friendsButton.layer.shadowOpacity = 0
+                    self.friendsButton.layer.shadowRadius = 0
+                    self.friendsButton.layer.shadowColor = .clear
+                    
+                    self.mainMenuButton.layer.shadowOpacity = 0
+                    self.mainMenuButton.layer.shadowRadius = 0
+                    self.mainMenuButton.layer.shadowColor = .clear
+                }
+            }
+            
+            UIView.transition(from: self.currentlyActiveView, to: self.settingsView, in: self.containerView) {
                 self.mainMenuButton.isUserInteractionEnabled = true
                 self.friendsButton.isUserInteractionEnabled = true
-                self.currentlyActiveView = self.settingsContainerView
-            })
+                self.currentlyActiveView = self.settingsView
+            }
+            
+            if ThemeEngine.enableAnimations {
+                self.settingsView.springAnimation()
+            }
         }
         
         friendsButton.addAction(for: .touchUpInside) {
             self.friendsButton.isUserInteractionEnabled = false
-            let direction: UIView.SlideDirection = {
-                switch self.currentlyActiveView {
-                case self.containerView:
-                    return .left
-                case self.settingsContainerView:
-                    return .right
-                default:
-                    return .right
+            if ThemeEngine.isHighPowerDevice {
+                UIView.animate(withDuration: 0.5) {
+                    self.friendsButton.layer.shadowColor = .white
+                    self.friendsButton.layer.shadowOpacity = 0.6
+                    self.friendsButton.layer.shadowRadius = 12
+                    
+                    self.mainMenuButton.layer.shadowOpacity = 0
+                    self.mainMenuButton.layer.shadowRadius = 0
+                    self.mainMenuButton.layer.shadowColor = .clear
+                    
+                    self.settingsButton.layer.shadowOpacity = 0
+                    self.settingsButton.layer.shadowRadius = 0
+                    self.settingsButton.layer.shadowColor = .clear
                 }
-            }()
-            UIView.transition(from: self.currentlyActiveView, to: self.friendsContainerView, direction: direction, in: self.mainContainerView, completionHandler: {
+            }
+            
+            UIView.transition(from: self.currentlyActiveView, to: self.friendsView, in: self.containerView) {
                 self.mainMenuButton.isUserInteractionEnabled = true
                 self.settingsButton.isUserInteractionEnabled = true
-                self.currentlyActiveView = self.friendsContainerView
-            })
+                self.currentlyActiveView = self.friendsView
+            }
+            
+            if ThemeEngine.enableAnimations {
+                self.friendsView.springAnimation()
+            }
         }
         
         mainMenuButton.addAction(for: .touchUpInside) {
             self.mainMenuButton.isUserInteractionEnabled = false
-            UIView.transition(from: self.currentlyActiveView, to: self.containerView, direction: .right, in: self.mainContainerView, completionHandler: {
+            
+            if ThemeEngine.isHighPowerDevice {
+                UIView.animate(withDuration: 0.5) {
+                    self.mainMenuButton.layer.shadowColor = .white
+                    self.mainMenuButton.layer.shadowOpacity = 0.6
+                    self.mainMenuButton.layer.shadowRadius = 12
+                    
+                    self.friendsButton.layer.shadowOpacity = 0
+                    self.friendsButton.layer.shadowRadius = 0
+                    self.friendsButton.layer.shadowColor = .clear
+                    
+                    self.settingsButton.layer.shadowOpacity = 0
+                    self.settingsButton.layer.shadowRadius = 0
+                    self.settingsButton.layer.shadowColor = .clear
+                }
+            }
+
+            UIView.transition(from: self.currentlyActiveView, to: self.mainView, in: self.containerView) {
                 self.settingsButton.isUserInteractionEnabled = true
                 self.friendsButton.isUserInteractionEnabled = true
-                self.currentlyActiveView = self.containerView
-            })
+                self.currentlyActiveView = self.mainView
+            }
+            
+            if ThemeEngine.enableAnimations {
+                self.mainView.springAnimation()
+            }
         }
     }
     
@@ -486,31 +546,31 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
         // MARK: Container view
         NSLayoutConstraint.activate([
-            mainContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: offset),
-            mainContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mainContainerView.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+            containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: offset),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
         ])
         
-        containerView.pinToEdges(of: mainContainerView)
+        mainView.pinToEdges(of: containerView)
         
-        settingsContainerView.pinToEdges(of: mainContainerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
-        friendsContainerView.pinToEdges(of: mainContainerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
+        settingsView.pinToEdges(of: containerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
+        friendsView.pinToEdges(of: containerView, insetBy: .init(top: 10, left: 10, bottom: 10, right: 10))
 
         // MARK: Sidebar
         NSLayoutConstraint.activate([
-            sidebarBackgroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            sidebarBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            sidebarBackgroundView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 10),
+            sidebarBackgroundView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 10),
             sidebarBackgroundView.widthAnchor.constraint(equalToConstant: 64),
-            sidebarBackgroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+            sidebarBackgroundView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -10)
         ])
 
         // MARK: Active content area
         NSLayoutConstraint.activate([
             activeContentView.leadingAnchor.constraint(equalTo: sidebarBackgroundView.trailingAnchor, constant: 10),
-            activeContentView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            activeContentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            activeContentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+            activeContentView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 10),
+            activeContentView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -10),
+            activeContentView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -10)
         ])
 
         // MARK: Sidebar collection
@@ -568,3 +628,43 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
 
 
+public extension UIView {
+
+    class func transition(
+        from oldView: UIView?,
+        to newView: UIView,
+        in container: UIView,
+        animated: Bool = true,
+        duration: TimeInterval = 0.25,
+        completionHandler: @escaping () -> Void
+    ) {
+        guard newView !== oldView else { return }
+
+        newView.alpha = 0
+        newView.isHidden = false
+        container.bringSubviewToFront(newView)
+
+        let animations = {
+            oldView?.alpha = 0
+            newView.alpha = 1
+        }
+
+        let completion: (Bool) -> Void = { _ in
+            oldView?.isHidden = true
+            completionHandler()
+        }
+
+        if animated {
+            UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: [.curveEaseInOut],
+                animations: animations,
+                completion: completion
+            )
+        } else {
+            animations()
+            completion(true)
+        }
+    }
+}
