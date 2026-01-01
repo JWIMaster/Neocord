@@ -273,7 +273,7 @@ class AuthenticationViewController: UIViewController {
      
      func makeGlassBackground() -> UIView {
          if ThemeEngine.enableGlass {
-             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+             let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
              glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
              glass.translatesAutoresizingMaskIntoConstraints = false
              return glass

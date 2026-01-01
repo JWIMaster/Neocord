@@ -16,7 +16,7 @@ import FoundationCompatKit
 public class ReplyMessageView: UIView, UIGestureRecognizerDelegate {
     let messageBackground: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 14, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
         } else {

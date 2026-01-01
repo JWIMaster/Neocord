@@ -6,16 +6,12 @@ import SFSymbolsCompatKit
 
 
 public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    public weak var snapshotView: UIView?
-    
     public let backgroundView: UIView? = {
         if ThemeEngine.enableGlass {
-            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 20, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             bView.translatesAutoresizingMaskIntoConstraints = false
             bView.solidViewColour = .discordGray.withAlphaComponent(0.8)
             bView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
-            bView.scaleFactor = PerformanceManager.scaleFactor
-            bView.frameInterval = PerformanceManager.frameInterval
             return bView
         } else {
             let bView = UIView()
@@ -31,10 +27,8 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
     
     let buttonBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            let background = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let background = LiquidGlassView(blurRadius: 6, cornerRadius: 20, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             background.translatesAutoresizingMaskIntoConstraints = false
-            background.scaleFactor = 0.25
-            background.frameInterval = 6
             background.isUserInteractionEnabled = false
             background.solidViewColour = .discordGray.withAlphaComponent(0.8)
             background.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
@@ -51,10 +45,8 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
     
     let buttonBackground2: UIView? = {
         if ThemeEngine.enableGlass {
-            let background = LiquidGlassView(blurRadius: 6, cornerRadius: 20, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let background = LiquidGlassView(blurRadius: 6, cornerRadius: 20, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             background.translatesAutoresizingMaskIntoConstraints = false
-            background.scaleFactor = 0.25
-            background.frameInterval = 6
             background.isUserInteractionEnabled = false
             background.solidViewColour = .discordGray.withAlphaComponent(0.8)
             background.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
@@ -117,9 +109,8 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
     var buttonIsActive: Bool = true
 
     
-    public init(channel: TextChannel, snapshotView: UIView, tokenInputView: Bool = false) {
+    public init(channel: TextChannel, tokenInputView: Bool = false) {
         super.init(frame: .zero)
-        self.snapshotView = snapshotView
         self.channel = channel
         self.tokenInputView = tokenInputView
         setupSubviews()
@@ -128,7 +119,6 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.snapshotView = nil
         self.channel = nil
         setupSubviews()
         setupConstraints()
@@ -139,10 +129,6 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
     }
     
     private func setupSubviews() {
-        if let buttonBackground = buttonBackground as? LiquidGlassView, let backgroundView = backgroundView as? LiquidGlassView {
-            buttonBackground.snapshotTargetView = snapshotView
-            backgroundView.snapshotTargetView = snapshotView
-        }
         guard let buttonBackground = buttonBackground, let backgroundView = backgroundView, let buttonBackground2 = buttonBackground2 else { return }
         addSubview(backgroundView)
         
@@ -219,9 +205,6 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
         if let dmVC = parentViewController as? TextViewController, let navBarHeight = dmVC.navigationController?.navigationBar.frame.height {
             maxHeight = dmVC.view.bounds.height - 50 - navBarHeight
         }
-        if let backgroundView = backgroundView as? LiquidGlassView {
-            backgroundView.frameInterval = 60*60*60
-        }
         let width = textView.bounds.width > 0 ? textView.bounds.width : 100 // fallback
         let size = textView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
         let clampedHeight = max(40, min(size.height, maxHeight))
@@ -230,12 +213,6 @@ public class InputView: UIView, UITextViewDelegate, UIImagePickerControllerDeleg
         
         if clampedHeight != self.bounds.height {
             self.invalidateIntrinsicContentSize()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            if let backgroundView = self.backgroundView as? LiquidGlassView {
-                backgroundView.frameInterval = 6
-            }
         }
     }
     

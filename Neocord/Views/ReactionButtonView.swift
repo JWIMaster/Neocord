@@ -37,7 +37,6 @@ class ReactionButtonView: UIButton {
             let glass = LiquidGlassView(
                 blurRadius: 0,
                 cornerRadius: 14,
-                snapshotTargetView: nil,
                 disableBlur: true,
                 filterExclusions: ThemeEngine.glassFilterExclusions
             )

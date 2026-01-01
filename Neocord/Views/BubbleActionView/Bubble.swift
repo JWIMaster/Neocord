@@ -18,12 +18,10 @@ enum BubbleType {
 class Bubble: UIView {
     public let backgroundView: UIView = {
         if ThemeEngine.enableGlass {
-            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 17, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let bView = LiquidGlassView(blurRadius: 6, cornerRadius: 17, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             bView.translatesAutoresizingMaskIntoConstraints = false
             bView.solidViewColour = .discordGray.withAlphaComponent(0.8)
             bView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
-            bView.scaleFactor = PerformanceManager.scaleFactor
-            bView.frameInterval = PerformanceManager.frameInterval
             return bView
         } else {
             let bView = UIView()

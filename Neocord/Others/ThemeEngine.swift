@@ -114,7 +114,7 @@ public final class ThemeEngine {
     
     public class func makeThemedView(cornerRadius: CGFloat = 22, blurRadius: CGFloat = 0, disableBlur: Bool = true) -> UIView {
         if Self.enableGlass {
-            let glass = LiquidGlassView(blurRadius: blurRadius, cornerRadius: cornerRadius, snapshotTargetView: nil, disableBlur: disableBlur, filterExclusions: Self.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: blurRadius, cornerRadius: cornerRadius, disableBlur: disableBlur, filterExclusions: Self.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
         } else {

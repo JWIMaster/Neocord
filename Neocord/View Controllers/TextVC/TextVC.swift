@@ -77,7 +77,7 @@ class TextViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
         activeClient.gateway?.requestGuildMemberChunk(guildId: guildID, userIds: [userID])
     }
     
-    var profileBlur = LiquidGlassView(blurRadius: 12, cornerRadius: 0, snapshotTargetView: nil, disableBlur: false, filterExclusions: [.highlight, .depth, .darken, .innerShadow, .tint, .rim])
+    var profileBlur = LiquidGlassView(blurRadius: 12, cornerRadius: 0, disableBlur: false, filterExclusions: [.highlight, .depth, .darken, .innerShadow, .tint, .rim])
     
     public init(dm: DMChannel? = nil, channel: GuildChannel? = nil) {
         super.init(nibName: nil, bundle: nil)

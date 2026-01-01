@@ -9,7 +9,6 @@ class SettingsView: UIView {
             let glass = LiquidGlassView(
                 blurRadius: 0,
                 cornerRadius: 22,
-                snapshotTargetView: nil,
                 disableBlur: true,
                 filterExclusions: ThemeEngine.glassFilterExclusions
             )
@@ -44,7 +43,7 @@ class SettingsView: UIView {
     private var glassButton: UIView!
     private var animationsButton: UIView!
     private var profileTintingButton: UIView!
-    private var resetTokenButton: UIView!
+    private var logOutButton: UIView!
     
     private var filterButtons: [LiquidGlassView.AdvancedFilterOptions: UIView] = [:]
     
@@ -98,7 +97,7 @@ class SettingsView: UIView {
             self.updateButtonTint(self.profileTintingButton, isOn: ThemeEngine.enableProfileTinting)
         }
         
-        resetTokenButton = makeToggleButton(title: "Reset Token", isOn: false) {
+        logOutButton = makeToggleButton(title: "Log Out", isOn: false) {
             activeClient.disconnect()
             token = nil
             UIApplication.shared.currentKeyWindow?.rootViewController = AuthenticationViewController()
@@ -107,7 +106,7 @@ class SettingsView: UIView {
         contentStack.addArrangedSubview(glassButton)
         contentStack.addArrangedSubview(animationsButton)
         contentStack.addArrangedSubview(profileTintingButton)
-        contentStack.addArrangedSubview(resetTokenButton)
+        contentStack.addArrangedSubview(logOutButton)
     }
     
     // MARK: - Advanced Filters
@@ -144,7 +143,7 @@ class SettingsView: UIView {
     // MARK: - Utility
     
     private func makeToggleButton(title: String, isOn: Bool, action: @escaping () -> Void) -> UIView {
-        let glass = LiquidGlassView(blurRadius: 8, cornerRadius: 16, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+        let glass = LiquidGlassView(blurRadius: 8, cornerRadius: 16, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         glass.translatesAutoresizingMaskIntoConstraints = false
         glass.heightAnchor.constraint(equalToConstant: 50).isActive = true
         glass.tintColorForGlass = isOn ? UIColor.green.withAlphaComponent(0.3) : UIColor.red.withAlphaComponent(0.3)

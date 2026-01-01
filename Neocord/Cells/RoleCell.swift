@@ -21,7 +21,7 @@ class RoleCell: UICollectionViewCell {
     
     var roleBackground: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             //glass.shadowRadius = 6
             //glass.shadowOpacity = 0.3
             glass.translatesAutoresizingMaskIntoConstraints = false

@@ -48,7 +48,7 @@ class MessageActionView: UIView {
     
     
     var glassView: LiquidGlassView = {
-        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         glass.translatesAutoresizingMaskIntoConstraints = false
         glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
         return glass
@@ -83,7 +83,7 @@ class MessageActionView: UIView {
     }
     
     static func makeActionButton(text: String, color: UIColor?, image: UIImage) -> LiquidGlassView {
-        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+        let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
         glass.translatesAutoresizingMaskIntoConstraints = false
         if let color = color {
             glass.tintColorForGlass = color

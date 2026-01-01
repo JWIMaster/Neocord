@@ -19,7 +19,6 @@ class LoadingView: UIView {
             let glass = LiquidGlassView(
                 blurRadius: 0,
                 cornerRadius: 22,
-                snapshotTargetView: nil,
                 disableBlur: true,
                 filterExclusions: ThemeEngine.glassFilterExclusions
             )

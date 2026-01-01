@@ -43,7 +43,7 @@ public class MessageView: UIView, UIGestureRecognizerDelegate {
     let edited = UILabel()
     let messageBackground: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
         } else {

@@ -6,7 +6,7 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
 
     private let customNavBar: UIView? = {
         if ThemeEngine.enableGlass {
-            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 22, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 22, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glassView.solidViewColour = .discordGray.withAlphaComponent(0.8)
             glassView.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             glassView.translatesAutoresizingMaskIntoConstraints = false
@@ -21,8 +21,6 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
             return navBar
         }
     }()
-    
-    weak var snapshotTargetView: UIView?
     
     public var navBarFrame: UIView = {
         let view = UIView()
@@ -131,10 +129,6 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
         if !(self.customNavBar is LiquidGlassView) {
             customNavBar!.layer.shadowPath = UIBezierPath(roundedRect: customNavBar!.bounds, cornerRadius: 12).cgPath
         }
-        
-        guard let superview = self.view.superview, let customNavBar = customNavBar as? LiquidGlassView else { return }
-        self.snapshotTargetView = superview
-        customNavBar.snapshotTargetView = snapshotTargetView
     }
     
     private func updateNavBar(for viewController: UIViewController?) {

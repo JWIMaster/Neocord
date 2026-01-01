@@ -28,7 +28,7 @@ class ChannelButtonCell: UICollectionViewCell {
     
     private var backgroundGlass: UIView? = {
         if ThemeEngine.enableGlass {
-            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 14, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 14, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             lg.shadowOpacity = 0
             lg.shadowRadius = 0
             lg.solidViewColour = .clear

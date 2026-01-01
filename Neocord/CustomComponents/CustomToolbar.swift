@@ -1,6 +1,7 @@
 import UIKit
 import UIKitCompatKit
 import UIKitExtensions
+import DeprecatedAPIKit
 
 class CustomToolbar: UIView {
 
@@ -16,7 +17,7 @@ class CustomToolbar: UIView {
     
     private let backgroundView: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 22, snapshotTargetView: nil, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 22, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
             glass.translatesAutoresizingMaskIntoConstraints = false
             return glass
@@ -84,11 +85,12 @@ extension UIButton {
     func alignVertical(spacing: CGFloat = 6.0) {
         guard let imageSize = self.imageView?.image?.size,
             let text = self.titleLabel?.text,
-            let font = self.titleLabel?.font
+            let font = self.titleLabel?.font,
+              let titleSize = titleLabel?.size(with: font, constrainedTo: CGSize(width: self.titleLabel!.bounds.width, height: CGFloat.greatestFiniteMagnitude), lineBreakMode: .byWordWrapping)
             else { return }
         self.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: -imageSize.width, bottom: -(imageSize.height + spacing), right: 0.0)
         let labelString = NSString(string: text)
-        let titleSize = labelString.size(withAttributes: [kCTFontAttributeName as NSAttributedString.Key: font])
+        //let titleSize = labelString.size(withAttributes: [kCTFontAttributeName as NSAttributedString.Key: font])
         self.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + spacing), left: 0.0, bottom: 0.0, right: -titleSize.width)
         let edgeOffset = abs(titleSize.height - imageSize.height) / 2.0;
         self.contentEdgeInsets = UIEdgeInsets(top: edgeOffset, left: 0.0, bottom: edgeOffset, right: 0.0)

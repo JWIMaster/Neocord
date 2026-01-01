@@ -6,7 +6,7 @@
       "location" : "https://github.com/JWIMaster/DeprecatedAPIKit",
       "state" : {
         "branch" : "master",
-        "revision" : "d506c40fabb9045fa67e29f33ead7310e8b19454"
+        "revision" : "1d73cad39febd6370162c112c20f83e4c80da68d"
       }
     },
     {
@@ -114,7 +114,7 @@
       "location" : "https://github.com/JWIMaster/UIKitExtensions.git",
       "state" : {
         "branch" : "master",
-        "revision" : "90879da194d88d20184b4ebbf60d5268b7e21b2a"
+        "revision" : "9b3461838e9c494e332318b8be8cc87a12430cc7"
       }
     }
   ],

@@ -28,7 +28,7 @@ class SidebarButtonCell: UICollectionViewCell {
     
     private var backgroundColorView: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 8, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 0
             glass.shadowOpacity = 0
@@ -80,8 +80,8 @@ class SidebarButtonCell: UICollectionViewCell {
                     self?.imageView.image = image ?? UIImage(named: "defaultavatar")
                 }
             }
-        case .folder(let folder):
-            guard let guildIDs = folder.0.guildIDs else { return }
+        case let .folder(folder, _):
+            guard let guildIDs = folder.guildIDs else { return }
             var guildImages = [UIImage?](repeating: nil, count: guildIDs.count)
             let group = DispatchGroup()
             
@@ -109,7 +109,7 @@ class SidebarButtonCell: UICollectionViewCell {
                 DispatchQueue.main.async {
                     self?.imageView.image = folderImage
                     if let glass = self?.backgroundColorView as? LiquidGlassView {
-                        glass.tintColorForGlass = folder.0.color?.withAlphaComponent(0.4) ?? .clear
+                        glass.tintColorForGlass = folder.color?.withAlphaComponent(0.4) ?? .clear
                     }
                 }
             }

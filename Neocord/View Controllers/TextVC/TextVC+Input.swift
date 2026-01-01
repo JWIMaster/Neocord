@@ -17,7 +17,7 @@ import LiveFrost
 //MARK: View input functions
 extension TextViewController {
     func setupInputView(for textChannel: TextChannel) {
-        textInputView = InputView(channel: textChannel, snapshotView: view)
+        textInputView = InputView(channel: textChannel)
         guard let textInputView = textInputView else {
             return
         }

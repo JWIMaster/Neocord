@@ -35,7 +35,7 @@ class ProfileView: UIView {
     let exclusions = ThemeEngine.glassFilterExclusions + [.highlight]
     lazy var bioBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: exclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 6
             return glass
@@ -56,7 +56,6 @@ class ProfileView: UIView {
             let bg = LiquidGlassView(
                 blurRadius: 6,
                 cornerRadius: 0,
-                snapshotTargetView: nil,
                 disableBlur: true,
                 filterExclusions: exclusions
             )
@@ -79,7 +78,7 @@ class ProfileView: UIView {
     }()
     lazy var roleCollectionViewBackground: UIView? = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, snapshotTargetView: nil, disableBlur: true, filterExclusions: exclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: exclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowRadius = 6
             return glass
@@ -92,7 +91,7 @@ class ProfileView: UIView {
     
     private lazy var presenceIndicator: UIView = {
         if ThemeEngine.enableGlass {
-            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 10, snapshotTargetView: nil, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+            let glass = LiquidGlassView(blurRadius: 0, cornerRadius: 10, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.translatesAutoresizingMaskIntoConstraints = false
             glass.shadowColor = presenceColor.withAlphaComponent(1).cgColor
             glass.shadowRadius = 6
