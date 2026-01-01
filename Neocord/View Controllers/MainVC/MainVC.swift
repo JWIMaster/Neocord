@@ -601,11 +601,17 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         let categories = guild.channels.values.compactMap { $0 as? GuildCategory }
 
         // Sort categories based on the highest-positioned child channel
-        let sortedCategories = categories.sorted { category1, category2 in
+        /*let sortedCategories = categories.sorted { category1, category2 in
             let maxPos1 = textChannels.filter { $0.parentID == category1.id }.map { $0.position ?? 0 }.max() ?? 0
             let maxPos2 = textChannels.filter { $0.parentID == category2.id }.map { $0.position ?? 0 }.max() ?? 0
             return maxPos2 > maxPos1// higher channels first
+        }*/
+        
+        //New fixed sorting based on the position integer provided in the payload
+        let sortedCategories = categories.sorted {
+            ($0.position ?? 0) < ($1.position ?? 0)
         }
+        print(sortedCategories)
 
         for category in sortedCategories {
             displayedChannels.append(category)
@@ -616,9 +622,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         }
 
         // Add uncategorized channels at the end
-        //let uncategorized = textChannels.filter { $0.parentID == nil || categories.first(where: { $0.id == $0.parentID }) == nil }.sorted { ($0.position ?? 0) < ($1.position ?? 0) }
+        let uncategorized = textChannels.filter { $0.parentID == nil }.sorted { ($0.position ?? 0) < ($1.position ?? 0) }
 
         //displayedChannels.append(contentsOf: uncategorized)
+        displayedChannels.insert(contentsOf: uncategorized, at: 0)
         
         channelsCollectionView.reloadData()
     }

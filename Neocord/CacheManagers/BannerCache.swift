@@ -63,7 +63,7 @@ final class BannerCache {
         }
 
         URLSessionCompat.shared.dataTask(with: URLRequest(url: url)) { data, _, _ in
-            guard let data, let image = UIImage(data: data) else {
+            guard let data = data, let image = UIImage(data: data) else {
                 completion(nil, nil)
                 return
             }

@@ -52,6 +52,7 @@
 		5F764B9D2ED2844900034CFC /* TextVC+Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9C2ED2844900034CFC /* TextVC+Bubble.swift */; };
 		5F764B9F2ED2867600034CFC /* BubbleActionView+Typing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */; };
 		5F79871A2EB1DD5C0058566C /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7987192EB1DD5C0058566C /* ReplyView.swift */; };
+		5F902D122F06103200BA29EC /* CDNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F902D112F06102900BA29EC /* CDNManager.swift */; };
 		5F93950A2EE3DC9300977D7A /* ETFKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5F9395092EE3DC9300977D7A /* ETFKit */; };
 		5F93950C2EE3E2B000977D7A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F93950B2EE3E2B000977D7A /* LoadingView.swift */; };
 		5F9F58B82EB42EE400A09760 /* TextVC+Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */; };
@@ -141,6 +142,7 @@
 		5F764B9E2ED2867600034CFC /* BubbleActionView+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BubbleActionView+Typing.swift"; sourceTree = "<group>"; };
 		5F7987192EB1DD5C0058566C /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
 		5F79871B2EB1E6470058566C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5F902D112F06102900BA29EC /* CDNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDNManager.swift; sourceTree = "<group>"; };
 		5F93950B2EE3E2B000977D7A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		5F9F58B72EB42EE400A09760 /* TextVC+Gateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Gateway.swift"; sourceTree = "<group>"; };
 		5F9F58B92EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextVC+Keyboard+Gesture.swift"; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 		5F57B8B02E9EEAC600CA2CE2 /* Neocord */ = {
 			isa = PBXGroup;
 			children = (
+				5F902D112F06102900BA29EC /* CDNManager.swift */,
 				5F57B8B12E9EEAC600CA2CE2 /* AppDelegate.swift */,
 				5F15C8DF2EEA7DB5004E0F4C /* SceneDelegate.swift */,
 				5FA7B1F72ED541A6008BCC5E /* Neocord.entitlements */,
@@ -600,6 +603,7 @@
 				5F5094862EA64674002646A2 /* CustomNavigationController.swift in Sources */,
 				5F9F58BA2EB42F8500A09760 /* TextVC+Keyboard+Gesture.swift in Sources */,
 				5F6CA5ED2EF37D660063D80B /* MessageView+MessageInfo.swift in Sources */,
+				5F902D122F06103200BA29EC /* CDNManager.swift in Sources */,
 				5F50947D2EA4F268002646A2 /* TextVC.swift in Sources */,
 				5F9F58DD2EB6E72200A09760 /* MessageView+Content.swift in Sources */,
 				5F57B8B22E9EEAC600CA2CE2 /* AppDelegate.swift in Sources */,
