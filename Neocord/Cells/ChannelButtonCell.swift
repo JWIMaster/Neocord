@@ -26,7 +26,7 @@ class ChannelButtonCell: UICollectionViewCell {
         return lbl
     }()
     
-    private var backgroundGlass: UIView? = {
+    private var backgroundGlass: UIView = {
         if ThemeEngine.enableGlass {
             let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 14, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             lg.shadowOpacity = 0
@@ -59,7 +59,6 @@ class ChannelButtonCell: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError() }
     
     private func setupViews() {
-        guard let backgroundGlass = backgroundGlass else { return }
         contentView.addSubview(backgroundGlass)
         contentView.addSubview(stack)
         stack.addArrangedSubview(channelIcon)
@@ -98,7 +97,7 @@ class ChannelButtonCell: UICollectionViewCell {
         if let glass = backgroundGlass as? LiquidGlassView {
             glass.tintColorForGlass = .discordGray
         } else {
-            backgroundGlass?.backgroundColor = .discordGray
+            backgroundGlass.backgroundColor = .discordGray
         }
     }
 

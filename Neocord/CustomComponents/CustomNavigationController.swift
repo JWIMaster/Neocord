@@ -4,7 +4,7 @@ import UIKitExtensions
 
 public class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate {
 
-    private let customNavBar: UIView? = {
+    private let customNavBar: UIView = {
         if ThemeEngine.enableGlass {
             let glassView = LiquidGlassView(blurRadius: 6, cornerRadius: 22, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glassView.solidViewColour = .discordGray.withAlphaComponent(0.8)
@@ -32,14 +32,13 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
     private let backButton = UIButton(type: .custom)
 
     public var navBarOpacity: CGFloat {
-        get { customNavBar!.alpha }
-        set { customNavBar!.alpha = max(0, min(1, newValue)) } // clamp 0–1
+        get { customNavBar.alpha }
+        set { customNavBar.alpha = max(0, min(1, newValue)) } // clamp 0–1
     }
     
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        guard let customNavBar = customNavBar else { return }
         // Hide the default navbar
         navBarFrame = UIView(frame: navigationBar.frame)
         
@@ -62,12 +61,11 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
     }
     
     func layoutBar() {
-        customNavBar?.setNeedsLayout()
+        customNavBar.setNeedsLayout()
         titleLabel.setNeedsLayout()
     }
 
     private func layoutCustomNavBar() {
-        guard let customNavBar = customNavBar else { return }
         customNavBar.widthAnchor.constraint(equalToConstant: navBarFrame.frame.width-20).isActive = true
         customNavBar.heightAnchor.constraint(equalToConstant: navBarFrame.frame.height).isActive = true
         customNavBar.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -80,7 +78,6 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
 
     private func setupTitleAndBack() {
         // Title label
-        guard let customNavBar = customNavBar else { return }
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.textColor = .white
         titleLabel.backgroundColor = .clear
@@ -127,7 +124,7 @@ public class CustomNavigationController: UINavigationController, UIGestureRecogn
     public override func viewDidAppear(_ animated: Bool) {
         
         if !(self.customNavBar is LiquidGlassView) {
-            customNavBar!.layer.shadowPath = UIBezierPath(roundedRect: customNavBar!.bounds, cornerRadius: 12).cgPath
+            customNavBar.layer.shadowPath = UIBezierPath(roundedRect: customNavBar.bounds, cornerRadius: 12).cgPath
         }
     }
     

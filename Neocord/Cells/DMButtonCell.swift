@@ -40,6 +40,7 @@ public extension UIColor {
     }
 }
 
+
 class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
 
     static let reuseID = "DMButtonCell"
@@ -61,7 +62,7 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         return lbl
     }()
 
-    private var backgroundGlass: UIView? = {
+    private var backgroundGlass: UIView = {
         if ThemeEngine.enableGlass {
             let lg = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
             lg.shadowOpacity = 0
@@ -117,7 +118,6 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     required init?(coder: NSCoder) { fatalError() }
 
     private func setupViews() {
-        guard let backgroundGlass = backgroundGlass else { return }
 
         contentView.addSubview(backgroundGlass)
         contentView.addSubview(stack)
@@ -224,7 +224,7 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
                                 glass.tintColorForGlass = color
                                 //glass.shadowColor = color.cgColor
                             } else {
-                                self.backgroundGlass?.backgroundColor = color
+                                self.backgroundGlass.backgroundColor = color
                             }
                         }
                     }
@@ -236,14 +236,14 @@ class DMButtonCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             dmNameLabel.text = dm.name
             
             DispatchQueue.global(qos: .userInitiated).async {
-                let defaultImage = UIImage(named: "defaultavatar")!.resizeImage(UIImage(named: "defaultavatar")!, targetSize: CGSize(width: 40, height: 40))
+                let defaultImage = UIImage(named: "defaultavatar")!.resizeImage(targetSize: CGSize(width: 40, height: 40))
                 DispatchQueue.main.async {
                     self.dmAuthorAvatar.image = defaultImage
                     if ThemeEngine.enableProfileTinting {
                         if let glass = self.backgroundGlass as? LiquidGlassView {
                             glass.tintColorForGlass = UIColor.blue.withAlphaComponent(0.5)
                         } else {
-                            self.backgroundGlass?.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+                            self.backgroundGlass.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
                         }
                     }
                 }

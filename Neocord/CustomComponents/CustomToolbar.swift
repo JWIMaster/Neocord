@@ -3,8 +3,9 @@ import UIKitCompatKit
 import UIKitExtensions
 import DeprecatedAPIKit
 
-class CustomToolbar: UIView {
 
+
+class CustomToolbar: UIView {
     private let stackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -15,7 +16,7 @@ class CustomToolbar: UIView {
         return sv
     }()
     
-    private let backgroundView: UIView? = {
+    private let backgroundView: UIView = {
         if ThemeEngine.enableGlass {
             let glass = LiquidGlassView(blurRadius: 6, cornerRadius: 22, disableBlur: PerformanceManager.disableBlur, filterExclusions: ThemeEngine.glassFilterExclusions)
             glass.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
@@ -40,7 +41,6 @@ class CustomToolbar: UIView {
     }
 
     private func setupViews() {
-        guard let backgroundView = backgroundView else { return }
         addSubview(backgroundView)
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -82,6 +82,7 @@ class CustomToolbar: UIView {
     }
 
 }
+
 
 extension UIButton {
     func alignVertical(spacing: CGFloat = 6.0) {

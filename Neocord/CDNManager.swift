@@ -9,6 +9,7 @@ import Foundation
 import SwiftcordLegacy
 import FoundationCompatKit
 import UIKit
+import ETFKit
 
 public final class DiscordCDNManager {
     public let baseURLString = "https://cdn.discordapp.com"

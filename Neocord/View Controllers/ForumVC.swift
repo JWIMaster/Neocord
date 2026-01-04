@@ -20,7 +20,7 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
     var offset: CGFloat {
         return UIApplication.shared.statusBarFrame.height+(self.navigationController?.navigationBar.frame.height)!
     }
-    
+    var threadSyncObserver: NSObjectProtocol?
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -44,6 +44,13 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
     
     required init?(coder: NSCoder) { fatalError() }
     
+    deinit {
+        if let threadSyncObserver = threadSyncObserver {
+            NotificationCenter.default.removeObserver(threadSyncObserver)
+        }
+        threadSyncObserver = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .discordGray
@@ -59,12 +66,20 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
         loadThreads()
         addBackGesture()
         
+        threadSyncObserver = NotificationCenter.default.addObserver(forName: .threadListSync, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+            if let guildID = notification.object as? Snowflake {
+                guard guildID == self.forum.guild?.id else { return }
+                self.loadThreads()
+            }
+        }
+        
         // Listen for Thread List Sync events from the gateway
-        activeClient.gateway?.handleThreadListSync = { [weak self] guildId in
+        /*activeClient.gateway?.handleThreadListSync = { [weak self] guildId in
             guard let self = self else { return }
             guard guildId == self.forum.guild?.id else { return }
             self.loadThreads()
-        }
+        }*/
     }
     
     func loadThreads() {
@@ -78,6 +93,7 @@ class ForumViewController: UIViewController, UIGestureRecognizerDelegate {
             loadingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        
         
         activeClient.getForumThreads(for: self.forum) { threads in
             DispatchQueue.main.async {

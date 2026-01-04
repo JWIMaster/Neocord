@@ -26,7 +26,7 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
     }()
 
     private let bottomBar: LiquidGlassView = {
-        let view = LiquidGlassView(blurRadius: 0, cornerRadius: 22, disableBlur: true, filterExclusions: ThemeEngine.glassFilterExclusions)
+        let view = LiquidGlassView(blurRadius: 6, cornerRadius: 22, disableBlur: false, filterExclusions: ThemeEngine.glassFilterExclusions)
         view.tintColorForGlass = .discordGray.withAlphaComponent(0.5)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -83,9 +83,9 @@ final class AttachmentViewController: UIViewController, UIScrollViewDelegate {
         bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         if #available(iOS 11.0, *) {
-            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 6).isActive = true
+            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -6).isActive = true
         } else {
-            bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 6).isActive = true
+            bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -6).isActive = true
         }
         bottomBar.heightAnchor.constraint(equalToConstant: (self.parent?.navigationController?.navigationBar.frame.height) ?? 44).isActive = true
 

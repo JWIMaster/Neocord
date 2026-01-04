@@ -17,8 +17,6 @@ import LiveFrost
 // MARK: Message Action Functions
 extension TextViewController {
     func takeMessageAction(_ message: Message) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
         UIView.setAnimationsEnabled(false)
         applyGaussianBlur(to: containerView.layer, radius: 12)
         var messageActionView: MessageActionView
@@ -27,14 +25,12 @@ extension TextViewController {
         } else {
             messageActionView = MessageActionView(activeClient, message, self.dm!)
         }
-        messageActionView.alpha = 0
-        messageActionView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         view.addSubview(messageActionView)
+        messageActionView.alpha = 0
         messageActionView.translatesAutoresizingMaskIntoConstraints = false
+        messageActionView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         messageActionView.pinToCenter(of: view)
         UIView.setAnimationsEnabled(true)
-        CATransaction.commit()
-        
         
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut]) {
             messageActionView.alpha = 1
